@@ -11,7 +11,7 @@ const renderProducts = async () => {
 
     container.innerHTML = products.map(product => `
         <div class="bg-white p-4 rounded-lg shadow">
-            <img src="${product.thumbnail}" class="w-full h-48 object-cover rounded">
+            <img src="${product.image}" class="w-full h-48 object-cover rounded">
             <h3 class="font-bold mt-2">${product.name}</h3>
             <p class="text-green-600">${product.price.toLocaleString()}đ</p>
         </div>

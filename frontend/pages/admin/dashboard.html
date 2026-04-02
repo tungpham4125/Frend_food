@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - MINI MART Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Manrope', sans-serif; background-color: #f8f9fa; }
+        body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8f9fa; }
         .sidebar-active { background-color: #f0fdf4; color: #15803d; font-weight: 800; border-left: 4px solid #16a34a; }
         .primary-gradient { background: linear-gradient(135deg, #28a745 0%, #006e25 100%); }
     </style>
@@ -53,6 +55,13 @@
                 <span class="text-sm font-bold">POS Bán lẻ</span>
             </a>
         </nav>
+
+        <div class="px-4 py-6 border-t border-slate-100 mt-auto">
+            <button onclick="logoutAdmin()" class="flex items-center gap-4 w-full py-3 px-4 text-red-500 hover:bg-red-50 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">logout</span>
+                <span class="text-sm font-bold">Đăng xuất</span>
+            </button>
+        </div>
     </aside>
 
     <!-- Main Content -->
@@ -85,7 +94,7 @@
                         <span class="text-green-600 text-[11px] font-bold">+12%</span>
                     </div>
                     <p class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Tổng doanh thu</p>
-                    <p class="text-2xl font-extrabold text-slate-800 mt-1">12,450,000đ</p>
+                    <p class="text-2xl font-extrabold text-slate-800 mt-1" id="stat-revenue">12,450,000đ</p>
                 </div>
                 <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
                     <div class="flex items-center justify-between mb-4">
@@ -93,7 +102,7 @@
                         <span class="text-green-600 text-[11px] font-bold">+5%</span>
                     </div>
                     <p class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Đơn hàng mới</p>
-                    <p class="text-2xl font-extrabold text-slate-800 mt-1">142</p>
+                    <p class="text-2xl font-extrabold text-slate-800 mt-1" id="stat-orders">142</p>
                 </div>
                 <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
                     <div class="flex items-center justify-between mb-4">
@@ -101,7 +110,7 @@
                         <span class="text-slate-400 text-[11px] font-bold">0%</span>
                     </div>
                     <p class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Khách hàng</p>
-                    <p class="text-2xl font-extrabold text-slate-800 mt-1">24</p>
+                    <p class="text-2xl font-extrabold text-slate-800 mt-1" id="stat-users">24</p>
                 </div>
                 <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
                     <div class="flex items-center justify-between mb-4">
@@ -146,6 +155,29 @@
 
     <script>
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+        function logoutAdmin() { localStorage.clear(); window.location.href = '../user/login.html'; }
+
+        // Load thống kê thực từ API
+        async function loadDashboardStats() {
+            const token = localStorage.getItem('token');
+            if (!token) { window.location.href = '../user/login.html'; return; }
+            try {
+                const res = await fetch('http://localhost:5000/api/dashboard/stats', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    // Cập nhật các thẻ stat nếu có phần tử id
+                    const revEl = document.getElementById('stat-revenue');
+                    const ordEl = document.getElementById('stat-orders');
+                    const usrEl = document.getElementById('stat-users');
+                    if (revEl) revEl.innerText = (data.revenue || 0).toLocaleString('vi-VN') + 'đ';
+                    if (ordEl) ordEl.innerText = data.totalOrders || 0;
+                    if (usrEl) usrEl.innerText = data.totalUsers || 0;
+                }
+            } catch(e) { console.log('Lỗi tải stats:', e); }
+        }
+        document.addEventListener('DOMContentLoaded', loadDashboardStats);
 
         const ctx = document.getElementById('revenueChart').getContext('2d');
         new Chart(ctx, {
@@ -181,11 +213,11 @@
                         beginAtZero: true, 
                         grid: { color: '#f8f9fa' }, 
                         ticks: { 
-                            font: { size: 10, family: 'Manrope', weight: 'bold' },
+                            font: { size: 10, family: 'Inter, system-ui, sans-serif', weight: 'bold' },
                             callback: function(value) { return (value/1000000) + 'tr'; }
                         } 
                     },
-                    x: { grid: { display: false }, ticks: { font: { size: 10, family: 'Manrope', weight: 'bold' } } }
+                    x: { grid: { display: false }, ticks: { font: { size: 10, family: 'Inter, system-ui, sans-serif', weight: 'bold' } } }
                 }
             }
         });

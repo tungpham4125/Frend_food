@@ -4,7 +4,7 @@ const Order = require('../models/Order');
 const addOrderItems = async (req, res) => {
     const { orderItems, shippingAddress, paymentMethod, itemsPrice, shippingPrice, totalPrice, orderType } = req.body;
     
-    if (orderItems && orderItems.length === 0) {
+    if (!orderItems || orderItems.length === 0) {
         return res.status(400).json({ message: 'Không có sản phẩm nào trong đơn hàng' });
     }
 

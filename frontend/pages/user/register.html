@@ -1,12 +1,15 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FreshFood - Đăng ký tài khoản</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
+        body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
         .smooth-transition { transition: all 0.3s ease-in-out; }
         .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
         @keyframes fadeInUp {
@@ -68,11 +71,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Họ và tên</label>
-                                <input type="text" class="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="Nguyễn Văn A" required>
+                                <input type="text" id="reg-fullname" class="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="Nguyễn Văn A" required>
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Số điện thoại</label>
-                                <input type="tel" class="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="0123 456 789" required>
+                                <input type="tel" id="reg-phone" class="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="0123 456 789" required>
                             </div>
                         </div>
 
@@ -83,7 +86,7 @@
 
                         <div class="space-y-2">
                             <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Mật khẩu</label>
-                            <input type="password" class="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="••••••••" required>
+                            <input type="password" id="reg-password" class="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="••••••••" required>
                         </div>
 
                         <label class="flex items-center gap-2 cursor-pointer group px-1">
@@ -115,13 +118,38 @@
 <div id="toast-container" class="fixed top-20 right-4 md:top-24 md:right-8 z-[70] flex flex-col gap-2 pointer-events-none"></div>
 
 <script>
-    document.getElementById('register-form').addEventListener('submit', (e) => {
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const username = document.getElementById('reg-username').value;
-        showToast('Đăng ký thành công! Đang chuyển tới Trang chủ...');
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('currentUser', JSON.stringify({ username: username, displayName: 'Thành viên mới' }));
-        setTimeout(() => window.location.href = 'index.html', 1500);
+        const password = document.getElementById('reg-password').value;
+        const fullName = document.getElementById('reg-fullname').value;
+        const phone = document.getElementById('reg-phone').value;
+
+        try {
+            const res = await fetch('http://localhost:5000/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, fullName, phone })
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                showToast('🎉 Đăng ký thành công! Đang chuyển trang...');
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('currentUser', JSON.stringify({
+                    username: data.username,
+                    displayName: data.fullName || data.username,
+                    role: data.role
+                }));
+                setTimeout(() => window.location.href = 'index.html', 1200);
+            } else {
+                showToast(data.message || 'Đăng ký thất bại!', 'error');
+            }
+        } catch (err) {
+            console.error(err);
+            showToast('Lỗi kết nối tới Server. Đảm bảo Backend đang chạy.', 'error');
+        }
     });
 
     function showToast(message, type = 'success') {

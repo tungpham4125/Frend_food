@@ -10,7 +10,7 @@ router.post('/', protect, adminOrStaff, createProduct);
 router.put('/:id', protect, adminOrStaff, updateProduct);
 router.delete('/:id', protect, adminOrStaff, deleteProduct);
 
-// Endpoint đặc biệt để tạo dữ liệu mẫu
-router.post('/seed', seedProducts);
+// Endpoint đặc biệt để tạo dữ liệu mẫu - phải đặt TRƯỚC /:id
+router.post('/seed', protect, adminOrStaff, seedProducts);
 
 module.exports = router;

@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FreshFood - Giỏ hàng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
+        body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
         .smooth-transition { transition: all 0.3s ease-in-out; }
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
@@ -79,7 +82,7 @@
                 <a href="products.html" class="nav-link hover:text-green-700 transition pb-3 uppercase">Sản phẩm</a>
                 <a href="explore.html" class="nav-link hover:text-green-700 transition pb-3 uppercase">Khám phá</a>
                 <a href="coupons.html" class="nav-link hover:text-green-700 transition pb-3 uppercase">Mã giảm giá</a>
-                <a href="favorite.html" class="nav-link hover:text-green-700 transition pb-3 uppercase text-green-700 border-b-2 border-green-700">Giỏ hàng</a>
+                <a href="cart.html" class="nav-link hover:text-green-700 transition pb-3 uppercase text-green-700 border-b-2 border-green-700">Giỏ hàng</a>
             </div>
         </nav>
     </header>
@@ -265,10 +268,12 @@
     }
 
     function logout() {
-        localStorage.setItem('isLoggedIn', 'false');
+        localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
         checkAuth();
         showToast('Đã đăng xuất.');
+        setTimeout(() => window.location.href = 'login.html', 1000);
     }
 
     function updateCartBadges() {
