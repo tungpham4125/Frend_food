@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -11,6 +11,7 @@
         body { font-family: 'Manrope', sans-serif; background-color: #f8f9fa; }
         .sidebar-active { background-color: #f0fdf4; color: #15803d; font-weight: 800; border-left: 4px solid #16a34a; }
         .primary-gradient { background: linear-gradient(135deg, #28a745 0%, #006e25 100%); }
+        .tab-btn.active { background-color: #16a34a; color: white; border-color: #16a34a; }
     </style>
 </head>
 <body class="text-slate-900 antialiased flex h-screen overflow-hidden">
@@ -31,54 +32,82 @@
             <a href="staff.html" class="flex items-center gap-4 py-3 px-4 rounded-xl sidebar-active"><span class="material-symbols-outlined text-xl">badge</span><span class="text-sm">Nhân viên</span></a>
             <a href="create-order.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all"><span class="material-symbols-outlined text-xl">add_circle</span><span class="text-sm font-bold">POS Bán lẻ</span></a>
         </nav>
+        
+        <div class="px-4 py-6 border-t border-slate-100 mt-auto">
+            <button onclick="logoutAdmin()" class="flex items-center gap-4 w-full py-3 px-4 text-red-500 hover:bg-red-50 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">logout</span>
+                <span class="text-sm font-bold">Đăng xuất</span>
+            </button>
+        </div>
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0 bg-[#f8f9fa]">
         <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-8 sticky top-0 z-40">
-            <h1 class="text-lg font-bold text-slate-800 tracking-tight">Cơ cấu Nhân sự</h1>
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden text-slate-500"><span class="material-symbols-outlined">menu</span></button>
+                <h1 class="text-lg font-bold text-slate-800 tracking-tight">Cơ cấu Nhân sự</h1>
+            </div>
             <button class="primary-gradient text-white px-8 py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest hover:scale-[1.02] shadow-lg shadow-green-600/10 flex items-center gap-2">
-                <span class="material-symbols-outlined text-sm">how_to_reg</span> Phê duyệt quyền
+                <span class="material-symbols-outlined text-sm">how_to_reg</span> Thêm Nhân Sự
             </button>
         </header>
 
-        <main class="flex-1 overflow-y-auto p-10 space-y-10 uppercase ">
-            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col uppercase -none">
+        <main class="flex-1 overflow-y-auto p-10 space-y-10">
+            <!-- Thống kê -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 flex items-center gap-6 group hover:border-green-200 transition-colors">
+                    <div class="w-16 h-16 rounded-2xl bg-green-50 text-green-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">groups</span>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Tổng Nhân Sự</p>
+                        <p class="text-3xl font-extrabold text-slate-900 tracking-tighter" id="stat-total">0</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 flex items-center gap-6 group hover:border-amber-200 transition-colors">
+                    <div class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">admin_panel_settings</span>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Cấp Quản Lý</p>
+                        <p class="text-3xl font-extrabold text-amber-600 tracking-tighter" id="stat-admin">0</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 flex items-center gap-6 group hover:border-blue-200 transition-colors">
+                    <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">support_agent</span>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Nhân Viên Bán Hàng</p>
+                        <p class="text-3xl font-extrabold text-blue-600 tracking-tighter" id="stat-staff">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs Layout -->
+            <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+                <div class="flex gap-4 p-6 border-b border-slate-100 bg-slate-50/30">
+                    <button onclick="filterStaff('all')" class="tab-btn active px-6 py-2.5 border border-slate-200 bg-white text-slate-600 rounded-full text-xs font-bold uppercase tracking-widest transition cursor-pointer hover:bg-slate-100">Tất Cả</button>
+                    <button onclick="filterStaff('admin')" class="tab-btn px-6 py-2.5 border border-slate-200 bg-white text-slate-600 rounded-full text-xs font-bold uppercase tracking-widest transition cursor-pointer hover:bg-slate-100">Quản Lý</button>
+                    <button onclick="filterStaff('staff')" class="tab-btn px-6 py-2.5 border border-slate-200 bg-white text-slate-600 rounded-full text-xs font-bold uppercase tracking-widest transition cursor-pointer hover:bg-slate-100">Nhân Viên Bán Hàng</button>
+                </div>
+
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm uppercase-none">
-                        <thead class="bg-slate-50/50 border-b border-slate-100 uppercase tracking-widest  tracking-normal">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50/50 border-b border-slate-100 uppercase tracking-widest">
                             <tr class="text-[10px] font-extrabold text-slate-400">
-                                <th class="px-8 py-5">Nhân sự hệ thống</th>
-                                <th class="px-8 py-5">Phân quyền Admin</th>
-                                <th class="px-8 py-5">Hệ thống mạng IP</th>
-                                <th class="px-8 py-5">Kết nối</th>
-                                <th class="px-8 py-5 text-center">Hành động</th>
+                                <th class="px-8 py-5">Hồ Sơ Nhân Sự</th>
+                                <th class="px-8 py-5">Tài Khoản & SĐT</th>
+                                <th class="px-8 py-5 text-center">Vai Trò</th>
+                                <th class="px-8 py-5 text-center">Tình Trạng</th>
+                                <th class="px-8 py-5 text-center">Hành Động</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-50 font-bold">
-                            <tr class="hover:bg-slate-50/50 transition">
-                                <td class="px-8 py-6">
-                                    <div class="flex items-center gap-5">
-                                        <div class="w-12 h-12 rounded-[1rem] bg-white border border-slate-100 overflow-hidden shrink-0 shadow-sm p-0.5">
-                                            <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=200&q=80" class="w-full h-full object-cover rounded-xl filter grayscale group-hover:grayscale-0 transition-all duration-300">
-                                        </div>
-                                        <div>
-                                            <p class="text-slate-900 font-extrabold ">Lê Huy Hùng</p>
-                                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1 tracking-tighter">hung.lv@minimart.vn</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-6  text-slate-500 uppercase text-[10px] font-bold">Admin Tối cao</td>
-                                <td class="px-8 py-6 font-mono text-[10px] text-slate-400 tracking-tighter font-extrabold ">192.168.1.102</td>
-                                <td class="px-8 py-6">
-                                    <span class="px-4 py-1.5 rounded-full bg-green-50 text-green-700 text-[9px] font-black uppercase tracking-widest border border-green-100 ">Online</span>
-                                </td>
-                                <td class="px-8 py-6">
-                                    <div class="flex items-center justify-center gap-4 text-slate-300">
-                                        <button class="hover:text-amber-700 transition"><span class="material-symbols-outlined text-lg">admin_panel_settings</span></button>
-                                        <button class="hover:text-red-700 transition"><span class="material-symbols-outlined text-lg">lock</span></button>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tbody id="staff-table-body" class="divide-y divide-slate-50 font-bold">
+                            <!-- JS Renders -->
+                            <tr><td colspan="5" class="py-10 text-center text-slate-400">Đang tải cấu trúc dữ liệu ...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -88,6 +117,107 @@
 
     <script>
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+        function logoutAdmin() {
+            localStorage.clear();
+            window.location.href = '../user/login.html';
+        }
+
+        let allUsers = [];
+        let staffMembers = [];
+        const API_URL = 'http://localhost:5000/api/users';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if(!token) {
+                alert('Vui lòng đăng nhập lại.'); window.location.href = '../user/login.html'; return;
+            }
+            fetchStaff();
+        });
+
+        async function fetchStaff() {
+            try {
+                const res = await fetch(API_URL, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                if(res.ok) {
+                    allUsers = await res.json();
+                    staffMembers = allUsers.filter(u => u.role === 'admin' || u.role === 'staff');
+                    
+                    // Thống kê
+                    document.getElementById('stat-total').innerText = staffMembers.length;
+                    document.getElementById('stat-admin').innerText = staffMembers.filter(u => u.role === 'admin').length;
+                    document.getElementById('stat-staff').innerText = staffMembers.filter(u => u.role === 'staff').length;
+
+                    renderStaff(staffMembers);
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
+
+        function filterStaff(roleStr) {
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(b => {
+                 b.classList.remove('active', 'bg-green-600', 'text-white', 'border-green-600');
+                 b.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+            });
+            const activeBtn = Array.from(btns).find(b => b.onclick.toString().includes(`'${roleStr}'`));
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+                activeBtn.classList.add('bg-green-600', 'text-white', 'border-green-600');
+            }
+            
+            let filtered = roleStr === 'all' ? staffMembers : staffMembers.filter(p => p.role === roleStr);
+            renderStaff(filtered);
+        }
+
+        function renderStaff(items) {
+            const tbody = document.getElementById('staff-table-body');
+            tbody.innerHTML = '';
+
+            if(items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="py-10 text-center font-bold text-slate-400">Không có nhân sự trong nhánh này.</td></tr>';
+                return;
+            }
+
+            items.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/50 transition duration-300 group';
+                
+                const initial = (u.fullName || u.username).charAt(0).toUpperCase();
+
+                tr.innerHTML = `
+                    <td class="px-8 py-6">
+                        <div class="flex items-center gap-5">
+                            <div class="w-12 h-12 rounded-[1rem] ${u.role === 'admin' ? 'bg-amber-500' : 'bg-blue-500'} text-white flex items-center justify-center font-extrabold text-xl shadow-lg shrink-0">${initial}</div>
+                            <div>
+                                <p class="text-slate-900 font-extrabold uppercase">${u.fullName || 'Chưa định danh'}</p>
+                                <p class="text-[10px] text-slate-400 font-bold tracking-widest uppercase mt-1">ID: ${u._id.substr(-6)}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-6">
+                        <p class="text-slate-600 font-bold">${u.username}</p>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">${u.phone ? '📞 ' + u.phone : 'Không Số Điện Thoại'}</p>
+                    </td>
+                    <td class="px-8 py-6 text-center">
+                        <span class="px-4 py-1.5 rounded-full ${u.role === 'admin' ? 'bg-amber-100 text-amber-600 border border-amber-200' : 'bg-blue-100 text-blue-600 border border-blue-200'} text-[9px] font-black uppercase tracking-widest shadow-sm">
+                            ${u.role === 'admin' ? 'Quản Lý Cao Cấp' : 'Nhân Viên'}
+                        </span>
+                    </td>
+                    <td class="px-8 py-6 text-center">
+                        <span class="px-4 py-1.5 rounded-full bg-slate-100 text-slate-400 text-[9px] font-black uppercase tracking-widest border border-slate-200">Ngoại Tuyến</span>
+                    </td>
+                    <td class="px-8 py-6">
+                        <div class="flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition duration-300">
+                            <button class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-slate-200 hover:text-slate-800 transition shadow-sm"><span class="material-symbols-outlined text-sm font-bold">edit</span></button>
+                            <button class="w-8 h-8 rounded-full bg-red-50 text-red-400 flex items-center justify-center hover:bg-red-100 hover:text-red-700 transition shadow-sm"><span class="material-symbols-outlined text-sm font-bold">block</span></button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
     </script>
 </body>
 </html>

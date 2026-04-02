@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -52,6 +52,13 @@
                 <span class="text-sm font-bold">POS Bán lẻ</span>
             </a>
         </nav>
+        
+        <div class="px-4 py-6 border-t border-slate-100 mt-auto">
+            <button onclick="logoutAdmin()" class="flex items-center gap-4 w-full py-3 px-4 text-red-500 hover:bg-red-50 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">logout</span>
+                <span class="text-sm font-bold">Đăng xuất</span>
+            </button>
+        </div>
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0 bg-[#f8f9fa]">
@@ -65,72 +72,155 @@
         <main class="flex-1 overflow-y-auto p-10 space-y-10">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 transition-all hover:bg-blue-50/50">
-                    <p class="text-[10px] font-extrabold text-slate-300 uppercase tracking-widest mb-2 ">Tổng số hội viên</p>
+                    <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-2">Tổng số tài khoản</p>
                     <div class="flex items-center justify-between">
-                        <p class="text-3xl font-extrabold text-slate-900 tracking-tighter ">4,582</p>
-                        <span class="px-3 py-1 bg-green-50 text-green-700 text-[10px] font-bold rounded-full ">+12% Tháng mới</span>
+                        <p class="text-3xl font-extrabold text-slate-900 tracking-tighter" id="total-users">0</p>
+                        <span class="px-3 py-1 bg-green-50 text-green-700 text-[10px] font-bold rounded-full">+1 Hệ thống</span>
                     </div>
-                </div>
-                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 transition-all hover:bg-amber-50/50">
-                    <p class="text-[10px] font-extrabold text-slate-300 uppercase tracking-widest mb-2 ">Hạng Kim Cương</p>
-                    <p class="text-3xl font-extrabold text-amber-600 tracking-tighter ">142</p>
                 </div>
             </div>
 
             <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-50/50 border-b border-slate-100 uppercase tracking-widest ">
+                        <thead class="bg-slate-50/50 border-b border-slate-100 uppercase tracking-widest">
                             <tr class="text-[10px] font-extrabold text-slate-400">
                                 <th class="px-8 py-5">Hội viên hệ thống</th>
-                                <th class="px-8 py-5 text-center">Hạng hội viên</th>
-                                <th class="px-8 py-5 text-center">Số đơn đã đặt</th>
-                                <th class="px-8 py-5">Tổng chi tiêu</th>
-                                <th class="px-8 py-5">Trạng thái</th>
+                                <th class="px-8 py-5">Tài khoản User</th>
+                                <th class="px-8 py-5 text-center">Vai Trò</th>
                                 <th class="px-8 py-5 text-center">Hành động</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-50 font-bold">
-                            <tr class="hover:bg-slate-50/50 transition duration-300">
-                                <td class="px-8 py-6">
-                                    <div class="flex items-center gap-5">
-                                        <div class="w-12 h-12 rounded-[1rem] primary-gradient text-white flex items-center justify-center font-extrabold text-xs shadow-lg shadow-green-600/10 shrink-0">NH</div>
-                                        <div>
-                                            <p class="text-slate-900 font-extrabold ">Nguyễn Huy</p>
-                                            <p class="text-[10px] text-slate-400 font-bold  tracking-tighter">huy.nguyen@example.com</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-6 text-center">
-                                    <span class="px-4 py-1.5 rounded-full bg-amber-50 text-amber-600 text-[9px] font-black uppercase tracking-widest border border-amber-100">Gold</span>
-                                </td>
-                                <td class="px-8 py-6 text-center text-slate-500 font-black ">42</td>
-                                <td class="px-8 py-6 text-slate-900 tracking-tighter font-extrabold ">15.420.000đ</td>
-                                <td class="px-8 py-6 uppercase font-bold text-[9px] tracking-widest text-green-700 ">Hoạt động</td>
-                                <td class="px-8 py-6">
-                                    <div class="flex items-center justify-center gap-4 text-slate-300">
-                                        <button class="hover:text-amber-700 transition"><span class="material-symbols-outlined text-lg">visibility</span></button>
-                                        <button class="hover:text-red-700 transition"><span class="material-symbols-outlined text-lg">block</span></button>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tbody id="users-table-body" class="divide-y divide-slate-50 font-bold">
+                            <!-- JS render -->
+                            <tr><td colspan="4" class="py-10 text-center font-bold text-slate-400">Đang tải cấu trúc dữ liệu ...</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="p-10 border-t border-slate-50 bg-white  -none flex justify-between items-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">
-                    <span>Page 1 of 122 Customer Pages</span>
-                    <div class="flex gap-4">
-                        <button class="px-6 py-2 border border-slate-100 rounded-full hover:bg-slate-50">Back</button>
-                        <button class="px-6 py-2 border border-slate-100 rounded-full hover:bg-slate-50">Next</button>
-                    </div>
+                <div class="p-10 border-t border-slate-50 bg-white flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest cursor-default">
+                    <span>Cơ sở dữ liệu Thời gian thực</span>
                 </div>
             </div>
         </main>
     </div>
 
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-8 right-8 z-[150] flex flex-col gap-2 pointer-events-none"></div>
+
     <script>
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+
+        let usersList = [];
+        const API_URL = 'http://localhost:5000/api/users';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if(!token) {
+                alert('Vui lòng đăng nhập lại.'); window.location.href = '../user/login.html'; return;
+            }
+            fetchUsersDetail();
+        });
+
+        function logoutAdmin() {
+            localStorage.clear();
+            window.location.href = '../user/login.html';
+        }
+
+        async function fetchUsersDetail() {
+            try {
+                const res = await fetch(API_URL, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                if(res.ok) {
+                    usersList = await res.json();
+                    document.getElementById('total-users').innerText = usersList.length;
+                    renderUsers();
+                } else {
+                    showToast('Lỗi truy xuất hệ thống', 'error');
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
+
+        function renderUsers() {
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = '';
+            
+            if(usersList.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="py-10 text-center text-slate-400 font-bold">Trống rỗng! Không có User nào.</td></tr>';
+                return;
+            }
+
+            usersList.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/50 transition duration-300 group';
+                
+                // Get initials
+                const uName = u.fullName || u.username;
+                const initial = uName.charAt(0).toUpperCase();
+                
+                tr.innerHTML = `
+                    <td class="px-8 py-6">
+                        <div class="flex items-center gap-5">
+                            <div class="w-12 h-12 rounded-[1rem] ${u.role === 'admin' ? 'bg-amber-500' : 'primary-gradient'} text-white flex items-center justify-center font-extrabold text-lg shadow-lg shrink-0">${initial}</div>
+                            <div>
+                                <p class="text-slate-900 font-extrabold">${u.fullName || 'Chưa cập nhật'}</p>
+                                <p class="text-[10px] text-slate-400 font-bold tracking-tighter mt-1">SĐT: ${u.phone || 'Chưa cập nhật'}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-6 text-slate-500 tracking-tighter font-extrabold">${u.username}</td>
+                    <td class="px-8 py-6 text-center">
+                        <span class="px-4 py-1.5 rounded-full ${u.role === 'admin' ? 'bg-amber-100 text-amber-600' : (u.role === 'staff' ? 'bg-blue-100 text-blue-600' : 'bg-slate-100 text-slate-500')} text-[9px] font-black uppercase tracking-widest border border-slate-50">${u.role}</span>
+                    </td>
+                    <td class="px-8 py-6">
+                        <div class="flex items-center justify-center gap-4 text-slate-300 opacity-0 group-hover:opacity-100 transition">
+                            <button onclick="deleteAccount('${u._id}', '${u.role}')" class="p-2 bg-slate-50 rounded-full hover:bg-red-50 hover:text-red-700 transition" title="Xóa khách hàng">
+                                <span class="material-symbols-outlined text-lg">block</span>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function deleteAccount(id, role) {
+            if(role === 'admin') {
+                showToast('Hành động cấm! Không thể xóa Admin.', 'error');
+                return;
+            }
+            if(!confirm('Bạn có chắc chắn muốn xóa hệ thống người dùng này vĩnh viễn không?')) return;
+            
+            try {
+                const res = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                
+                if(res.ok) {
+                    showToast('Đã tiêu hủy tài khoản thành công.');
+                    fetchUsersDetail(); // reload
+                } else {
+                    const err = await res.json();
+                    showToast(err.message || 'Lỗi server ròi', 'error');
+                }
+            } catch(e) { showToast('Lỗi Server', 'error'); }
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const icon = type === 'success' ? '✅' : '⚠️';
+            const color = type === 'success' ? 'bg-slate-900 border-green-500' : 'bg-red-600 border-red-400';
+            toast.className = `transform translate-x-10 opacity-0 smooth-transition px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 font-bold text-sm text-white ${color} border-l-4 pointer-events-auto z-[300]`;
+            toast.innerHTML = `<span class="text-lg">${icon}</span> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
+            setTimeout(() => { toast.classList.add('translate-x-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3000);
+        }
     </script>
 </body>
 </html>

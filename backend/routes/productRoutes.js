@@ -1,5 +1,5 @@
 const express = require('express');
-const { getProducts, getProductById, createProduct, seedProducts } = require('../controllers/productController');
+const { getProducts, getProductById, createProduct, updateProduct, deleteProduct, seedProducts } = require('../controllers/productController');
 const { protect, adminOrStaff } = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -7,6 +7,8 @@ const router = express.Router();
 router.get('/', getProducts);
 router.get('/:id', getProductById);
 router.post('/', protect, adminOrStaff, createProduct);
+router.put('/:id', protect, adminOrStaff, updateProduct);
+router.delete('/:id', protect, adminOrStaff, deleteProduct);
 
 // Endpoint đặc biệt để tạo dữ liệu mẫu
 router.post('/seed', seedProducts);

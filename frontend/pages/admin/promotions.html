@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -11,6 +11,47 @@
         body { font-family: 'Manrope', sans-serif; background-color: #f8f9fa; }
         .sidebar-active { background-color: #f0fdf4; color: #15803d; font-weight: 800; border-left: 4px solid #16a34a; }
         .primary-gradient { background: linear-gradient(135deg, #28a745 0%, #006e25 100%); }
+        
+        .ticket {
+            position: relative;
+            background: #ffffff;
+            border-radius: 1.5rem;
+            display: flex;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .ticket:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); border-color: #16a34a; }
+        .ticket::before, .ticket::after {
+            content: '';
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background-color: #f8f9fa;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 1px solid #f1f5f9;
+        }
+        .ticket::before { left: -16px; clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%); }
+        .ticket::after { right: -16px; clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%); border-left: none; }
+        
+        .ticket-left {
+            border-right: 2px dashed #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            min-width: 140px;
+        }
+        .ticket-right { padding: 2rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .coupon-code {
+            position: relative;
+            background-size: 20px 20px;
+            background-image: radial-gradient(circle at 10px 10px, #f1f5f9 2px, transparent 0);
+        }
     </style>
 </head>
 <body class="text-slate-900 antialiased flex h-screen overflow-hidden">
@@ -34,69 +75,135 @@
             <a href="staff.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all"><span class="material-symbols-outlined text-xl">badge</span><span class="text-sm font-bold">Nhân viên</span></a>
             <a href="create-order.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all"><span class="material-symbols-outlined text-xl">add_circle</span><span class="text-sm font-bold">POS Bán lẻ</span></a>
         </nav>
+        
+        <div class="px-4 py-6 border-t border-slate-100 mt-auto">
+            <button onclick="logoutAdmin()" class="flex items-center gap-4 w-full py-3 px-4 text-red-500 hover:bg-red-50 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">logout</span>
+                <span class="text-sm font-bold">Đăng xuất</span>
+            </button>
+        </div>
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0 bg-[#f8f9fa]">
         <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-8 sticky top-0 z-40">
-            <h1 class="text-lg font-bold text-slate-800 tracking-tight ">Marketing & Khuyến mãi</h1>
-            <button class="primary-gradient text-white px-8 py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest hover:scale-[1.02] shadow-lg shadow-green-600/10 flex items-center gap-2">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden text-slate-500"><span class="material-symbols-outlined">menu</span></button>
+                <h1 class="text-lg font-bold text-slate-800 tracking-tight">Marketing & Khuyến mãi</h1>
+            </div>
+            <button class="primary-gradient text-white px-8 py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-[1.02] shadow-lg shadow-green-600/10 flex items-center gap-2 transition duration-300">
                 <span class="material-symbols-outlined text-sm">confirmation_number</span> Tạo Mã Coupon
             </button>
         </header>
 
         <main class="flex-1 overflow-y-auto p-10 space-y-10">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-100 group transition hover:border-green-100">
-                    <p class="text-[10px] font-extrabold text-slate-300 uppercase tracking-widest mb-2 ">Chiến dịch active</p>
-                    <p class="text-4xl font-extrabold text-slate-900 tracking-tighter ">04</p>
+            <!-- Header Stats -->
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800 tracking-tighter uppercase mb-1">Kho Voucher Hệ Thống</h2>
+                    <p class="text-slate-400 font-bold text-[10px] tracking-widest uppercase">Các chương trình đang kích hoạt & hết hạn</p>
                 </div>
             </div>
 
-            <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col uppercase -none">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-50/50 border-b border-slate-100 uppercase tracking-widest  tracking-normal">
-                            <tr class="text-[10px] font-extrabold text-slate-400">
-                                <th class="px-8 py-5">Tên chương trình</th>
-                                <th class="px-8 py-5">Mã ưu đãi</th>
-                                <th class="px-8 py-5 text-center">Giảm giá</th>
-                                <th class="px-8 py-5">Áp dụng</th>
-                                <th class="px-8 py-5 text-center">Trạng thái</th>
-                                <th class="px-8 py-5 text-center">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-50 font-bold">
-                            <tr class="hover:bg-slate-50 transition">
-                                <td class="px-8 py-6">
-                                    <p class="text-slate-900 font-extrabold  uppercase-none">Chào mừng Member mới</p>
-                                    <p class="text-[10px] text-slate-400 font-bold  tracking-tighter uppercase mt-1">Hết hạn: 31/12/2024</p>
-                                </td>
-                                <td class="px-8 py-6">
-                                    <span class="px-4 py-2 rounded-xl bg-slate-50 text-slate-900 text-[11px] font-black border border-dashed border-slate-200 uppercase tracking-widest">MINI2024</span>
-                                </td>
-                                <td class="px-8 py-6 text-center text-green-700 font-extrabold ">-15%</td>
-                                <td class="px-8 py-6">
-                                    <span class="px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 text-[9px] font-black uppercase tracking-widest border border-blue-100 ">Bill > 200k</span>
-                                </td>
-                                <td class="px-8 py-6 text-center">
-                                    <span class="px-4 py-1.5 rounded-full bg-green-50 text-green-700 text-[9px] font-black uppercase tracking-widest border border-green-100 ">Đang chạy</span>
-                                </td>
-                                <td class="px-8 py-6">
-                                    <div class="flex items-center justify-center gap-3 text-slate-300">
-                                        <button class="hover:text-green-700 transition"><span class="material-symbols-outlined text-lg">edit</span></button>
-                                        <button class="hover:text-red-700 transition"><span class="material-symbols-outlined text-lg">pause</span></button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <!-- Ticket Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+                
+                <!-- Ticket 1 -->
+                <div class="ticket group">
+                    <div class="ticket-left bg-green-50 group-hover:bg-green-100 transition-colors">
+                        <span class="text-4xl font-black text-green-600 tracking-tighter leading-none mb-1">15%</span>
+                        <span class="text-[10px] font-black text-green-800 uppercase tracking-widest text-center">Giảm Tối đa<br>50.000đ</span>
+                    </div>
+                    <div class="ticket-right">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-black text-slate-800 text-lg leading-tight w-2/3">Chào Mừng Thành Viên Mới</h3>
+                                <span class="px-2 py-1 bg-green-50 text-green-700 text-[9px] font-black uppercase tracking-widest rounded relative top-1">Đang chạy</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 font-bold mb-4">Áp dụng cho Bill > 200k. Dành riêng cho User mới đăng ký lần đầu.</p>
+                            <div class="coupon-code inline-block bg-slate-50 border border-slate-200 rounded-lg px-4 py-2">
+                                <span class="font-black text-slate-600 tracking-[0.2em] uppercase text-sm">FRESHNEW</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">HSD: 31/12/2026</span>
+                            <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 transition"><span class="material-symbols-outlined text-sm font-bold">edit</span></button>
+                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-amber-50 hover:text-amber-600 transition"><span class="material-symbols-outlined text-sm font-bold">pause</span></button>
+                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-600 transition"><span class="material-symbols-outlined text-sm font-bold">delete</span></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Ticket 2 -->
+                <div class="ticket group">
+                    <div class="ticket-left bg-blue-50 group-hover:bg-blue-100 transition-colors">
+                        <span class="text-4xl font-black text-blue-600 tracking-tighter leading-none mb-1">FREE</span>
+                        <span class="text-[10px] font-black text-blue-800 uppercase tracking-widest text-center mt-1">Shipping</span>
+                    </div>
+                    <div class="ticket-right">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-black text-slate-800 text-lg leading-tight w-2/3">Miễn Phí Giao Hàng</h3>
+                                <span class="px-2 py-1 bg-green-50 text-green-700 text-[9px] font-black uppercase tracking-widest rounded relative top-1">Đang chạy</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 font-bold mb-4">Freeship mọi đơn hàng nội thành Hà Nội có giá trị từ 300.000đ trở lên.</p>
+                            <div class="coupon-code inline-block bg-slate-50 border border-slate-200 rounded-lg px-4 py-2">
+                                <span class="font-black text-slate-600 tracking-[0.2em] uppercase text-sm">FREESHIP</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">HSD: Không giới hạn</span>
+                            <div class="flex gap-2 border-slate-100">
+                                <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 transition"><span class="material-symbols-outlined text-sm font-bold">edit</span></button>
+                                    <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-amber-50 hover:text-amber-600 transition"><span class="material-symbols-outlined text-sm font-bold">pause</span></button>
+                                    <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-600 transition"><span class="material-symbols-outlined text-sm font-bold">delete</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ticket 3 (Tạm dừng) -->
+                <div class="ticket group opacity-70 hover:opacity-100 grayscale hover:grayscale-0">
+                    <div class="ticket-left bg-slate-100 transition-colors">
+                        <span class="text-4xl font-black text-slate-400 tracking-tighter leading-none mb-1">50K</span>
+                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest text-center mt-1">Giảm Thẳng</span>
+                    </div>
+                    <div class="ticket-right">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-black text-slate-800 text-lg leading-tight w-2/3">Ưu đãi Ngày Đôi 4/4</h3>
+                                <span class="px-2 py-1 bg-amber-50 text-amber-700 text-[9px] font-black uppercase tracking-widest rounded relative top-1">Đã dừng</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 font-bold mb-4">Giảm 50% đơn hàng, tối đa 50k cho khách mua ngày 4/4.</p>
+                            <div class="coupon-code inline-block bg-slate-50 border border-slate-200 rounded-lg px-4 py-2">
+                                <span class="font-black text-slate-400 tracking-[0.2em] uppercase text-sm">SALE44</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">HSD: 04/04/2026</span>
+                            <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 transition"><span class="material-symbols-outlined text-sm font-bold">edit</span></button>
+                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-green-50 hover:text-green-600 transition"><span class="material-symbols-outlined text-sm font-bold">play_arrow</span></button>
+                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-600 transition"><span class="material-symbols-outlined text-sm font-bold">delete</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </main>
     </div>
 
     <script>
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+
+        function logoutAdmin() {
+            localStorage.clear();
+            window.location.href = '../user/login.html';
+        }
     </script>
 </body>
 </html>

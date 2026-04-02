@@ -51,4 +51,42 @@ const seedProducts = async (req, res) => {
     }
 };
 
-module.exports = { getProducts, getProductById, createProduct, seedProducts };
+const updateProduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (product) {
+            product.name = req.body.name || product.name;
+            product.category = req.body.category || product.category;
+            product.price = req.body.price || product.price;
+            product.oldPrice = req.body.oldPrice !== undefined ? req.body.oldPrice : product.oldPrice;
+            product.unit = req.body.unit || product.unit;
+            product.image = req.body.image || product.image;
+            product.sale = req.body.sale !== undefined ? req.body.sale : product.sale;
+            product.bestseller = req.body.bestseller !== undefined ? req.body.bestseller : product.bestseller;
+            product.stock = req.body.stock !== undefined ? req.body.stock : product.stock;
+
+            const updatedProduct = await product.save();
+            res.json(updatedProduct);
+        } else {
+            res.status(404).json({ message: 'Không tìm thấy sản phẩm' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi server' });
+    }
+};
+
+const deleteProduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (product) {
+            await Product.findByIdAndDelete(req.params.id);
+            res.json({ message: 'Xóa sản phẩm thành công' });
+        } else {
+            res.status(404).json({ message: 'Không tìm thấy sản phẩm' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi server' });
+    }
+};
+
+module.exports = { getProducts, getProductById, createProduct, updateProduct, deleteProduct, seedProducts };

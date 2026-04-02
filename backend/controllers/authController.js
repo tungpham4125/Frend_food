@@ -59,5 +59,29 @@ const login = async (req, res) => {
         res.status(500).json({ message: 'Lỗi server' });
     }
 };
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find({}).select('-password');
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi server' });
+    }
+};
 
-module.exports = { register, login };
+const deleteUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ message: 'Không tìm thấy người dùng' });
+
+        if (user.role === 'admin') {
+            return res.status(400).json({ message: 'Không thể xóa tài khoản Admin' });
+        }
+
+        await User.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Xóa hệ thống thành công!' });
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi server' });
+    }
+};
+
+module.exports = { register, login, getAllUsers, deleteUser };

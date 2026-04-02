@@ -1,31 +1,66 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreshFood - Mã giảm giá</title>
+    <title>FreshFood - Khuyến Mãi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
         .smooth-transition { transition: all 0.3s ease-in-out; }
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-        .nav-link.active { color: #15803d; border-bottom: 2px solid #15803d; }
+        .nav-link { position: relative; }
+        .nav-link.active { color: #15803d; }
+        .nav-link.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background-color: #15803d; }
         html { scroll-behavior: smooth; }
         .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .coupon-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .coupon-card:hover { transform: scale(1.02); }
+        
+        .ticket {
+            position: relative;
+            background: #fff;
+            border-radius: 1rem;
+            display: flex;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+        }
+        .ticket::before, .ticket::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: #f8fafc;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 1px solid #f1f5f9;
+        }
+        .ticket::before { left: -12px; clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%); }
+        .ticket::after { right: -12px; clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%); border-left: none; }
+        
+        .ticket-left {
+            border-right: 2px dashed #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            background-color: #f0fdf4;
+            border-radius: 1rem 0 0 1rem;
+            min-width: 120px;
+        }
+        .ticket-right { padding: 1.5rem; flex: 1; }
     </style>
 </head>
 <body class="text-slate-800 antialiased h-[100dvh] flex flex-col overflow-hidden">
 
-<div class="flex-1 flex flex-col overflow-y-auto bg-white relative min-h-0">
+<div class="flex-1 flex flex-col overflow-y-auto bg-white relative min-h-0 bg-slate-50">
     
-    <!-- Top Bar (Synced) -->
+    <!-- Top Bar -->
     <div class="bg-green-700 text-white text-xs py-2">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
             <div class="flex gap-4 sm:gap-6 font-medium">
@@ -38,218 +73,284 @@
                     <span class="text-green-500">|</span>
                     <a href="login.html" class="hover:text-green-200 transition font-bold">Đăng nhập</a>
                 </div>
-                <div id="auth-section-user" class="hidden flex items-center gap-3">
-                    <span class="text-green-200 text-xl">😎</span>
-                    <span id="header-username" class="font-bold"></span>
-                    <span class="text-green-500">|</span>
-                    <button onclick="logout()" class="hover:text-red-300 transition">Đăng xuất</button>
+                <div id="auth-section-user" class="hidden flex items-center gap-3 relative">
+                    <button onclick="toggleAccountMenu()" class="flex items-center gap-2 hover:text-green-200 transition focus:outline-none">
+                        <span class="text-green-200 text-xl">😎</span>
+                        <span id="header-username" class="font-bold"></span>
+                    </button>
+                    <!-- Account Dropdown -->
+                    <div id="account-dropdown" class="hidden absolute top-8 right-0 w-72 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden transform origin-top-right transition-all">
+                        <div class="p-4 bg-green-50 border-b border-green-100 text-center">
+                            <span class="text-3xl block mb-2">🧑‍🌾</span>
+                            <div class="font-black text-green-800" id="dropdown-name">Họ Tên</div>
+                            <div class="text-[10px] text-green-600 uppercase font-bold tracking-widest" id="dropdown-role">Khách hàng</div>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <button onclick="alert('Tính năng chỉnh sửa Đang phát triển!')" class="w-full text-left px-4 py-2 hover:bg-slate-50 text-sm font-bold text-slate-600 rounded-lg transition flex items-center gap-2">
+                                <span>✏️</span> Chỉnh sửa thông tin
+                            </button>
+                            <button onclick="logoutConfirm()" class="w-full text-left px-4 py-2 hover:bg-red-50 text-sm font-bold text-red-600 rounded-lg transition flex items-center gap-2">
+                                <span>🚪</span> Đăng xuất
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Header (Synced) -->
-    <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-50">
+    <!-- Header -->
+    <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-40 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
                 <a href="index.html" class="flex items-center gap-2 cursor-pointer shrink-0">
                     <span class="text-4xl text-green-600">🌿</span>
                     <div class="font-black text-3xl text-green-700 tracking-tighter uppercase">FreshFood</div>
                 </a>
+                
                 <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
-                    <input type="text" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-4 pr-10 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 text-sm transition">
-                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 text-lg leading-none">🔍</button>
+                    <input type="text" placeholder="Tìm kiếm voucher..." class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition">
+                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 text-lg">🔍</button>
                 </div>
+
                 <div class="flex items-center space-x-6 shrink-0">
-                    <button class="relative text-slate-600 hover:text-green-700 transition" title="Thông báo">
-                        <span class="text-2xl pt-1 block">🔔</span>
-                        <span class="absolute top-0 right-0 bg-red-500 w-2.5 h-2.5 rounded-full border-2 border-white"></span>
-                    </button>
-                    <div class="w-px h-6 bg-slate-200 hidden sm:block"></div>
                     <a href="orders.html" class="flex items-center gap-2 text-slate-600 hover:text-green-700 transition font-medium text-sm">
                         <span class="text-2xl">📋</span>
-                        <span class="hidden sm:inline font-medium">Lịch sử</span>
+                        <span class="hidden sm:inline font-bold">Đơn hàng</span>
                     </a>
- <!-- Empty Header Cart Placeholder -->
+                    <a href="cart.html" class="relative group flex items-center gap-2">
+                        <span class="text-2xl pt-1 block group-hover:text-green-600 transition">🛒</span>
+                        <span id="header-cart-count" class="hidden absolute -top-1 -right-2 bg-green-600 text-white text-[10px] font-black w-5 h-5 rounded-full items-center justify-center border-2 border-white">0</span>
+                    </a>
                 </div>
             </div>
         </div>
-        <nav class="bg-white shadow-sm mt-3 border-t border-slate-100 hidden md:block">
-            <div class="max-w-7xl mx-auto px-4 flex justify-center space-x-12 text-sm font-bold text-slate-600 pt-3">
-                <a href="index.html" class="nav-link hover:text-green-700 transition pb-3">TRANG CHỦ</a>
-                <a href="products.html" class="nav-link hover:text-green-700 transition pb-3">SẢN PHẨM</a>
-                <a href="explore.html" class="nav-link hover:text-green-700 transition pb-3">KHÁM PHÁ</a>
-                <a href="coupons.html" class="nav-link active hover:text-green-700 transition pb-3">MÃ GIẢM GIÁ</a>
-                <a href="favorite.html" class="nav-link hover:text-green-700 transition pb-3">YÊU THÍCH</a>
-                <a href="settings.html" class="nav-link hover:text-green-700 transition pb-3">TÀI KHOẢN</a>
+        
+        <nav class="bg-white mt-4 hidden md:block">
+            <div class="max-w-7xl mx-auto px-4 flex justify-center space-x-12 text-[11px] font-black text-slate-400 uppercase tracking-widest">
+                <a href="index.html" class="nav-link hover:text-green-700 transition pb-3">Trang Chủ</a>
+                <a href="products.html" class="nav-link hover:text-green-700 transition pb-3">Sản Phẩm</a>
+                <a href="explore.html" class="nav-link hover:text-green-700 transition pb-3">Khám Phá</a>
+                <a href="coupons.html" class="nav-link active hover:text-green-700 transition pb-3">Khuyến Mãi</a>
+                <a href="favorite.html" class="nav-link hover:text-green-700 transition pb-3">Yêu Thích</a>
             </div>
         </nav>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1 pb-24">
-        <section class="py-16 bg-white fade-in-up">
-            <div class="max-w-7xl mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h1 class="text-4xl font-black text-slate-800 mb-4 uppercase tracking-tight ">Ưu Đãi Đặc Biệt</h1>
-                    <p class="text-slate-500 max-w-2xl mx-auto font-medium">Sử dụng mã giảm giá để tiết kiệm chi phí mua sắm các thực phẩm hữu cơ tại FreshFood.</p>
-                </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Coupon 1 -->
-                    <div class="coupon-card bg-gradient-to-br from-green-500 to-green-700 text-white p-8 rounded-3xl shadow-xl relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 p-4 opacity-10 transform group-hover:scale-110 transition-transform">
-                            <span class="text-9xl">🌿</span>
+    <main class="flex-1 pb-24 max-w-7xl w-full mx-auto px-4 py-12 fade-in-up">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-black text-slate-800 mb-2 uppercase tracking-tighter">Kho Voucher</h1>
+            <p class="text-slate-400 font-bold text-sm tracking-widest uppercase">Thu thập mã để được giảm giá tức thì</p>
+        </div>
+
+        <!-- Layout 2 Cột -->
+        <div class="grid lg:grid-cols-2 gap-12">
+            
+            <!-- Cột 1: Mã Giảm Giá Đơn Hàng -->
+            <div>
+                <h2 class="text-xl font-black text-slate-800 uppercase tracking-tighter mb-6 flex items-center gap-2 border-b border-slate-200 pb-3">
+                    <span class="text-2xl text-red-500">🔥</span> Giảm Giá Đơn Hàng
+                </h2>
+                
+                <div class="space-y-4">
+                    <!-- Ticket 1 -->
+                    <div class="ticket hover:border-green-200 transition-colors group cursor-pointer" onclick="copyCoupon('FRESH20')">
+                        <div class="ticket-left group-hover:bg-green-100 transition-colors">
+                            <span class="text-3xl font-black text-green-600 leading-none">20%</span>
+                            <span class="text-[10px] font-bold text-green-800 uppercase mt-1">Giảm Tối đa</span>
                         </div>
-                        <div class="relative z-10">
-                            <div class="bg-white/20 backdrop-blur-md rounded-xl p-3 inline-block mb-4">
-                                <h3 class="text-2xl font-black tracking-widest">GIAM20</h3>
+                        <div class="ticket-right flex justify-between items-center gap-4">
+                            <div>
+                                <h3 class="font-black text-slate-800 mb-1">Giảm 20% Đơn Hàng Mới</h3>
+                                <div class="text-xs text-slate-500 font-medium mb-2">Đơn tối thiểu 200k, giảm tối đa 50k</div>
+                                <div class="bg-slate-100 text-slate-500 text-[10px] uppercase font-black tracking-widest px-2 py-1 rounded inline-block">MÃ: FRESH20</div>
                             </div>
-                            <p class="text-lg font-bold mb-6">Giảm 20% cho đơn hàng từ 200,000đ</p>
-                            <button onclick="copyCoupon('GIAM20')" class="bg-white text-green-700 px-6 py-3 rounded-xl font-black uppercase tracking-wider text-sm hover:bg-slate-50 transition shadow-lg active:scale-95">Sao chép mã</button>
+                            <button class="shrink-0 w-10 h-10 bg-slate-800 text-white rounded-xl flex items-center justify-center hover:bg-black transition shadow-lg group-hover:scale-110">
+                                <span>📋</span>
+                            </button>
                         </div>
                     </div>
-                    <!-- Coupon 2 -->
-                    <div class="coupon-card bg-gradient-to-br from-blue-500 to-blue-700 text-white p-8 rounded-3xl shadow-xl relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 p-4 opacity-10 transform group-hover:scale-110 transition-transform">
-                            <span class="text-9xl">🚚</span>
+
+                    <!-- Ticket 2 -->
+                    <div class="ticket hover:border-green-200 transition-colors group cursor-pointer" onclick="copyCoupon('GIAM50K')">
+                        <div class="ticket-left group-hover:bg-green-100 transition-colors">
+                            <span class="text-3xl font-black text-green-600 leading-none">50K</span>
+                            <span class="text-[10px] font-bold text-green-800 uppercase mt-1">Giảm Tiền</span>
                         </div>
-                        <div class="relative z-10">
-                            <div class="bg-white/20 backdrop-blur-md rounded-xl p-3 inline-block mb-4">
-                                <h3 class="text-2xl font-black tracking-widest">FREESHIP</h3>
+                        <div class="ticket-right flex justify-between items-center gap-4">
+                            <div>
+                                <h3 class="font-black text-slate-800 mb-1">Giảm Trực Tiếp 50K</h3>
+                                <div class="text-xs text-slate-500 font-medium mb-2">Áp dụng cho mọi đơn từ 500k</div>
+                                <div class="bg-slate-100 text-slate-500 text-[10px] uppercase font-black tracking-widest px-2 py-1 rounded inline-block">MÃ: GIAM50K</div>
                             </div>
-                            <p class="text-lg font-bold mb-6">Miễn phí giao hàng cho đơn từ 100,000đ</p>
-                            <button onclick="copyCoupon('FREESHIP')" class="bg-white text-blue-700 px-6 py-3 rounded-xl font-black uppercase tracking-wider text-sm hover:bg-slate-50 transition shadow-lg active:scale-95">Sao chép mã</button>
-                        </div>
-                    </div>
-                    <!-- Coupon 3 -->
-                    <div class="coupon-card bg-gradient-to-br from-purple-500 to-purple-700 text-white p-8 rounded-3xl shadow-xl relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 p-4 opacity-10 transform group-hover:scale-110 transition-transform">
-                            <span class="text-9xl">🎁</span>
-                        </div>
-                        <div class="relative z-10">
-                            <div class="bg-white/20 backdrop-blur-md rounded-xl p-3 inline-block mb-4">
-                                <h3 class="text-2xl font-black tracking-widest">NEWUSER</h3>
-                            </div>
-                            <p class="text-lg font-bold mb-6">Giảm 50,000đ cho khách hàng mới</p>
-                            <button onclick="copyCoupon('NEWUSER')" class="bg-white text-purple-700 px-6 py-3 rounded-xl font-black uppercase tracking-wider text-sm hover:bg-slate-50 transition shadow-lg active:scale-95">Sao chép mã</button>
+                            <button class="shrink-0 w-10 h-10 bg-slate-800 text-white rounded-xl flex items-center justify-center hover:bg-black transition shadow-lg group-hover:scale-110">
+                                <span>📋</span>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+
+            <!-- Cột 2: Voucher Freeship -->
+            <div>
+                <h2 class="text-xl font-black text-slate-800 uppercase tracking-tighter mb-6 flex items-center gap-2 border-b border-slate-200 pb-3">
+                    <span class="text-2xl text-blue-500">🚚</span> Voucher Miễn Vận Chuyển
+                </h2>
+                
+                <div class="space-y-4">
+                    <!-- Ticket 3 -->
+                    <div class="ticket hover:border-blue-200 transition-colors group cursor-pointer" onclick="copyCoupon('FREESHIP')">
+                        <div class="ticket-left !bg-blue-50 group-hover:bg-blue-100 transition-colors">
+                            <span class="text-3xl font-black text-blue-600 leading-none">100%</span>
+                            <span class="text-[10px] font-bold text-blue-800 uppercase mt-1">Free Ship</span>
+                        </div>
+                        <div class="ticket-right flex justify-between items-center gap-4">
+                            <div>
+                                <h3 class="font-black text-slate-800 mb-1">Miễn Phí Giao Hàng</h3>
+                                <div class="text-xs text-slate-500 font-medium mb-2">Cho đơn nội thành Hà Nội > 300k</div>
+                                <div class="bg-slate-100 text-slate-500 text-[10px] uppercase font-black tracking-widest px-2 py-1 rounded inline-block">MÃ: FREESHIP</div>
+                            </div>
+                            <button class="shrink-0 w-10 h-10 bg-slate-800 text-white rounded-xl flex items-center justify-center hover:bg-black transition shadow-lg group-hover:scale-110">
+                                <span>📋</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </main>
 
-    <!-- Footer (Synced) -->
-    <footer class="bg-slate-100 text-slate-600 border-t">
-        <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="col-span-1 md:col-span-2">
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="text-3xl text-green-600">🌿</span>
-                    <span class="font-black text-2xl text-green-700 tracking-tight uppercase">FreshFood</span>
-                </div>
-                <p class="text-sm mb-4 leading-relaxed max-w-sm">Hệ thống phân phối thực phẩm hữu cơ, thực phẩm tự nhiên và sản phẩm uy tín hàng đầu Việt Nam.</p>
-            </div>
-            <div>
-                <h4 class="text-slate-800 font-bold mb-4 uppercase text-sm">Hỗ trợ khách hàng</h4>
-                <ul class="text-sm space-y-2">
-                    <li><a href="#" class="hover:text-green-600 transition">Hướng dẫn mua hàng</a></li>
-                    <li><a href="#" class="hover:text-green-600 transition">Chính sách giao hàng</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="border-t border-slate-200 py-6 text-center text-xs font-medium text-slate-400 uppercase tracking-widest">
-            © 2024 FRESHFOOD. TẤT CẢ QUYỀN ĐƯỢC BẢO LƯU.
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-100 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 py-12 flex flex-col items-center">
+            <span class="text-4xl text-green-600 mb-2">🌿</span>
+            <span class="font-black text-2xl text-slate-800 tracking-tighter uppercase mb-4">FreshFood</span>
+            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Bán hàng bằng cả trái tim</p>
         </div>
     </footer>
 </div>
 
-<!-- Mobile Bottom Navbar (Synced) -->
-<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] flex justify-around items-center py-2 pb-safe">
+<!-- Logout Confirm Modal -->
+<div id="logout-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] items-center justify-center">
+    <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-300" id="logout-modal-content">
+        <h3 class="text-2xl font-black text-slate-800 mb-2">Đăng xuất?</h3>
+        <p class="text-slate-500 font-medium mb-8">Bạn có chắc chắn muốn đăng xuất khỏi tài khoản hiện tại không?</p>
+        <div class="flex gap-3">
+            <button onclick="closeLogoutModal()" class="flex-1 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 uppercase tracking-widest text-xs transition">Hủy bỏ</button>
+            <button onclick="confirmLogout()" class="flex-1 py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-black uppercase tracking-widest text-xs transition shadow-lg">Có, Đăng xuất</button>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Nav -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-40 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] flex justify-around items-center py-3 pb-safe">
     <a href="index.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
-        <span class="text-2xl leading-none">🏠</span>
-        <span class="text-[10px] font-medium mt-1 uppercase">Trang chủ</span>
+        <span class="text-xl">🏠</span>
     </a>
     <a href="explore.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
-        <span class="text-2xl leading-none">📰</span>
-        <span class="text-[10px] font-medium mt-1 uppercase">Khám phá</span>
+        <span class="text-xl">📰</span>
     </a>
-    <a href="orders.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
-        <span class="text-2xl leading-none">📋</span>
-        <span class="text-[10px] font-medium mt-1 uppercase">Đơn hàng</span>
-    </a>
-    <a href="settings.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
-        <span class="text-2xl leading-none">👤</span>
-        <span class="text-[10px] font-medium mt-1 uppercase">Tài khoản</span>
+    <a href="favorite.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="text-xl">❤️</span>
     </a>
 </nav>
 
-<!-- Floating Cart Button (Synced) -->
-<a href="cart.html" class="fixed bottom-20 right-4 md:bottom-8 md:right-8 w-14 h-14 bg-green-600 text-white rounded-full shadow-2xl flex items-center justify-center group z-40 hover:bg-green-500 hover:-translate-y-1 active:scale-95 transition-all">
-    <span class="text-2xl font-black block pt-1">🛒</span>
-    <span id="fab-cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">0</span>
-</a>
-
-<!-- Toast Container -->
-<div id="toast-container" class="fixed top-20 right-4 md:top-24 md:right-8 z-[70] flex flex-col gap-2 pointer-events-none"></div>
+<div id="toast-container" class="fixed top-20 right-4 md:top-24 md:right-8 z-[150] flex flex-col gap-2 pointer-events-none"></div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         checkAuth();
-        updateCartBadges();
     });
 
+    // --- Authentication ---
     function checkAuth() {
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
         const userStr = localStorage.getItem('currentUser');
         if (isLoggedIn && userStr) {
             const user = JSON.parse(userStr);
-            document.getElementById('header-username').innerText = user.displayName || user.username;
+            document.getElementById('header-username').innerText = user.displayName;
+            document.getElementById('dropdown-name').innerText = user.displayName;
+            document.getElementById('dropdown-role').innerText = user.role || 'Thành viên';
             document.getElementById('auth-section-guest').classList.add('hidden');
             document.getElementById('auth-section-user').classList.remove('hidden');
         } else {
             document.getElementById('auth-section-guest').classList.remove('hidden');
             document.getElementById('auth-section-user').classList.add('hidden');
         }
+        updateCartBadges(); 
     }
 
-    function logout() {
+    function toggleAccountMenu() {
+        document.getElementById('account-dropdown').classList.toggle('hidden');
+    }
+
+    function logoutConfirm() {
+        document.getElementById('account-dropdown').classList.add('hidden');
+        const modal = document.getElementById('logout-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => document.getElementById('logout-modal-content').classList.remove('scale-95'), 10);
+    }
+
+    function closeLogoutModal() {
+        document.getElementById('logout-modal-content').classList.add('scale-95');
+        setTimeout(() => {
+            const modal = document.getElementById('logout-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 200);
+    }
+
+    function confirmLogout() {
+        closeLogoutModal();
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
         checkAuth();
-        showToast('Đã đăng xuất thành công.');
+        showToastDesign('Đăng xuất thành công');
     }
 
     function updateCartBadges() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const headerBadge = document.getElementById('header-cart-count');
+        if (!headerBadge) return;
+
+        if (!isLoggedIn) {
+            headerBadge.classList.remove('flex');
+            headerBadge.classList.add('hidden');
+            return;
+        }
+
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
         let total = 0;
         cart.forEach(c => total += c.qty);
-        const headerBadge = document.getElementById('header-cart-count');
-        const fabBadge = document.getElementById('fab-cart-count');
-        [headerBadge, fabBadge].forEach(el => {
-            if(el) {
-                el.innerText = total;
-            }
-        });
+
+        if (total > 0) {
+            headerBadge.innerText = total;
+            headerBadge.classList.remove('hidden');
+            headerBadge.classList.add('flex');
+        } else {
+            headerBadge.classList.remove('flex');
+            headerBadge.classList.add('hidden');
+        }
     }
 
     function copyCoupon(code) {
         navigator.clipboard.writeText(code).then(() => {
-            showToast(`Đã sao chép mã <b>${code}</b>!`);
+            showToastDesign(`Đã lưu mã ${code} vào bộ nhớ`, '📝');
         });
     }
 
-    function showToast(message, type = 'success') {
+    function showToastDesign(message, iconStr = '') {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
-        const color = type === 'success' ? 'bg-green-600' : 'bg-red-500';
-        toast.className = `transform translate-x-10 opacity-0 smooth-transition px-4 py-3 rounded shadow-lg flex items-center gap-3 font-semibold text-sm text-white ${color} pointer-events-auto`;
-        toast.innerHTML = `<span class="text-xl">✅</span> <span>${message}</span>`;
+        toast.className = `transform translate-x-10 opacity-0 smooth-transition px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 font-bold text-sm text-slate-800 bg-white border border-slate-100 pointer-events-auto`;
+        toast.innerHTML = `${iconStr ? `<span class="text-xl">${iconStr}</span>` : ''} <span>${message}</span>`;
         container.appendChild(toast);
         setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
-        setTimeout(() => {
-            toast.classList.add('translate-x-10', 'opacity-0');
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
+        setTimeout(() => { toast.classList.add('translate-x-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 2500);
     }
 </script>
 </body>
