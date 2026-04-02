@@ -1,0 +1,461 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshFood - Trang chủ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
+        .smooth-transition { transition: all 0.3s ease-in-out; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .nav-link.active { color: #15803d; border-bottom: 2px solid #15803d; }
+        html { scroll-behavior: smooth; }
+        .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Stacked Banner Animation/Depth */
+        .stacked-bg-1 { transform: scale(0.9) translateY(-1rem); opacity: 0.6; z-index: 10; filter: blur(2px); }
+        .stacked-bg-2 { transform: scale(0.95) translateY(-0.5rem); opacity: 0.8; z-index: 20; }
+        .stacked-main { z-index: 30; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+    </style>
+</head>
+<body class="text-slate-800 antialiased h-[100dvh] flex flex-col overflow-hidden">
+
+<div class="flex-1 flex flex-col overflow-y-auto bg-white relative min-h-0">
+    
+    <!-- Top Bar -->
+    <div class="bg-green-700 text-white text-xs py-2">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
+            <div class="flex gap-4 sm:gap-6 font-medium">
+                <a href="#" class="hover:text-green-200 transition">Chính sách giao hàng</a>
+                <a href="#" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div id="auth-section-guest" class="flex gap-3">
+                    <a href="register.html" class="hover:text-green-200 transition">Đăng ký</a>
+                    <span class="text-green-500">|</span>
+                    <a href="login.html" class="hover:text-green-200 transition font-bold">Đăng nhập</a>
+                </div>
+                <!-- Dropdown thay Sidebar cũ -->
+                <div id="auth-section-user" class="hidden flex items-center gap-3">
+                    <span class="text-green-200 text-xl">😎</span>
+                    <span id="header-username" class="font-bold"></span>
+                    <span class="text-green-500">|</span>
+                    <button onclick="logout()" class="hover:text-red-300 transition">Đăng xuất</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center gap-2 cursor-pointer shrink-0">
+                    <span class="text-4xl text-green-600">🌿</span>
+                    <div class="font-black text-3xl text-green-700 tracking-tighter uppercase">FreshFood</div>
+                </a>
+                
+                <!-- Search Bar -->
+                <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-4 pr-10 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 text-sm transition">
+                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 text-lg leading-none">🔍</button>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center space-x-6 shrink-0">
+                    <!-- Tính năng cứu hộ (Rescue Feature): Chuông Thông báo (Notifications) -->
+                    <button class="relative text-slate-600 hover:text-green-700 transition" title="Thông báo">
+                        <span class="text-2xl pt-1 block">🔔</span>
+                        <span class="absolute top-0 right-0 bg-red-500 w-2.5 h-2.5 rounded-full border-2 border-white"></span>
+                    </button>
+
+                    <div class="w-px h-6 bg-slate-200 hidden sm:block"></div>
+
+                    <!-- Mua Hàng Logic (Orders) -->
+                    <a href="orders.html" class="flex items-center gap-2 text-slate-600 hover:text-green-700 transition font-medium text-sm">
+                        <span class="text-2xl">📋</span>
+                        <span class="hidden sm:inline font-medium">Lịch sử</span>
+                    </a>
+
+
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tính năng cứu hộ (Navigation Layout) -->
+        <nav class="bg-white shadow-sm mt-3 border-t border-slate-100 hidden md:block">
+            <div class="max-w-7xl mx-auto px-4 flex justify-center space-x-12 text-sm font-bold text-slate-600 pt-3">
+                <a href="index.html" class="nav-link active hover:text-green-700 transition pb-3">TRANG CHỦ</a>
+                <a href="products.html" class="nav-link hover:text-green-700 transition pb-3">SẢN PHẨM</a>
+                <a href="explore.html" class="nav-link hover:text-green-700 transition pb-3">KHÁM PHÁ</a>
+                <a href="coupons.html" class="nav-link hover:text-green-700 transition pb-3">MÃ GIẢM GIÁ</a>
+                <a href="favorite.html" class="nav-link hover:text-green-700 transition pb-3">YÊU THÍCH</a>
+                <a href="settings.html" class="nav-link hover:text-green-700 transition pb-3">TÀI KHOẢN</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col w-full pb-20 md:pb-0">
+        <div class="page-section fade-in-up flex-1 flex flex-col block">
+            
+            <!-- Stacked Banner (Yêu cầu Mới Nâng cấp) -->
+            <div class="relative w-full h-[450px] md:h-[550px] bg-slate-100 flex items-center justify-center overflow-hidden">
+                <!-- Màu phủ trang trí -->
+                <div class="absolute inset-0 bg-green-900/5 mix-blend-multiply"></div>
+                
+                <!-- Hiệu ứng chiều sâu -->
+                <div class="relative w-full max-w-5xl h-[300px] md:h-[400px] flex items-center justify-center">
+                    
+                    <!-- Lớp cuối mờ -->
+                    <div class="absolute stacked-bg-1 w-[80%] md:w-[60%] h-full rounded-3xl overflow-hidden pointer-events-none transition-transform duration-700 hover:scale-[0.92]">
+                        <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1600&q=80" alt="Groceries BG 1" class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Lớp giữa -->
+                    <div class="absolute stacked-bg-2 w-[85%] md:w-[65%] h-full rounded-3xl overflow-hidden pointer-events-none transition-transform duration-700 hover:scale-[0.97]">
+                        <img src="https://plus.unsplash.com/premium_photo-1661335266158-b611e4f45143?w=1600&q=80" alt="Groceries BG 2" class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Lớp trên cùng (Main) -->
+                    <div class="absolute stacked-main w-[90%] md:w-[75%] h-full rounded-3xl overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1495107334309-fcf20504a5ab?w=1600&q=80" alt="Organic Main" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent flex items-center px-8 md:px-16">
+                            <div class="text-white max-w-lg">
+                                <span class="bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">Mùa Hè Xanh</span>
+                                <h2 class="text-3xl md:text-5xl font-black mb-4 drop-shadow-lg tracking-tight">Thực Phẩm Sạch<br>Giao Tận Cửa</h2>
+                                <p class="text-sm md:text-lg mb-8 drop-shadow-md text-slate-200">Giảm đến 30% cho đơn hàng đầu tiên. Hữu cơ 100% đạt chuẩn USDA.</p>
+                                <button onclick="window.location.href='products.html'" class="inline-block bg-green-600 hover:bg-green-500 text-white px-8 py-3.5 rounded-full font-bold transition shadow-[0_4px_14px_0_rgba(22,163,74,0.39)] text-base md:text-lg">MUA SẮM NGAY</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cam kết -->
+            <div class="bg-green-50 border-y border-green-100 py-6">
+                <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-center gap-6 md:gap-16 text-center">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🌱</span>
+                        <div class="text-left"><div class="font-bold text-green-800">100% Hữu Cơ</div><div class="text-xs text-slate-500">Đạt chứng nhận quốc tế</div></div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🚚</span>
+                        <div class="text-left"><div class="font-bold text-green-800">Giao Hàng 2H</div><div class="text-xs text-slate-500">Miễn phí từ 500k</div></div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🔄</span>
+                        <div class="text-left"><div class="font-bold text-green-800">Đổi Trả Dễ Dàng</div><div class="text-xs text-slate-500">Trong vòng 24h</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Sản Phẩm -->
+            <div class="max-w-7xl mx-auto px-4 py-12 w-full flex-1">
+                <div class="mb-16">
+                    <div class="flex items-center justify-between border-b-2 border-red-500 pb-2 mb-6">
+                        <h2 class="text-xl md:text-2xl font-bold text-red-600 uppercase flex items-center gap-2">
+                            <span class="text-3xl">🔥</span> Đang Giảm Giá
+                        </h2>
+                        <a href="products.html" class="text-sm font-bold text-red-600 hover:underline">Xem thêm &rarr;</a>
+                    </div>
+                    <!-- Nơi sinh ra HTML Đang Giảm Giá bằng JS -->
+                    <div id="home-sale-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"></div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between border-b-2 border-green-600 pb-2 mb-6">
+                        <h2 class="text-xl md:text-2xl font-bold text-green-800 uppercase flex items-center gap-2">
+                            <span class="text-3xl">⭐</span> Sản Phẩm Bán Chạy
+                        </h2>
+                        <a href="products.html" class="text-sm font-bold text-green-700 hover:underline">Xem tất cả &rarr;</a>
+                    </div>
+                    <!-- Nơi sinh ra HTML Bán Chạy bằng JS -->
+                    <div id="home-bestseller-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-slate-100 text-slate-600 mt-auto border-t">
+            <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-3xl text-green-600">🌿</span>
+                        <span class="font-black text-2xl text-green-700 tracking-tight uppercase">FreshFood</span>
+                    </div>
+                    <p class="text-sm mb-4 leading-relaxed max-w-sm">Hệ thống phân phối thực phẩm hữu cơ, thực phẩm tự nhiên và sản phẩm uy tín hàng đầu Việt Nam.</p>
+                </div>
+                <div>
+                    <h4 class="text-slate-800 font-bold mb-4 uppercase text-sm">Hỗ trợ khách hàng</h4>
+                    <ul class="text-sm space-y-2">
+                        <li><a href="#" class="hover:text-green-600 transition">Hướng dẫn mua hàng</a></li>
+                        <li><a href="#" class="hover:text-green-600 transition">Chính sách giao hàng</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<!-- Tính năng cứu hộ (Rescue Feature): Thanh trượt Mobile (Bottom Navbar Layout) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] flex justify-around items-center py-2 pb-safe">
+    <a href="index.html" class="flex flex-col items-center text-green-700 font-bold active">
+        <span class="text-2xl leading-none">🏠</span>
+        <span class="text-[10px] font-medium mt-1 uppercase">Trang chủ</span>
+    </a>
+    <a href="explore.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="text-2xl leading-none">📰</span>
+        <span class="text-[10px] font-medium mt-1 uppercase">Khám phá</span>
+    </a>
+    <a href="orders.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="text-2xl leading-none">📋</span>
+        <span class="text-[10px] font-medium mt-1 uppercase">Đơn hàng</span>
+    </a>
+    <a href="settings.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="text-2xl leading-none">👤</span>
+        <span class="text-[10px] font-medium mt-1 uppercase">Tài khoản</span>
+    </a>
+</nav>
+
+<!-- Floating Cart Button (Synced) -->
+<a href="cart.html" class="fixed bottom-20 right-4 md:bottom-8 md:right-8 w-14 h-14 bg-green-600 text-white rounded-full shadow-2xl flex items-center justify-center group z-40 hover:bg-green-500 hover:-translate-y-1 active:scale-95 transition-all">
+    <span class="text-2xl font-black block pt-1">🛒</span>
+    <span id="fab-cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">0</span>
+</a>
+
+<div id="toast-container" class="fixed top-20 right-4 md:top-24 md:right-8 z-[70] flex flex-col gap-2 pointer-events-none"></div>
+
+<script>
+    // Thay thế mock data bằng API thực tế
+    let productsData = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        checkAuth();
+        updateCartBadges();
+        fetchProducts(); // Gọi API thực tế
+    });
+
+    async function fetchProducts() {
+        const saleGrid = document.getElementById('home-sale-grid');
+        const bestGrid = document.getElementById('home-bestseller-grid');
+        
+        // Render Loading Skeletons
+        const skeleton = `
+            <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm animate-pulse">
+                <div class="h-40 md:h-48 bg-slate-200"></div>
+                <div class="p-4 md:p-5 flex flex-col gap-2">
+                    <div class="h-3 bg-slate-200 rounded w-1/4 mb-1"></div>
+                    <div class="h-4 bg-slate-200 rounded w-3/4 mb-2"></div>
+                    <div class="h-3 bg-slate-200 rounded w-1/2 mb-3"></div>
+                    <div class="flex justify-between items-end mt-4">
+                        <div class="h-6 bg-slate-200 rounded w-1/3"></div>
+                        <div class="h-10 bg-slate-200 rounded w-1/3"></div>
+                    </div>
+                </div>
+            </div>`;
+        saleGrid.innerHTML = skeleton.repeat(4);
+        bestGrid.innerHTML = skeleton.repeat(4);
+
+        try {
+            const response = await fetch('http://localhost:5000/api/products');
+            if (response.ok) {
+                productsData = await response.json();
+                renderProducts(); // Re-render từ dữ liệu API
+            } else {
+                throw new Error('Không thể tải dữ liệu');
+            }
+        } catch (error) {
+            console.error("Lỗi lấy dữ liệu:", error);
+            showToast('Lỗi tải dữ liệu sản phẩm mới, hiển thị dữ liệu mẫu.', 'warning');
+            
+            // Fallback mock data
+            productsData = [
+                { id: 1, name: 'Cải Chíp Hữu Cơ Thủy Canh', category: 'rau', price: 35000, unit: '500g', image: 'https://images.unsplash.com/photo-1557844352-761f2565b576?w=500&q=80', sale: false, bestseller: true },
+                { id: 2, name: 'Thịt Lợn Sinh Học', category: 'thit', price: 120000, oldPrice: 135000, unit: '1kg', image: 'https://images.unsplash.com/photo-1607623814075-e51df1bd6372?w=500&q=80', sale: true, bestseller: true },
+                { id: 3, name: 'Cà Chua Cherry Organic', category: 'rau', price: 45000, unit: '500g', image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500&q=80', sale: false, bestseller: false },
+                { id: 4, name: 'Cá Hồi Na Uy Phi Lê', category: 'thit', price: 350000, unit: '500g', image: 'https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=500&q=80', sale: false, bestseller: true }
+            ];
+            renderProducts();
+        }
+    }
+
+    // Tính năng Đồng bộ file cũ với Logic Mới: Cập nhật tài khoản, Header
+    function checkAuth() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const userStr = localStorage.getItem('currentUser');
+        
+        if (isLoggedIn && userStr) {
+            const user = JSON.parse(userStr);
+            document.getElementById('header-username').innerText = user.displayName || user.username;
+            document.getElementById('auth-section-guest').classList.add('hidden');
+            document.getElementById('auth-section-user').classList.remove('hidden');
+        } else {
+            document.getElementById('auth-section-guest').classList.remove('hidden');
+            document.getElementById('auth-section-user').classList.add('hidden');
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
+        checkAuth();
+        showToast('Đã đăng xuất thành công.');
+    }
+
+    // --- Render Component & Feature Rescue
+    function formatMoney(amount) {
+        return amount.toLocaleString('vi-VN') + 'đ';
+    }
+
+    // Hàm giả lập thẻ Sản phẩm 
+    function createProductCard(p) {
+        const hasSale = p.sale && p.oldPrice;
+        const oldPriceHtml = hasSale ? `<span class="text-slate-400 line-through text-xs font-medium ml-2">${formatMoney(p.oldPrice)}</span>` : '';
+        const badgeHtml = p.sale ? `<div class="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-black px-2 py-1 rounded shadow-sm z-10 uppercase tracking-wider">Giảm Giá</div>` : '';
+        const idStr = p._id || p.id; // Support both backend _id and fallback id
+        
+        return `
+            <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:border-green-400 hover:shadow-xl hover:-translate-y-1 transition-all relative flex flex-col group cursor-pointer" onclick="window.location.href='product-detail.html?id=${idStr}'">
+                ${badgeHtml}
+                <!-- Feature Rescue: Nút Yêu Thích (Favorite Heart) cho từng thẻ -->
+                <button onclick="event.stopPropagation(); toggleFavorite('${idStr}', this)" class="absolute top-3 right-3 z-10 w-8 h-8 bg-white/60 backdrop-blur-md rounded-full text-slate-400 hover:text-red-500 hover:bg-white transition-all shadow-sm flex items-center justify-center">
+                    <span class="text-lg pb-0.5">❤️</span>
+                </button>
+
+                <div class="h-40 md:h-48 bg-slate-100 relative overflow-hidden">
+                    <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                </div>
+                
+                <div class="p-4 md:p-5 flex flex-col flex-1">
+                    <div class="text-[10px] text-green-700 font-black tracking-widest uppercase mb-1">${p.category === 'rau' ? 'Tươi sống': 'Trái cây'}</div>
+                    <h3 class="font-bold text-slate-800 text-sm md:text-base leading-tight mb-2 line-clamp-2">${p.name}</h3>
+                    <div class="text-[11px] text-slate-500 font-medium mb-3">Đơn vị: <span class="text-slate-700">${p.unit}</span></div>
+                    
+                    <div class="mt-auto flex flex-col xl:flex-row justify-between xl:items-end gap-3">
+                        <div>
+                            <span class="text-lg md:text-xl font-black text-red-600 tracking-tight">${formatMoney(p.price)}</span>
+                            ${oldPriceHtml}
+                        </div>
+                        <div class="flex gap-2 w-full xl:w-auto mt-2 xl:mt-0">
+                            <!-- Chặn chuyển hướng khi Thêm giỏ -->
+                            <button onclick="event.stopPropagation(); handleAddToCart(event, '${idStr}', false)" class="flex-1 xl:w-10 xl:flex-none h-10 bg-green-50 text-green-700 rounded-xl flex items-center justify-center hover:bg-green-100 transition border border-green-200 focus:ring-2 focus:ring-green-400 focus:outline-none" title="Thêm giỏ hàng">
+                                <span class="text-xl pb-1">🛒</span>
+                            </button>
+                            <!-- Chặn chuyển hướng khi Mua ngay -->
+                            <button onclick="event.stopPropagation(); handleAddToCart(event, '${idStr}', true)" class="flex-1 px-4 h-10 bg-green-600 text-white text-[10px] font-black rounded-xl hover:bg-green-500 tracking-widest transition shadow-md uppercase focus:ring-2 focus:ring-green-400 focus:outline-none">
+                                Mua ngay
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderProducts() {
+        const saleGrid = document.getElementById('home-sale-grid');
+        const bestGrid = document.getElementById('home-bestseller-grid');
+        saleGrid.innerHTML = productsData.filter(p => p.sale).map(p => createProductCard(p)).join('');
+        bestGrid.innerHTML = productsData.filter(p => p.bestseller).map(p => createProductCard(p)).join('');
+    }
+
+    // --- Logic Mua Hàng & Chặn Đăng Nhập Mới ---
+    function handleAddToCart(event, productId, isBuyNow) {
+        event.preventDefault();
+
+        // Kiểm tra chặn đăng nhập
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        if (!isLoggedIn) {
+            localStorage.setItem('redirectAfter', window.location.href);
+            window.location.href = 'login.html'; // Tự động đá về Cửa Đăng nhập
+            return;
+        }
+
+        const product = productsData.find(p => (p._id || p.id) == productId);
+        if(!product) return;
+
+        // Lưu giỏ hàng (+1)
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const existing = cart.find(i => (i._id || i.id) == productId);
+        if (existing) {
+            existing.qty += 1;
+        } else {
+            cart.push({ ...product, qty: 1, selected: true }); // checked theo mặc định cho Trang Checkout sau này
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        
+        // Render +1
+        updateCartBadges();
+
+        // Tạo hiệu ứng thêm vào giỏ hàng đẹp mắt bằng cách bay icon (Tuỳ chọn)
+        
+        // Chuyển hướng nếu Mua ngay
+        if (isBuyNow) {
+            window.location.href = 'cart.html';
+        } else {
+            showToast(`Đã thêm <b class="text-green-200">${product.name}</b> vào giỏ hàng!`);
+        }
+    }
+
+    function updateCartBadges() {
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        let total = 0;
+        cart.forEach(c => total += c.qty);
+
+        const headerBadge = document.getElementById('header-cart-count');
+        const fabBadge = document.getElementById('fab-cart-count');
+        
+        [headerBadge, fabBadge].forEach(el => {
+            if(el) {
+                el.innerText = total;
+                if(total > 0) {
+                    el.classList.add('animate-bounce');
+                    setTimeout(() => el.classList.remove('animate-bounce'), 1000);
+                }
+            }
+        });
+    }
+
+    function toggleFavorite(id, btn) {
+        const heartSpan = btn.querySelector('span');
+        if(heartSpan.innerText === '❤️') {
+            heartSpan.innerText = '🤍';
+            showToast('Đã loại khỏi mục yêu thích.', 'warning');
+        } else {
+            heartSpan.innerText = '❤️';
+            showToast('Đã thêm thành công vào mục Yêu thích!');
+        }
+    }
+
+    // --- Toast UI ---
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        const icon = type === 'success' ? '✅' : '⚠️';
+        const color = type === 'success' ? 'bg-slate-800' : 'bg-red-500';
+
+        toast.className = `transform translate-x-10 opacity-0 smooth-transition px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 font-medium text-sm text-white ${color} border border-white/10 backdrop-blur-md`;
+        toast.innerHTML = `<span class="text-xl">${icon}</span> <span>${message}</span>`;
+        
+        container.appendChild(toast);
+        // Animate thò ra
+        setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
+        // Animate thụt vào
+        setTimeout(() => {
+            toast.classList.add('translate-x-10', 'opacity-0');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+</script>
+</body>
+</html>

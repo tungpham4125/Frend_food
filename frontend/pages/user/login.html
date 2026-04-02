@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshFood - Đăng nhập</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
+        .smooth-transition { transition: all 0.3s ease-in-out; }
+        .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased h-[100dvh] flex flex-col overflow-hidden">
+
+<div class="flex-1 flex flex-col overflow-y-auto bg-slate-50 relative min-h-0">
+    
+    <!-- Header (Synced) -->
+    <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2 cursor-pointer shrink-0">
+                    <span class="text-4xl text-green-600">🌿</span>
+                    <div class="font-black text-3xl text-green-700 tracking-tighter uppercase">FreshFood</div>
+                </a>
+                <div class="flex items-center space-x-6">
+                    <a href="index.html" class="text-sm font-bold text-slate-500 hover:text-green-700 transition uppercase tracking-widest">Trở về trang chủ</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-green-50 to-slate-50 relative overflow-hidden">
+        <!-- Abstract Shapes -->
+        <div class="absolute -top-24 -left-24 w-64 h-64 bg-green-200 rounded-full blur-3xl opacity-30"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-green-100 rounded-full blur-3xl opacity-40"></div>
+
+        <div class="max-w-2xl w-full relative z-10 fade-in-up">
+            <div class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden border border-slate-100 flex flex-col md:flex-row">
+                <!-- Left Side: Image/Intro -->
+                <div class="hidden md:block md:w-5/12 bg-green-700 p-12 text-white relative">
+                    <div class="relative z-10">
+                        <h2 class="text-3xl font-black mb-6 leading-tight uppercase font-">Rất vui được gặp lại!</h2>
+                        <p class="text-sm font-medium opacity-80 leading-relaxed">Đăng nhập ngay để tiếp tục tận hưởng ưu đãi dành riêng cho thành viên FreshFood.</p>
+                        <div class="mt-12">
+                            <div class="w-20 h-1 bg-white rounded-full opacity-30"></div>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-8 opacity-20">
+                        <span class="text-9xl">🌿</span>
+                    </div>
+                </div>
+
+                <!-- Right Side: Form -->
+                <div class="flex-1 p-10 md:p-12">
+                    <div class="text-center md:text-left mb-10">
+                        <h1 class="text-4xl font-black text-slate-800 mb-2 tracking-tight">Đăng nhập</h1>
+                        <p class="text-slate-500 font-medium text-sm">Chào mừng bạn quay trở lại!</p>
+                    </div>
+
+                    <form id="login-form" class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tên đăng nhập</label>
+                            <input type="text" id="username" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="Username..." required>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center px-1">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mật khẩu</label>
+                                <a href="#" class="text-[10px] font-black text-green-600 hover:text-green-700 uppercase tracking-widest">Quên mật khẩu?</a>
+                            </div>
+                            <input type="password" id="password" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="••••••••" required>
+                        </div>
+
+                        <label class="flex items-center gap-2 cursor-pointer group px-1">
+                            <input type="checkbox" class="w-4 h-4 rounded border-slate-300 text-green-600 focus:ring-green-500 cursor-pointer">
+                            <span class="text-[10px] font-bold text-slate-500 group-hover:text-slate-700 transition uppercase tracking-tighter">Ghi nhớ đăng nhập</span>
+                        </label>
+
+                        <button type="submit" class="w-full bg-green-700 text-white py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-green-600 transition shadow-xl shadow-green-100 active:scale-95 duration-300 mt-2">
+                            Đăng nhập ngay
+                        </button>
+                    </form>
+
+                    <div class="mt-10 pt-10 border-t border-slate-100 text-center">
+                        <p class="text-sm font-medium text-slate-500">
+                            Chưa có tài khoản? <a href="register.html" class="text-green-700 font-black hover:underline ml-1 uppercase text-xs tracking-widest">Đăng ký mới</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer (Synced) -->
+    <footer class="bg-white text-slate-400 py-6 text-center text-[10px] font-black uppercase tracking-widest border-t border-slate-100">
+        © 2024 FRESHFOOD. TẤT CẢ QUYỀN ĐƯỢC BẢO LƯU.
+    </footer>
+</div>
+
+<div id="toast-container" class="fixed top-20 right-4 md:top-24 md:right-8 z-[70] flex flex-col gap-2 pointer-events-none"></div>
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            // Lệnh kết nối với Backend API
+            const res = await fetch('http://localhost:5000/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await res.json();
+            
+            if (res.ok) {
+                showToast('🔑 Đăng nhập thành công!');
+                
+                // Lưu trạng thái và Token bảo mật
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('currentUser', JSON.stringify({ 
+                    username: data.username, 
+                    displayName: data.fullName || data.username,
+                    role: data.role 
+                }));
+
+                // Lái sang từng luồng riêng biệt theo Phân quyền (Role)
+                setTimeout(() => {
+                    if (data.role === 'admin') {
+                        window.location.href = '../admin/dashboard.html';
+                    } else if (data.role === 'staff') {
+                        window.location.href = '../staff/pos.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                }, 1000);
+            } else {
+                showToast(data.message || 'Sai tên đăng nhập hoặc mật khẩu!', 'error');
+            }
+        } catch (err) {
+            console.error(err);
+            showToast('Lỗi kết nối tới Server. Đảm bảo Backend đang chạy.', 'error');
+        }
+    });
+
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        const color = type === 'success' ? 'bg-green-600' : 'bg-red-500';
+        toast.className = `transform translate-x-10 opacity-0 smooth-transition px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 font-bold text-sm text-white ${color} pointer-events-auto border-4 border-white/20`;
+        toast.innerHTML = `<span class="text-xl">✅</span> <span>${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
+        setTimeout(() => {
+            toast.classList.add('translate-x-10', 'opacity-0');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+</script>
+</body>
+</html>

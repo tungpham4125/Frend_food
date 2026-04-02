@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Màn hình Khách hàng | MINI MART Staff</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <style>
+        body { font-family: 'Manrope', sans-serif; background-color: #f8f9fa; }
+        .primary-gradient { background: linear-gradient(135deg, #28a745 0%, #006e25 100%); }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .scan-line { width: 100%; height: 2px; background: rgba(34, 197, 94, 0.5); position: absolute; top: 0; left: 0; box-shadow: 0 0 20px 2px rgba(34, 197, 94, 0.8); animation: scanning 2s infinite linear; }
+        @keyframes scanning { 0% { top: 0; } 100% { top: 100%; } }
+    </style>
+</head>
+<body class="bg-[#f8f9fa] h-screen overflow-hidden flex flex-col antialiased">
+
+    <header class="h-20 bg-white border-b border-slate-100 flex items-center justify-between px-10 shrink-0 z-20">
+        <div class="flex items-center gap-4">
+            <span class="material-symbols-outlined text-green-700 text-5xl font-black">eco</span>
+            <h1 class="text-3xl font-black  tracking-tighter text-slate-900 uppercase">MINI MART</h1>
+        </div>
+        <div class="text-right">
+            <p id="liveTime" class="font-black text-2xl tabular-nums text-slate-900 tracking-tighter ">00:00:00</p>
+            <p class="text-[10px] font-black text-green-700 uppercase tracking-[0.3em] ">Quầy phục vụ: Terminal #01</p>
+        </div>
+    </header>
+
+    <main class="flex-1 flex overflow-hidden">
+        <div class="flex-1 flex flex-col p-10 overflow-hidden">
+            <h2 class="text-slate-300 font-black uppercase text-[11px] tracking-[0.4em] mb-10 shrink-0 px-2 ">Danh sách quét sản phẩm</h2>
+            <div id="customerCartList" class="flex-1 overflow-y-auto space-y-8 pr-8 custom-scrollbar">
+                <!-- Demo Screen -->
+                <div class="flex items-center gap-10 bg-white p-10 rounded-[3.5rem] shadow-sm border border-slate-50 transition-all hover:scale-[1.01]">
+                    <img src="https://namxanh.vn/wp-content/uploads/2022/08/nam-dui-ga-baby-tuoi-2.jpg" class="w-32 h-32 rounded-[2rem] object-cover border border-slate-50 shadow-inner">
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-black text-slate-900 text-3xl  mb-2 uppercase tracking-tight -none ">Nấm đùi gà baby tươi</h3>
+                        <p class="text-green-700 text-lg font-black uppercase tracking-widest  tabular-nums -none ">65.000đ x 1 khay</p>
+                    </div>
+                    <p class="text-6xl font-black text-slate-900 tabular-nums  tracking-tighter -none ">65.000đ</p>
+                </div>
+
+                <div class="flex items-center gap-10 bg-white p-10 rounded-[3.5rem] shadow-sm border border-slate-50 transition-all hover:scale-[1.01]">
+                    <img src="https://storage.googleapis.com/sc_pcm_product/prod/2025/10/24/670863-8934563138165_3.webp" class="w-32 h-32 rounded-[2rem] object-cover border border-slate-50 shadow-inner">
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-black text-slate-900 text-3xl  mb-2 uppercase tracking-tight -none ">Mì Hảo Hảo Tôm Chua Cay</h3>
+                        <p class="text-green-700 text-lg font-black uppercase tracking-widest  tabular-nums -none ">4.500đ x 10 gói</p>
+                    </div>
+                    <p class="text-6xl font-black text-slate-900 tabular-nums  tracking-tighter -none ">45.000đ</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-[520px] bg-white flex flex-col shadow-2xl shrink-0 z-10 border-l border-slate-100 relative overflow-hidden">
+            <div class="flex-1 overflow-y-auto custom-scrollbar p-12 flex flex-col items-center">
+                <div class="mb-12 w-full">
+                    <div class="bg-green-50 px-8 py-5 rounded-[2.5rem] border border-green-100 flex items-center justify-center gap-4">
+                        <span class="material-symbols-outlined text-green-700 font-black">verified_user</span>
+                        <span class="text-[12px] font-black text-green-700 uppercase tracking-tighter  -none ">Chào quý khách: Nguyễn Anh Quân</span>
+                    </div>
+                </div>
+
+                <div class="relative w-80 h-80 mb-12 group">
+                    <div class="p-6 bg-white border-[12px] border-slate-50 rounded-[4rem] shadow-inner h-full w-full relative overflow-hidden transition-transform duration-700 hover:scale-105">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=MiniMartPayment" class="w-full h-full rounded-3xl opacity-90 transition-all group-hover:opacity-100">
+                        <div class="scan-line"></div>
+                    </div>
+                </div>
+                
+                <h3 class="text-3xl font-black text-slate-900 uppercase  tracking-tighter -none ">Quét mã chuyển khoản</h3>
+                <p class="text-[11px] text-slate-300 font-black mt-3 uppercase tracking-[0.5em] mb-14  -none ">Sử dụng đa ứng dụng Ngân hàng / MOMO</p>
+                
+                <div id="promoNote" class="w-full bg-rose-50 border border-rose-100 p-8 rounded-[3rem] flex items-start gap-8 relative overflow-hidden transition-all hover:scale-[1.02]">
+                    <div class="absolute -right-8 -top-8 opacity-10">
+                        <span class="material-symbols-outlined text-[140px] text-rose-500">card_giftcard</span>
+                    </div>
+                    <div class="w-14 h-14 bg-rose-500 text-white rounded-[1.5rem] flex items-center justify-center shrink-0 shadow-2xl shadow-rose-500/30">
+                        <span class="material-symbols-outlined text-xl font-black">auto_awesome</span>
+                    </div>
+                    <div class="text-left relative z-10">
+                        <p class="text-[12px] font-black text-rose-600 uppercase tracking-widest  -none ">Siêu ưu đãi POS</p>
+                        <p class="text-[10px] text-rose-500 font-extrabold leading-relaxed mt-2 uppercase tracking-tight  -none ">Giảm ngay 10% (tối đa 50.000đ) khi thanh toán qua ví điện tử liên kết.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 p-14 rounded-t-[5rem] space-y-10 shadow-[0_-30px_70px_rgba(0,110,37,0.2)] shrink-0 transition-all">
+                <div class="space-y-4">
+                    <div class="flex justify-between font-black text-slate-500 text-[12px] uppercase tracking-[0.3em]  -none ">
+                        <span>Giá trị giỏ hàng:</span>
+                        <span class="text-slate-300 tabular-nums">110.000đ</span>
+                    </div>
+                    <div class="flex justify-between font-black text-rose-400 text-[12px] uppercase tracking-[0.3em]  -none ">
+                        <span>Ưu đãi áp dụng:</span>
+                        <span class="tabular-nums">- 10.000đ</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-end border-t border-white/5 pt-10">
+                    <div>
+                        <span class="text-slate-500 font-black text-[11px] uppercase block mb-3 tracking-[0.4em]  -none ">Tổng số tiền thanh toán:</span>
+                        <span class="text-white font-black text-sm uppercase  tracking-widest opacity-20 -none ">Payable Total Now</span>
+                    </div>
+                    <span class="text-[5.5rem] font-black text-emerald-400 tracking-tighter  tabular-nums leading-none -none ">100.000đ</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white px-10 py-6 text-center border-t border-slate-50 shrink-0">
+        <p class="text-[10px] font-black text-slate-200 uppercase tracking-[0.8em]  -none ">VUI LÒNG KIỂM TRA LẠI SẢN PHẨM TRƯỚC KHI RỜI QUẦY - XIN CẢM ƠN QUÝ KHÁCH</p>
+    </footer>
+
+    <script>
+        function updateTime() { document.getElementById('liveTime').innerText = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
+        setInterval(updateTime, 1000); updateTime();
+    </script>
+</body>
+</html>

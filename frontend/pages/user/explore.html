@@ -1,0 +1,316 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshFood - Khám phá</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
+        .smooth-transition { transition: all 0.3s ease-in-out; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .nav-link.active { color: #15803d; border-bottom: 2px solid #15803d; }
+        html { scroll-behavior: smooth; }
+        .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .product-card:hover { transform: translateY(-5px); }
+    </style>
+</head>
+<body class="text-slate-800 antialiased h-[100dvh] flex flex-col overflow-hidden">
+
+<div class="flex-1 flex flex-col overflow-y-auto bg-white relative min-h-0">
+    
+    <!-- Top Bar (Synced from index.html) -->
+    <div class="bg-green-700 text-white text-xs py-2">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
+            <div class="flex gap-4 sm:gap-6 font-medium">
+                <a href="#" class="hover:text-green-200 transition">Chính sách giao hàng</a>
+                <a href="#" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div id="auth-section-guest" class="flex gap-3">
+                    <a href="register.html" class="hover:text-green-200 transition">Đăng ký</a>
+                    <span class="text-green-500">|</span>
+                    <a href="login.html" class="hover:text-green-200 transition font-bold">Đăng nhập</a>
+                </div>
+                <div id="auth-section-user" class="hidden flex items-center gap-3">
+                    <span class="text-green-200 text-xl">😎</span>
+                    <span id="header-username" class="font-bold"></span>
+                    <span class="text-green-500">|</span>
+                    <button onclick="logout()" class="hover:text-red-300 transition">Đăng xuất</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header (Synced from index.html) -->
+    <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center gap-2 cursor-pointer shrink-0">
+                    <span class="text-4xl text-green-600">🌿</span>
+                    <div class="font-black text-3xl text-green-700 tracking-tighter uppercase">FreshFood</div>
+                </a>
+                
+                <!-- Search Bar -->
+                <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-4 pr-10 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 text-sm transition">
+                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 text-lg leading-none">🔍</button>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center space-x-6 shrink-0">
+                    <button class="relative text-slate-600 hover:text-green-700 transition" title="Thông báo">
+                        <span class="text-2xl pt-1 block">🔔</span>
+                        <span class="absolute top-0 right-0 bg-red-500 w-2.5 h-2.5 rounded-full border-2 border-white"></span>
+                    </button>
+
+                    <div class="w-px h-6 bg-slate-200 hidden sm:block"></div>
+
+                    <a href="orders.html" class="flex items-center gap-2 text-slate-600 hover:text-green-700 transition font-medium text-sm">
+                        <span class="text-2xl">📋</span>
+                        <span class="hidden sm:inline font-medium">Lịch sử</span>
+                    </a>
+
+ <!-- Empty Header Cart Placeholder -->
+                </div>
+            </div>
+        </div>
+        
+        <nav class="bg-white shadow-sm mt-3 border-t border-slate-100 hidden md:block">
+            <div class="max-w-7xl mx-auto px-4 flex justify-center space-x-12 text-sm font-bold text-slate-600 pt-3">
+                <a href="index.html" class="nav-link hover:text-green-700 transition pb-3">TRANG CHỦ</a>
+                <a href="products.html" class="nav-link hover:text-green-700 transition pb-3">SẢN PHẨM</a>
+                <a href="explore.html" class="nav-link active hover:text-green-700 transition pb-3">KHÁM PHÁ</a>
+                <a href="coupons.html" class="nav-link hover:text-green-700 transition pb-3">MÃ GIẢM GIÁ</a>
+                <a href="favorite.html" class="nav-link hover:text-green-700 transition pb-3">YÊU THÍCH</a>
+                <a href="settings.html" class="nav-link hover:text-green-700 transition pb-3">TÀI KHOẢN</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content (Explore Page Specific) -->
+    <main class="flex-1 pb-20 md:pb-12 fade-in-up">
+        <!-- Explore Hero -->
+        <div class="relative h-[300px] md:h-[400px] bg-slate-100 flex items-center justify-center overflow-hidden mb-12">
+            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1600" alt="Explore Hero" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/50"></div>
+            <div class="relative text-center text-white px-4">
+                <h1 class="text-4xl md:text-6xl font-black mb-4 tracking-tight">KHÁM PHÁ THỰC PHẨM SẠCH</h1>
+                <p class="text-lg md:text-xl text-slate-200 max-w-2xl mx-auto">Tìm kiếm những sản phẩm hữu cơ tươi ngon nhất, từ nông trại đến tận nhà bạn.</p>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4">
+            <!-- Filter & Sort placeholder -->
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+                <h2 class="text-2xl font-bold text-slate-800">Danh mục nổi bật</h2>
+                <div class="flex gap-2">
+                    <button class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-bold hover:border-green-600 transition">Phổ biến nhất</button>
+                    <button class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-bold hover:border-green-600 transition">Giá thấp - cao</button>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-16">
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col group">
+                    <div class="relative h-48 md:h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=800" alt="Rau xanh" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-3 left-3 bg-green-600 text-white text-[10px] font-black px-2 py-1 rounded uppercase tracking-wider">TƯƠI MỚI</div>
+                    </div>
+                    <div class="p-4 md:p-6 flex-1 flex flex-col">
+                        <h3 class="font-bold text-slate-800 text-base md:text-lg mb-2">Rau xanh hữu cơ</h3>
+                        <p class="text-slate-500 text-xs md:text-sm mb-4 line-clamp-2">Cung cấp vitamin và khoáng chất thiết yếu cho gia đình bạn.</p>
+                        <div class="mt-auto flex items-center justify-between border-t border-slate-50 pt-4">
+                            <span class="text-lg md:text-xl font-black text-red-600">30,000đ</span>
+                            <button class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-500 transition shadow-lg">
+                                <span class="text-xl">🛒</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col group">
+                    <div class="relative h-48 md:h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1619566636858-adf3ef46400c?auto=format&fit=crop&q=80&w=800" alt="Trái cây" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-3 left-3 bg-orange-500 text-white text-[10px] font-black px-2 py-1 rounded uppercase tracking-wider">HỮU CƠ</div>
+                    </div>
+                    <div class="p-4 md:p-6 flex-1 flex flex-col">
+                        <h3 class="font-bold text-slate-800 text-base md:text-lg mb-2">Trái cây nhiệt đới</h3>
+                        <p class="text-slate-500 text-xs md:text-sm mb-4 line-clamp-2">Ngọt lịm, mọng nước và hoàn toàn sạch.</p>
+                        <div class="mt-auto flex items-center justify-between border-t border-slate-50 pt-4">
+                            <span class="text-lg md:text-xl font-black text-red-600">50,000đ</span>
+                            <button class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-500 transition shadow-lg">
+                                <span class="text-xl">🛒</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col group">
+                    <div class="relative h-48 md:h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1607623814075-e512199b4482?auto=format&fit=crop&q=80&w=800" alt="Thịt sạch" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded uppercase tracking-wider">CAO CẤP</div>
+                    </div>
+                    <div class="p-4 md:p-6 flex-1 flex flex-col">
+                        <h3 class="font-bold text-slate-800 text-base md:text-lg mb-2">Thịt tươi sạch</h3>
+                        <p class="text-slate-500 text-xs md:text-sm mb-4 line-clamp-2">Đảm bảo nguồn gốc, không chất bảo quản.</p>
+                        <div class="mt-auto flex items-center justify-between border-t border-slate-50 pt-4">
+                            <span class="text-lg md:text-xl font-black text-red-600">100,000đ</span>
+                            <button class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-500 transition shadow-lg">
+                                <span class="text-xl">🛒</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col group">
+                    <div class="relative h-48 md:h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1550583724-125581cc2532?auto=format&fit=crop&q=80&w=800" alt="Sữa tươi" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-3 left-3 bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded uppercase tracking-wider">DAILY</div>
+                    </div>
+                    <div class="p-4 md:p-6 flex-1 flex flex-col">
+                        <h3 class="font-bold text-slate-800 text-base md:text-lg mb-2">Sữa bò nguyên chất</h3>
+                        <p class="text-slate-500 text-xs md:text-sm mb-4 line-clamp-2">Giàu dinh dưỡng, vị thơm ngậy tự nhiên.</p>
+                        <div class="mt-auto flex items-center justify-between border-t border-slate-50 pt-4">
+                            <span class="text-lg md:text-xl font-black text-red-600">25,000đ</span>
+                            <button class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-500 transition shadow-lg">
+                                <span class="text-xl">🛒</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer (Synced from index.html) -->
+    <footer class="bg-slate-100 text-slate-600 border-t">
+        <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="text-3xl text-green-600">🌿</span>
+                    <span class="font-black text-2xl text-green-700 tracking-tight uppercase">FreshFood</span>
+                </div>
+                <p class="text-sm mb-4 leading-relaxed max-w-sm">Hệ thống phân phối thực phẩm hữu cơ, thực phẩm tự nhiên và sản phẩm uy tín hàng đầu Việt Nam.</p>
+            </div>
+            <div>
+                <h4 class="text-slate-800 font-bold mb-4 uppercase text-sm">Hỗ trợ khách hàng</h4>
+                <ul class="text-sm space-y-2">
+                    <li><a href="#" class="hover:text-green-600 transition">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#" class="hover:text-green-600 transition">Chính sách giao hàng</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-slate-200 py-6 text-center text-xs font-medium text-slate-400">
+            © 2024 FRESHFOOD. TẤT CẢ QUYỀN ĐƯỢC BẢO LƯU.
+        </div>
+    </footer>
+</div>
+
+<!-- Mobile Bottom Navbar (Synced from index.html) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] flex justify-around items-center py-2 pb-safe">
+    <a href="index.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="text-2xl leading-none">🏠</span>
+        <span class="text-[10px] font-medium mt-1 uppercase">Trang chủ</span>
+    </a>
+    <a href="explore.html" class="flex flex-col items-center text-green-700 font-bold active">
+        <span class="text-2xl leading-none">📰</span>
+        <span class="text-[10px] font-medium mt-1 uppercase">Khám phá</span>
+    </a>
+    <a href="orders.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="text-2xl leading-none">📋</span>
+        <span class="text-[10px] font-medium mt-1 uppercase">Đơn hàng</span>
+    </a>
+    <a href="settings.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="text-2xl leading-none">👤</span>
+        <span class="text-[10px] font-medium mt-1 uppercase">Tài khoản</span>
+    </a>
+</nav>
+
+<!-- Floating Cart Button (Synced from index.html) -->
+<a href="cart.html" class="fixed bottom-20 right-4 md:bottom-8 md:right-8 w-14 h-14 bg-green-600 text-white rounded-full shadow-2xl flex items-center justify-center group z-40 hover:bg-green-500 hover:-translate-y-1 active:scale-95 transition-all">
+    <span class="text-2xl font-black block pt-1">🛒</span>
+    <span id="fab-cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">0</span>
+</a>
+
+<!-- Toast Container -->
+<div id="toast-container" class="fixed top-20 right-4 md:top-24 md:right-8 z-[70] flex flex-col gap-2 pointer-events-none"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        checkAuth();
+        updateCartBadges();
+    });
+
+    function checkAuth() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const userStr = localStorage.getItem('currentUser');
+        
+        if (isLoggedIn && userStr) {
+            const user = JSON.parse(userStr);
+            document.getElementById('header-username').innerText = user.displayName || user.username;
+            document.getElementById('auth-section-guest').classList.add('hidden');
+            document.getElementById('auth-section-user').classList.remove('hidden');
+        } else {
+            document.getElementById('auth-section-guest').classList.remove('hidden');
+            document.getElementById('auth-section-user').classList.add('hidden');
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('currentUser');
+        checkAuth();
+        showToast('Đã đăng xuất thành công.');
+    }
+
+    function updateCartBadges() {
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        let total = 0;
+        cart.forEach(c => total += c.qty);
+
+        const headerBadge = document.getElementById('header-cart-count');
+        const fabBadge = document.getElementById('fab-cart-count');
+        
+        [headerBadge, fabBadge].forEach(el => {
+            if(el) {
+                el.innerText = total;
+                if(total > 0) {
+                    el.classList.add('animate-bounce');
+                    setTimeout(() => el.classList.remove('animate-bounce'), 1000);
+                }
+            }
+        });
+    }
+
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        const icon = type === 'success' ? '✅' : '⚠️';
+        const color = type === 'success' ? 'bg-green-600' : 'bg-red-500';
+
+        toast.className = `transform translate-x-10 opacity-0 smooth-transition px-4 py-3 rounded shadow-lg flex items-center gap-3 font-semibold text-sm text-white ${color} pointer-events-auto`;
+        toast.innerHTML = `<span class="text-xl">${icon}</span> <span>${message}</span>`;
+        
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
+        setTimeout(() => {
+            toast.classList.add('translate-x-10', 'opacity-0');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+</script>
+</body>
+</html>
