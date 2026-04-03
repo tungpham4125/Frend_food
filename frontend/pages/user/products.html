@@ -778,7 +778,7 @@
             grid.innerHTML = items.map(p => {
                 const idStr = p._id || p.id;
                 return `
-                <div class="bg-white rounded-[2rem] border border-slate-100 overflow-hidden hover:shadow-2xl hover:border-green-200 transition-all duration-300 relative group cursor-pointer" onclick="openProductModal('${idStr}')">
+                <div class="bg-white rounded-[2rem] border border-slate-100 overflow-hidden hover:shadow-2xl hover:border-green-200 transition-all duration-300 relative group cursor-pointer" onclick="window.location.href='product-detail.html?id=${idStr}'">
                     <div class="h-56 md:h-64 bg-slate-50 relative overflow-hidden flex items-center justify-center group-hover:bg-slate-100/50 transition-colors duration-500">
                         ${p.sale ? '<div class="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full z-10 shadow-lg uppercase tracking-widest">Sale</div>' : ''}
                         <img src="${p.image}" class="w-full h-full object-cover transform group-hover:scale-[1.05] transition duration-700" alt="${p.name}">

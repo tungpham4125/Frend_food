@@ -17,6 +17,7 @@ const addOrderItems = async (req, res) => {
     }
 
     try {
+        const isPOS = orderType === 'POS';
         const order = new Order({
             user: req.user ? req.user.id : null, 
             orderItems,
@@ -28,7 +29,9 @@ const addOrderItems = async (req, res) => {
             discountAmount: discountAmount || 0,
             voucherCode: voucherCode || '',
             orderType: orderType || 'Online',
-            status: 'Chờ xử lý'
+            status: isPOS ? 'Hoàn thành' : 'Chờ xử lý',
+            isPaid: isPOS ? true : false,
+            paidAt: isPOS ? Date.now() : undefined
         });
 
         // Setup QR Code For Payment Support if requested

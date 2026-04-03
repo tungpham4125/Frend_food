@@ -20,37 +20,34 @@
 
     <!-- Sidebar -->
     <aside id="sidebar" class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300">
-        <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6">
+        <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6 shrink-0">
             <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">FreshFood<br>
-            <span class="text-[10px] text-slate-300 tracking-widest font-bold">Hệ thống Staff</span></span>
+            <span class="text-[10px] text-slate-300 tracking-widest font-bold uppercase">Nhân viên trực</span></span>
         </div>
-        <nav class="flex-1 px-4 space-y-1">
+        <nav class="flex flex-col gap-1 flex-1 overflow-y-auto px-4">
             <a href="dashboard.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
-                <span class="material-symbols-outlined text-xl">dashboard</span>
-                <span class="text-sm font-bold">Tổng quan</span>
-            </a>
-            <a href="orders.html" class="flex items-center gap-4 py-3 px-4 rounded-xl sidebar-active">
-                <span class="material-symbols-outlined text-xl">shopping_cart</span>
-                <span class="text-sm">Đơn hàng</span>
-            </a>
-            <a href="customers.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
-                <span class="material-symbols-outlined text-xl">group</span>
-                <span class="text-sm font-bold">Khách hàng</span>
+                <span class="material-symbols-outlined text-xl">dashboard</span><span class="text-sm font-bold">Tổng quan ca</span>
             </a>
             <a href="pos.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
-                <span class="material-symbols-outlined text-xl">point_of_sale</span>
-                <span class="text-sm font-bold">POS Bán lẻ</span>
+                <span class="material-symbols-outlined text-xl">point_of_sale</span><span class="text-sm font-bold">Bán hàng (POS)</span>
+            </a>
+            <a href="my-orders.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">receipt_long</span><span class="text-sm font-bold">Đơn hàng của mình</span>
+            </a>
+            <a href="orders.html" class="flex items-center gap-4 py-3 px-4 rounded-xl sidebar-active">
+                <span class="material-symbols-outlined text-xl">shopping_cart</span><span class="text-sm">Quản lý đơn hàng</span>
             </a>
             <a href="inventory-check.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
-                <span class="material-symbols-outlined text-xl">inventory</span>
-                <span class="text-sm font-bold">Kiểm kho</span>
+                <span class="material-symbols-outlined text-xl">inventory_2</span><span class="text-sm font-bold">Kiểm kho nhanh</span>
             </a>
         </nav>
-        <div class="px-4 py-6 border-t border-slate-100 mt-auto">
-            <button onclick="logoutStaff()" class="flex items-center gap-4 w-full py-3 px-4 text-red-400 hover:bg-red-50 rounded-xl transition-all">
-                <span class="material-symbols-outlined text-xl">logout</span>
-                <span class="text-sm font-bold">Đăng xuất</span>
-            </button>
+        <div class="mt-auto px-4 pb-8">
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+                <p class="text-[10px] font-bold text-green-700 uppercase mb-3 tracking-widest">Quản lý đơn hàng</p>
+                <button onclick="logoutStaff()" class="w-full py-3 bg-white text-slate-500 border border-slate-200 font-extrabold rounded-xl flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest hover:text-red-500 hover:border-red-100 transition-all">
+                    <span class="material-symbols-outlined text-sm">logout</span> Đăng xuất
+                </button>
+            </div>
         </div>
     </aside>
 

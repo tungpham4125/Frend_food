@@ -40,7 +40,7 @@
         
         <div class="mt-auto px-4 pb-8 opacity-40 grayscale pointer-events-none">
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-center ">
-                <p class="text-[10px] font-bold text-green-700 uppercase mb-3 tracking-widest">Ca trực sáng: #01</p>
+                <p id="sidebar-shift-label" class="text-[10px] font-bold text-green-700 uppercase mb-3 tracking-widest">Ca trực: ---</p>
                 <button class="w-full py-3 primary-gradient text-white font-extrabold rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-widest">
                     <span class="material-symbols-outlined text-sm font-bold">lock_clock</span> Đang chốt sổ
                 </button>
@@ -61,8 +61,8 @@
             <form id="endShiftForm" class="space-y-10">
                 <div class="grid grid-cols-2 gap-5">
                     <div class="bg-slate-50 p-6 rounded-[1.5rem] border border-slate-100 flex flex-col items-center text-center">
-                        <span class="text-[9px] text-slate-300 font-black uppercase tracking-widest mb-1 ">Mã Nhân Viên</span>
-                        <p class="font-black text-slate-900 text-sm uppercase  tracking-tight">MP-S1-001</p>
+                        <span class="text-[9px] text-slate-300 font-black uppercase tracking-widest mb-1 ">Nhân Viên</span>
+                        <p id="staffCode" class="font-black text-slate-900 text-sm uppercase  tracking-tight">---</p>
                     </div>
                     <div class="bg-slate-50 p-6 rounded-[1.5rem] border border-slate-100 flex flex-col items-center text-center">
                         <span class="text-[9px] text-slate-300 font-black uppercase tracking-widest mb-1 ">Tổng Giờ Trực</span>
@@ -130,21 +130,47 @@
             const diffMins = Math.floor((diffMs % 3600000) / 60000);
             document.getElementById('shiftDuration').innerText = `${diffHrs}h ${diffMins}m`;
 
+            // Lấy đơn hàng từ API
             const token = localStorage.getItem('token');
-            let allOrders = [];
+            let apiOrders = [];
             try {
                 const res = await fetch('http://localhost:5000/api/orders', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if(res.ok) {
-                    allOrders = await res.json();
+                    apiOrders = await res.json();
                 }
             } catch(e) {}
 
-            // Chỉ tính doanh thu từ đơn Hoàn thành trong ca
+            // Merge with local POS orders from STAFF_MY_ORDERS
+            const localPosOrders = JSON.parse(localStorage.getItem('STAFF_MY_ORDERS') || '[]');
+            const localConverted = localPosOrders.map(lo => ({
+                _id: lo.orderId || lo.id || ('local-' + lo.timestamp),
+                createdAt: lo.timestamp || new Date().toISOString(),
+                totalPrice: lo.total || 0,
+                isPaid: true,
+                status: lo.status || 'Hoàn thành',
+                orderType: 'POS',
+                paymentMethod: lo.paymentMethod || 'Tiền mặt (POS)',
+                _isLocal: true
+            }));
+
+            // Deduplicate: API orders override local
+            const mergedMap = new Map();
+            localConverted.forEach(o => {
+                const key = String(o._id).replace(/^#POS-/, '');
+                mergedMap.set(key, o);
+            });
+            apiOrders.forEach(o => {
+                mergedMap.set(String(o._id), o);
+            });
+            const allOrders = Array.from(mergedMap.values());
+
+            // Chỉ tính doanh thu từ đơn Hoàn thành / POS trong ca
             const shiftOrders = allOrders.filter(o => {
                 const st = (o.status || '').toLowerCase();
-                const isCompleted = st.includes('hoàn thành') || st.includes('hoan thanh');
+                const isPosOrder = o.orderType === 'POS' || o._isLocal;
+                const isCompleted = isPosOrder || st.includes('hoàn thành') || st.includes('hoan thanh');
                 return isCompleted && new Date(o.createdAt) >= start;
             });
             const totalRevenue = shiftOrders.reduce((sum, o) => sum + (Number(o.totalPrice) || 0), 0); 
@@ -153,12 +179,12 @@
             document.getElementById('shiftRevenue').innerText = totalRevenue.toLocaleString() + 'đ';
             document.getElementById('shiftCount').innerText = orderCount;
             
-            // Tạm tính (vì BE không tách PaymentMethod rõ ràng)
+            // Phân loại theo phương thức thanh toán
             const cashOrders = shiftOrders.filter(o => !o.paymentMethod || o.paymentMethod.includes('Tiền mặt') || o.paymentMethod.includes('COD'));
-            const qrOrders = shiftOrders.filter(o => o.paymentMethod && o.paymentMethod.includes('QR'));
+            const qrOrders = shiftOrders.filter(o => o.paymentMethod && (o.paymentMethod.includes('QR') || o.paymentMethod.includes('Chuyển khoản')));
             
             const cash = cashOrders.reduce((sum, o) => sum + (Number(o.totalPrice) || 0), 0);
-            const qr = totalRevenue - cash; // qr and other
+            const qr = totalRevenue - cash;
 
             document.getElementById('cashAmount').innerText = cash.toLocaleString() + 'đ';
             document.getElementById('qrAmount').innerText = qr.toLocaleString() + 'đ';
@@ -172,7 +198,22 @@
             }
         };
 
-        document.addEventListener('DOMContentLoaded', renderShiftReport);
+        document.addEventListener('DOMContentLoaded', () => {
+            renderShiftReport();
+            // Display staff name & shift info
+            const uStr = localStorage.getItem('currentUser');
+            if (uStr) {
+                const u = JSON.parse(uStr);
+                const el = document.getElementById('staffCode');
+                if (el) el.innerText = u.displayName || u.fullName || u.username || '---';
+            }
+            const shiftStr = localStorage.getItem(SHIFT_KEY);
+            if (shiftStr) {
+                const shift = JSON.parse(shiftStr);
+                const sLabel = document.getElementById('sidebar-shift-label');
+                if (sLabel && shift.name) sLabel.innerText = 'Ca trực: ' + shift.name;
+            }
+        });
     </script>
 </body>
 </html>

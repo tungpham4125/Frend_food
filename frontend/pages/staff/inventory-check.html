@@ -46,7 +46,7 @@
         
         <div class="mt-auto px-4 pb-8">
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-center ">
-                <p class="text-[10px] font-bold text-green-700 uppercase mb-3 tracking-widest">Hệ thống đồng bộ: ONLINE</p>
+                <p id="sidebar-shift-label" class="text-[10px] font-bold text-green-700 uppercase mb-3 tracking-widest text-center">Ca làm việc: ---</p>
                 <button onclick="window.location.href='end.html'" class="w-full py-3 bg-white text-slate-400 border border-slate-200 font-extrabold rounded-xl flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest hover:text-green-700 hover:border-green-100 transition-all">
                     <span class="material-symbols-outlined text-sm">logout</span> Đăng xuất ca
                 </button>
@@ -69,6 +69,9 @@
                     <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-sm">search</span>
                     <input id="invSearch" onkeyup="renderItems(this.value)" type="text" placeholder="Tìm tên sản phẩm hoặc mã SKU..." class="w-full bg-slate-50 border-none rounded-2xl py-3 pl-12 pr-6 text-[11px] font-black uppercase tracking-widest  outline-none focus:ring-2 focus:ring-green-600/10 transition-all">
                 </div>
+                <button id="btn-init-stock" onclick="initStockDefaults()" title="Cập nhật stock mặc định cho tất cả sản phẩm đang có tồn kho = 0" class="bg-amber-500 hover:bg-amber-400 text-white px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg active:scale-95 transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">restart_alt</span> Khởi tạo kho
+                </button>
                 <button onclick="saveInventory()" class="primary-gradient text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-green-600/20 active:scale-95 transition-all flex items-center gap-3">
                     <span class="material-symbols-outlined text-lg">save</span> LƯU DỮ LIỆU
                 </button>
@@ -129,10 +132,25 @@
         let isSaving = false;
 
         document.addEventListener('DOMContentLoaded', () => {
+            ensureShift();
             ensureStaffAuth();
             loadProducts();
         });
 
+        
+        function getShift() {
+            try { return JSON.parse(localStorage.getItem('STAFF_SHIFT_SESSION') || 'null'); } catch { return null; }
+        }
+        function ensureShift() {
+            const shift = getShift();
+            const sLabel = document.getElementById('sidebar-shift-label');
+            if (!shift || !shift.startedAt) {
+                alert('Vui lòng chọn ca làm việc trước!');
+                window.location.href = 'dashboard.html';
+            } else if(sLabel) {
+                sLabel.innerText = 'Ca làm việc: ' + shift.name;
+            }
+        }
         function ensureStaffAuth() {
             const token = localStorage.getItem('token');
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -158,21 +176,31 @@
         }
 
         async function loadProducts() {
+            const tbody = document.getElementById('inventoryBody');
+            tbody.innerHTML = `<tr><td colspan="5" class="px-10 py-16 text-center text-slate-400 font-black text-sm uppercase tracking-widest">
+                <span class="material-symbols-outlined animate-spin text-green-600 text-4xl block mb-4">refresh</span>Đang tải dữ liệu kho...
+            </td></tr>`;
             try {
                 const res = await fetch('http://localhost:5000/api/products');
-                if (!res.ok) throw new Error('API error');
+                if (!res.ok) throw new Error('API error ' + res.status);
                 const data = await res.json();
-                products = (data || []).map(p => ({
-                    _id: String(p._id || p.id || ''),
-                    name: p.name || '',
-                    category: p.category || '',
-                    parentCategory: getParentCategory(p.category),
-                    unit: p.unit || '',
-                    image: p.image || '',
-                    current: Number(p.stock) || 0,
-                    actual: Number(p.stock) || 0,
-                })).filter(p => p._id);
+                if (!Array.isArray(data) || data.length === 0) throw new Error('Không có dữ liệu sản phẩm');
+                products = (data || []).map(p => {
+                    // Thử nhiều tên field tồn kho khác nhau
+                    const stockVal = p.stock ?? p.countInStock ?? p.quantity ?? p.soLuong ?? p.inventory ?? 0;
+                    return {
+                        _id: String(p._id || p.id || ''),
+                        name: p.name || p.tenSanPham || '',
+                        category: p.category || p.danhMuc || '',
+                        parentCategory: getParentCategory(p.category || p.danhMuc || ''),
+                        unit: p.unit || p.donVi || '',
+                        image: p.image || p.hinh || p.imageUrl || '',
+                        current: Number(stockVal) || 0,
+                        actual: Number(stockVal) || 0,
+                    };
+                }).filter(p => p._id);
             } catch (e) {
+                console.error('Lỗi tải sản phẩm:', e);
                 // Demo fallback
                 products = [
                     { _id: 'p1', name: 'Cải Chíp Thủy Canh Hữu Cơ', category: 'Rau ăn lá', parentCategory: 'Rau củ quả', unit: '500g', image: 'https://images.unsplash.com/photo-1557844352-761f2565b576?w=200&q=80', current: 20, actual: 20 },
@@ -283,6 +311,44 @@
                 alert(`⚠️ Lỗi lưu tồn kho: ${e.message || 'Không rõ lỗi'}`);
             } finally {
                 isSaving = false;
+            }
+        }
+
+        async function initStockDefaults() {
+            if (!confirm('Bạn có chắc muốn khởi tạo số lượng tồn kho ngẫu nhiên cho tất cả sản phẩm đang có tồn kho = 0?')) return;
+            
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Vui lòng đăng nhập lại');
+                return;
+            }
+
+            try {
+                const btn = document.getElementById('btn-init-stock');
+                btn.innerHTML = `<span class="material-symbols-outlined text-sm animate-spin">refresh</span> Đang khởi tạo...`;
+                btn.disabled = true;
+
+                const res = await fetch('http://localhost:5000/api/products/init-stock', {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await res.json();
+                
+                if (!res.ok) throw new Error(data.message || 'Không thể khởi tạo tồn kho');
+                
+                alert(`✅ Thành công: ${data.message}`);
+                
+                // Mặc dù load lại sản phẩm, ta gọi hàm loadProducts
+                await loadProducts();
+            } catch (e) {
+                alert(`⚠️ Lỗi: ${e.message}`);
+            } finally {
+                const btn = document.getElementById('btn-init-stock');
+                btn.innerHTML = `<span class="material-symbols-outlined text-sm">restart_alt</span> Khởi tạo kho`;
+                btn.disabled = false;
             }
         }
 
