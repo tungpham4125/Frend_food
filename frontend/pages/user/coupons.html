@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,200..700,0..1,-50..200">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
@@ -123,8 +123,10 @@
                 </a>
                 
                 <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
-                    <input type="text" placeholder="Tìm kiếm voucher..." class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition">
-                    <button onclick="const q = document.getElementById('header-search').value.trim(); if(q) { if(typeof goSearch === 'function') goSearch(); else window.location.href='products.html?search='+encodeURIComponent(q); }" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 text-lg">🔍</button>
+                    <input type="text" id="header-search" placeholder="Tìm kiếm voucher..." class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition font-medium">
+                    <button onclick="const q = document.getElementById('header-search').value.trim(); if(q) { if(typeof goSearch === 'function') goSearch(); else window.location.href='products.html?search='+encodeURIComponent(q); }" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 transition">
+                        <span class="material-symbols-outlined text-xl !font-normal">search</span>
+                    </button>
                 </div>
 
                 <div class="flex items-center space-x-6 shrink-0">
