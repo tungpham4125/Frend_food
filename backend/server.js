@@ -1,7 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+console.log('🔑 JWT_SECRET loaded:', process.env.JWT_SECRET ? 'YES (' + process.env.JWT_SECRET.substring(0,5) + '...)' : '❌ NOT FOUND');
 
 const app = express();
 
@@ -10,7 +12,6 @@ app.use(cors());
 app.use(express.json());
 
 // Phục vụ toàn bộ Giao diện Front-end như một trang Web thật có miền (http://localhost:5000)
-const path = require('path');
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Điều hướng mặc định: Khi vào dấu "/" sẽ tự bật trang chủ
