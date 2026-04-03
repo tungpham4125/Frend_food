@@ -23,14 +23,13 @@
 
 ### 2. Tải mã nguồn
 ```bash
-git clone <link-repo-cua-ban>
-cd Frend_food
+git clone <link-repo>
 ```
 ### 3. Cài đặt Backend
 Di chuyển vào thư mục backend và cài đặt thư viện:
 npm install
 
-Quan trọng: Tạo file .env trong thư mục backend và dán cấu hình sau:
+Quan trọng: Tạo file .env trong thư mục backend và dán cấu hình sau thì mới đăng nhập được:
 ```bash
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/freshfood_db
