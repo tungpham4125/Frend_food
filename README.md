@@ -29,7 +29,7 @@ git clone <link-repo>
 Di chuyển vào thư mục backend và cài đặt thư viện:
 npm install
 
-Quan trọng: Tạo file .env trong thư mục backend và dán cấu hình sau thì mới đăng nhập được:
+####Quan trọng: Tạo file .env trong thư mục backend và dán cấu hình sau thì mới đăng nhập được:
 ```bash
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/freshfood_db
