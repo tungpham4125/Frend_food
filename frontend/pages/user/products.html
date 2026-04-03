@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -33,8 +33,8 @@
     <div class="bg-green-700 text-white text-xs py-2">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
             <div class="flex gap-4 sm:gap-6 font-medium">
-                <a href="#" class="hover:text-green-200 transition">Chính sách giao hàng</a>
-                <a href="#" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
+                <a href="policy.html" class="hover:text-green-200 transition">Chính sách giao hàng</a>
+                <a href="guide.html" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
             </div>
             <div class="flex gap-4 items-center">
                 <div id="auth-section-guest" class="flex gap-3">
@@ -55,9 +55,9 @@
                             <div class="text-[10px] text-green-600 uppercase font-bold tracking-widest" id="dropdown-role">Khách hàng</div>
                         </div>
                         <div class="p-4 space-y-3">
-                            <button onclick="alert('Tính năng chỉnh sửa Đang phát triển!')" class="w-full text-left px-4 py-2 hover:bg-slate-50 text-sm font-bold text-slate-600 rounded-lg transition flex items-center gap-2">
+                            <a href="settings.html" class="w-full text-left px-4 py-2 hover:bg-slate-50 text-sm font-bold text-slate-600 rounded-lg transition flex items-center gap-2">
                                 <span>✏️</span> Chỉnh sửa thông tin
-                            </button>
+                            </a>
                             <button onclick="logoutConfirm()" class="w-full text-left px-4 py-2 hover:bg-red-50 text-sm font-bold text-red-600 rounded-lg transition flex items-center gap-2">
                                 <span>🚪</span> Đăng xuất
                             </button>
@@ -78,8 +78,8 @@
                 </a>
                 
                 <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
-                    <input type="text" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition">
-                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 text-lg">🔍</button>
+                    <input type="text" id="header-search" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition" oninput="liveSearch()" onkeydown="if(event.key==='Enter') liveSearch()">
+                    <button onclick="liveSearch()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 text-lg">🔍</button>
                 </div>
 
                 <div class="flex items-center space-x-6 shrink-0">
@@ -116,10 +116,9 @@
                     <h3 class="font-black text-slate-800 text-sm mb-6 border-b border-slate-100 pb-4 uppercase tracking-widest">Danh mục</h3>
                     <ul class="space-y-2 mb-10" id="category-list">
                         <li><button onclick="filterCategory('all', this)" class="category-btn active w-full text-left px-4 py-3 rounded-2xl transition text-sm">Tất cả sản phẩm</button></li>
-                        <li><button onclick="filterCategory('rau', this)" class="category-btn w-full text-left px-4 py-3 rounded-2xl transition text-sm text-slate-500 hover:bg-slate-50 font-bold">Rau củ quả</button></li>
-                        <li><button onclick="filterCategory('thit', this)" class="category-btn w-full text-left px-4 py-3 rounded-2xl transition text-sm text-slate-500 hover:bg-slate-50 font-bold">Thịt & Hải sản</button></li>
-                        <li><button onclick="filterCategory('traicay', this)" class="category-btn w-full text-left px-4 py-3 rounded-2xl transition text-sm text-slate-500 hover:bg-slate-50 font-bold">Trái cây tươi</button></li>
-                        <li><button onclick="filterCategory('sua', this)" class="category-btn w-full text-left px-4 py-3 rounded-2xl transition text-sm text-slate-500 hover:bg-slate-50 font-bold">Sữa & Bơ sữa</button></li>
+                        <li><button onclick="filterCategory('Rau củ quả', this)" class="category-btn w-full text-left px-4 py-3 rounded-2xl transition text-sm text-slate-500 hover:bg-slate-50 font-bold">Rau củ quả</button></li>
+                        <li><button onclick="filterCategory('Thịt các loại', this)" class="category-btn w-full text-left px-4 py-3 rounded-2xl transition text-sm text-slate-500 hover:bg-slate-50 font-bold">Thịt các loại</button></li>
+                        <li><button onclick="filterCategory('Thủy hải sản', this)" class="category-btn w-full text-left px-4 py-3 rounded-2xl transition text-sm text-slate-500 hover:bg-slate-50 font-bold">Thủy hải sản</button></li>
                     </ul>
                     
                     <h3 class="font-black text-slate-800 text-sm mb-6 border-b border-slate-100 pb-4 uppercase tracking-widest">Lọc theo giá</h3>
@@ -243,11 +242,41 @@
 <script>
     let productsData = [];
     let currentCategory = 'all';
+    let searchKeyword = '';
 
     document.addEventListener('DOMContentLoaded', () => {
         checkAuth();
+        // Đọc từ khoá từ URL nếu có
+        const urlParams = new URLSearchParams(window.location.search);
+        const q = urlParams.get('search') || '';
+        if (q) {
+            searchKeyword = q.toLowerCase();
+            const searchEl = document.getElementById('header-search');
+            if (searchEl) searchEl.value = q;
+            document.getElementById('main-products-title').innerText = `Kết quả: "${q}"`;
+        }
         fetchProducts();
     });
+
+    function goSearch() {
+        const q = document.getElementById('header-search').value.trim();
+        if (q) {
+            searchKeyword = q.toLowerCase();
+            document.getElementById('main-products-title').innerText = `Kết quả: "${q}"`;
+            applyFilters();
+        }
+    }
+
+    function liveSearch() {
+        const q = document.getElementById('header-search').value.trim();
+        searchKeyword = q.toLowerCase();
+        if (q) {
+            document.getElementById('main-products-title').innerText = `Kết quả: "${q}"`;
+        } else {
+            document.getElementById('main-products-title').innerText = 'Tất Cả Sản Phẩm';
+        }
+        applyFilters();
+    }
 
     async function fetchProducts() {
         try {
@@ -257,8 +286,16 @@
                 applyFilters();
             } else { throw new Error('API Error'); }
         } catch (error) {
-            productsData = [];
-            document.getElementById('product-grid').innerHTML = '<div class="col-span-3 text-center text-slate-400 py-10 font-bold">Không tải được dữ liệu. Hãy bật Backend Server.</div>';
+            // Fallback dữ liệu demo
+            productsData = [
+                { _id: 'p1', name: 'Cải Chíp Thủy Canh Hữu Cơ', category: 'rau', price: 35000, unit: '500g', image: 'https://images.unsplash.com/photo-1557844352-761f2565b576?w=400&q=80', sale: true, bestseller: true },
+                { _id: 'p2', name: 'Thịt Lợn Sinh Học Omega-3', category: 'thit', price: 120000, unit: '1kg', image: 'https://images.unsplash.com/photo-1607623814075-e512199b4482?w=400&q=80', bestseller: true },
+                { _id: 'p3', name: 'Cà Chua Bi Hữu Cơ', category: 'rau', price: 45000, unit: '300g', image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&q=80', sale: true },
+                { _id: 'p4', name: 'Rau Bina Baby Organic', category: 'rau', price: 28000, unit: '200g', image: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&q=80' },
+                { _id: 'p5', name: 'Trứng Gà Ta Thả Vườn', category: 'thit', price: 55000, unit: '10 quả', image: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=400&q=80' },
+                { _id: 'p6', name: 'Nấm Hương Tươi Sạch', category: 'rau', price: 38000, unit: '300g', image: 'https://images.unsplash.com/photo-1504545102780-26774c1bb073?w=400&q=80' }
+            ];
+            applyFilters();
         }
     }
 
@@ -330,8 +367,29 @@
         applyFilters();
     }
 
+    function getParentCategory(cat) {
+        const c = String(cat || '');
+        if (['Rau ăn lá', 'Củ & Quả', 'Nấm tươi', 'Trái cây'].includes(c)) return 'Rau củ quả';
+        if (['Thịt heo', 'Thịt bò', 'Gia cầm (gà, vịt)'].includes(c)) return 'Thịt các loại';
+        if (['Cá tươi', 'Tôm/Cua/Mực', 'Hải sản đông lạnh'].includes(c)) return 'Thủy hải sản';
+        // Fallback backward compatibility
+        const lowC = c.toLowerCase();
+        if (['rau', 'traicay', 'raucu', 'cuqua', 'nam', 'raucu'].includes(lowC)) return 'Rau củ quả';
+        if (['thit', 'thitheo', 'thitbo', 'giacam'].includes(lowC)) return 'Thịt các loại';
+        if (['thuyhai', 'hai', 'catuoi', 'tomcua', 'haisan'].includes(lowC)) return 'Thủy hải sản';
+        return 'Rau củ quả';
+    }
+
     function applyFilters() {
-        let filtered = currentCategory === 'all' ? [...productsData] : productsData.filter(p => p.category === currentCategory);
+        let filtered = currentCategory === 'all' ? [...productsData] : productsData.filter(p => getParentCategory(p.category) === currentCategory || p.category === currentCategory);
+
+        // Tìm kiếm theo từ khoá
+        if (searchKeyword) {
+            filtered = filtered.filter(p =>
+                p.name.toLowerCase().includes(searchKeyword) ||
+                (p.category || '').toLowerCase().includes(searchKeyword)
+            );
+        }
 
         // Lọc Giá
         const priceFilter = document.querySelector('input[name="price"]:checked');
@@ -347,7 +405,24 @@
         if(sortMode === 'asc') filtered.sort((a,b) => a.price - b.price);
         if(sortMode === 'desc') filtered.sort((a,b) => b.price - a.price);
 
+        if (!filtered.length && searchKeyword) {
+            document.getElementById('product-grid').innerHTML = `
+                <div class="col-span-3 text-center py-16">
+                    <span class="text-5xl block mb-4 opacity-30">🔍</span>
+                    <p class="text-slate-400 font-bold text-lg">Không tìm thấy sản phẩm nào cho "${searchKeyword}"</p>
+                    <button onclick="clearSearch()" class="mt-4 text-green-600 font-black text-xs uppercase tracking-widest hover:underline">Xem tất cả sản phẩm</button>
+                </div>`;
+            return;
+        }
         renderGrid(filtered);
+    }
+
+    function clearSearch() {
+        searchKeyword = '';
+        const el = document.getElementById('header-search');
+        if (el) el.value = '';
+        document.getElementById('main-products-title').innerText = 'Tất Cả Sản Phẩm';
+        applyFilters();
     }
 
     function formatMoney(amount) {
@@ -400,7 +475,7 @@
         document.getElementById('modal-price').innerText = formatMoney(product.price);
         document.getElementById('modal-unit').innerText = product.unit;
         document.getElementById('modal-img').src = product.image;
-        document.getElementById('modal-category').innerText = product.category === 'rau' ? 'Rau & Củ quả' : 'Thực phẩm sạch';
+        document.getElementById('modal-category').innerText = getParentCategory(product.category);
         
         const oldPriceEl = document.getElementById('modal-old-price');
         const badgeSale = document.getElementById('modal-badge-sale');
@@ -457,13 +532,32 @@
         else showToastDesign(`Đã thêm vào giỏ`, '✅');
     }
 
+    function getFavKey() {
+        const userStr = localStorage.getItem('currentUser');
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            return 'favorites_' + (user.id || user._id || user.username);
+        }
+        return 'favorites';
+    }
+
     function toggleFavorite(id) {
         if (localStorage.getItem('isLoggedIn') !== 'true') {
-            alert('Vui lòng đăng nhập để lưu sản phẩm yêu thích.');
-            window.location.href = 'login.html';
+            showToastDesign('Vui lòng đăng nhập để lưu yêu thích', '⚠️');
+            setTimeout(() => window.location.href = 'login.html', 1000);
             return;
         }
-        showToastDesign('Đã thêm tiêu điểm Yêu thích', '❤️');
+        const favs = JSON.parse(localStorage.getItem(getFavKey()) || '[]');
+        const idx = favs.indexOf(String(id));
+        if (idx > -1) {
+            favs.splice(idx, 1);
+            localStorage.setItem(getFavKey(), JSON.stringify(favs));
+            showToastDesign('Đã xóa khỏi Yêu thích', '🗑️');
+        } else {
+            favs.push(String(id));
+            localStorage.setItem(getFavKey(), JSON.stringify(favs));
+            showToastDesign('Đã thêm vào Yêu thích ❤️');
+        }
     }
 
     function updateCartBadges() {

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshFood - Chính sách giao hàng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
+        html { scroll-behavior: smooth; }
+        .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+        .policy-card { border-left: 4px solid #16a34a; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Top Bar -->
+    <div class="bg-green-700 text-white text-xs py-2">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+            <div class="flex gap-6 font-medium">
+                <a href="policy.html" class="text-green-200 font-bold">Chính sách giao hàng</a>
+                <a href="guide.html" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
+            </div>
+            <div class="flex gap-3">
+                <a href="register.html" class="hover:text-green-200 transition">Đăng ký</a>
+                <span class="text-green-500">|</span>
+                <a href="login.html" class="hover:text-green-200 transition font-bold">Đăng nhập</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2">
+                    <span class="text-4xl text-green-600">🌿</span>
+                    <div class="font-black text-3xl text-green-700 tracking-tighter uppercase">FreshFood</div>
+                </a>
+                <div class="flex gap-4">
+                    <a href="products.html" class="text-sm font-bold text-slate-500 hover:text-green-700 transition">Xem sản phẩm</a>
+                    <a href="cart.html" class="text-sm font-bold text-green-700">🛒 Giỏ hàng</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="bg-gradient-to-br from-slate-800 to-slate-900 text-white py-20 px-4 fade-in-up">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="text-6xl mb-6">🚚</div>
+            <h1 class="text-4xl md:text-6xl font-black mb-4 tracking-tighter">Chính Sách<br/>Giao Hàng</h1>
+            <p class="text-slate-300 text-lg font-medium max-w-2xl mx-auto">Cam kết giao hàng nhanh chóng, an toàn và đúng hẹn tới từng gia đình.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 py-16 px-4">
+        <div class="max-w-4xl mx-auto space-y-8">
+
+            <!-- Phí giao hàng -->
+            <div class="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-8">
+                    <h2 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
+                        <span class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-xl">💰</span>
+                        Phí giao hàng
+                    </h2>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-green-50 border border-green-100 rounded-2xl p-6 text-center">
+                            <div class="text-3xl font-black text-green-600 mb-2">FREE</div>
+                            <div class="font-black text-slate-800 mb-1">Miễn phí ship</div>
+                            <div class="text-sm text-slate-500">Đơn hàng từ 200.000đ</div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 rounded-2xl p-6 text-center">
+                            <div class="text-3xl font-black text-slate-700 mb-2">15K</div>
+                            <div class="font-black text-slate-800 mb-1">Nội thành</div>
+                            <div class="text-sm text-slate-500">Đơn dưới 200.000đ</div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 rounded-2xl p-6 text-center">
+                            <div class="text-3xl font-black text-slate-700 mb-2">30K</div>
+                            <div class="font-black text-slate-800 mb-1">Ngoại thành</div>
+                            <div class="text-sm text-slate-500">Các quận vùng ven</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thời gian giao hàng -->
+            <div class="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-8">
+                    <h2 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
+                        <span class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-xl">⏱️</span>
+                        Thời gian giao hàng
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="policy-card bg-slate-50 rounded-xl p-5">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="font-black text-slate-800">Nội thành (Hà Nội, TP.HCM)</div>
+                                    <div class="text-sm text-slate-500 mt-1">Đặt trước 12:00 — giao trong ngày. Đặt sau 12:00 — giao sáng hôm sau.</div>
+                                </div>
+                                <div class="text-right ml-6 shrink-0">
+                                    <div class="font-black text-green-600 text-lg">2–4 giờ</div>
+                                    <div class="text-xs text-slate-400">Express</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="policy-card bg-slate-50 rounded-xl p-5">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="font-black text-slate-800">Tỉnh thành lân cận</div>
+                                    <div class="text-sm text-slate-500 mt-1">Các tỉnh trong vòng 200km. Giao qua đơn vị vận chuyển uy tín.</div>
+                                </div>
+                                <div class="text-right ml-6 shrink-0">
+                                    <div class="font-black text-blue-600 text-lg">1–2 ngày</div>
+                                    <div class="text-xs text-slate-400">Standard</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="policy-card bg-slate-50 rounded-xl p-5">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="font-black text-slate-800">Toàn quốc</div>
+                                    <div class="text-sm text-slate-500 mt-1">Tất cả các tỉnh thành Việt Nam. Đóng gói lạnh chuyên dụng cho thực phẩm tươi.</div>
+                                </div>
+                                <div class="text-right ml-6 shrink-0">
+                                    <div class="font-black text-orange-600 text-lg">2–5 ngày</div>
+                                    <div class="text-xs text-slate-400">Economy</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Đóng gói & Bảo quản -->
+            <div class="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-8">
+                    <h2 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
+                        <span class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-xl">📦</span>
+                        Đóng gói & Bảo quản
+                    </h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="flex gap-4">
+                            <span class="text-3xl shrink-0">❄️</span>
+                            <div>
+                                <div class="font-black text-slate-800 mb-1">Túi giữ lạnh chuyên dụng</div>
+                                <p class="text-sm text-slate-500">Tất cả thực phẩm tươi sống được đóng trong túi giữ lạnh PE, duy trì nhiệt độ 4–8°C trong 12 giờ.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="text-3xl shrink-0">🌿</span>
+                            <div>
+                                <div class="font-black text-slate-800 mb-1">Bao bì thân thiện môi trường</div>
+                                <p class="text-sm text-slate-500">Sử dụng túi giấy và hộp carton tái chế. Giảm thiểu nhựa dùng một lần.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="text-3xl shrink-0">🔒</span>
+                            <div>
+                                <div class="font-black text-slate-800 mb-1">Niêm phong an toàn</div>
+                                <p class="text-sm text-slate-500">Mỗi kiện hàng được niêm phong với tem FreshFood. Nếu tem bị bóc, từ chối nhận hàng ngay.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="text-3xl shrink-0">📱</span>
+                            <div>
+                                <div class="font-black text-slate-800 mb-1">Theo dõi đơn hàng</div>
+                                <p class="text-sm text-slate-500">Cập nhật trạng thái đơn hàng real-time qua app. Shipper liên hệ trước khi giao 30 phút.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chính sách đổi trả -->
+            <div class="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-8">
+                    <h2 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
+                        <span class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center text-xl">🔄</span>
+                        Chính sách đổi trả & hoàn tiền
+                    </h2>
+                    <div class="bg-red-50 border border-red-100 rounded-2xl p-6 mb-6">
+                        <div class="font-black text-red-700 text-lg mb-3">Đổi trả miễn phí trong 24 giờ nếu:</div>
+                        <ul class="space-y-2 text-sm text-red-600 font-medium">
+                            <li class="flex gap-2"><span>✓</span> Sản phẩm không đúng mô tả, sai chủng loại</li>
+                            <li class="flex gap-2"><span>✓</span> Rau củ bị dập nát, thối hỏng khi nhận</li>
+                            <li class="flex gap-2"><span>✓</span> Hàng hết hạn sử dụng khi giao</li>
+                            <li class="flex gap-2"><span>✓</span> Thiếu sản phẩm so với đơn hàng</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 border border-green-100 rounded-2xl p-6">
+                        <div class="font-black text-green-700 text-lg mb-3">Quy trình đổi trả:</div>
+                        <div class="space-y-3 text-sm text-slate-600 font-medium">
+                            <div class="flex gap-3"><span class="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">1</span><span>Chụp ảnh sản phẩm lỗi, liên hệ hotline hoặc chat trực tiếp</span></div>
+                            <div class="flex gap-3"><span class="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">2</span><span>Bộ phận CSKH xác nhận & tạo phiếu đổi trả trong 2 giờ</span></div>
+                            <div class="flex gap-3"><span class="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">3</span><span>Shipper tới thu hàng lỗi & giao hàng thay thế (hoặc hoàn tiền trong 24h)</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotline -->
+            <div class="bg-gradient-to-r from-green-600 to-green-700 rounded-[2rem] p-10 text-white text-center">
+                <div class="text-5xl mb-4">📞</div>
+                <h3 class="text-2xl font-black mb-2">Cần hỗ trợ thêm?</h3>
+                <p class="text-green-100 mb-6">Đội ngũ CSKH trực 7/7 từ 7:00 - 22:00</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="tel:1800123456" class="bg-white text-green-700 font-black px-8 py-3 rounded-full hover:bg-green-50 transition text-sm uppercase tracking-widest">📞 1800 123 456 (miễn phí)</a>
+                    <a href="index.html" class="border-2 border-white text-white font-black px-8 py-3 rounded-full hover:bg-white/10 transition text-sm uppercase tracking-widest">Về trang chủ</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-white py-8 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center gap-2 mb-3 opacity-60">
+                <span class="text-2xl">🌿</span>
+                <span class="font-black text-xl tracking-tight uppercase">FreshFood</span>
+            </div>
+            <p class="text-slate-400 text-sm">© 2024 FreshFood. Bán hàng bằng cả trái tim.</p>
+        </div>
+    </footer>
+</body>
+</html>

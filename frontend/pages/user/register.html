@@ -140,7 +140,11 @@
                 localStorage.setItem('currentUser', JSON.stringify({
                     username: data.username,
                     displayName: data.fullName || data.username,
-                    role: data.role
+                    role: data.role,
+                    fullName: data.fullName || '',
+                    phone: data.phone || phone || '',
+                    email: data.email || '',
+                    defaultAddress: data.defaultAddress || ''
                 }));
                 setTimeout(() => window.location.href = 'index.html', 1200);
             } else {

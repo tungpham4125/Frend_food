@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -11,27 +11,22 @@
     <style>
         body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
         .smooth-transition { transition: all 0.3s ease-in-out; }
-        .hide-scroll::-webkit-scrollbar { display: none; }
-        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
         .nav-link.active { color: #15803d; border-bottom: 2px solid #15803d; }
         html { scroll-behavior: smooth; }
         .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="text-slate-800 antialiased h-[100dvh] flex flex-col overflow-hidden">
 
 <div class="flex-1 flex flex-col overflow-y-auto bg-white relative min-h-0">
-    
-    <!-- Top Bar (Synced) -->
+
+    <!-- Top Bar -->
     <div class="bg-green-700 text-white text-xs py-2">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
             <div class="flex gap-4 sm:gap-6 font-medium">
-                <a href="#" class="hover:text-green-200 transition">Chính sách giao hàng</a>
-                <a href="#" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
+                <a href="policy.html" class="hover:text-green-200 transition">Chính sách giao hàng</a>
+                <a href="guide.html" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
             </div>
             <div class="flex gap-4 items-center">
                 <div id="auth-section-guest" class="flex gap-3">
@@ -49,7 +44,7 @@
         </div>
     </div>
 
-    <!-- Header (Synced) -->
+    <!-- Header -->
     <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
@@ -58,20 +53,14 @@
                     <div class="font-black text-3xl text-green-700 tracking-tighter uppercase">FreshFood</div>
                 </a>
                 <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
-                    <input type="text" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-4 pr-10 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 text-sm transition">
-                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 text-lg leading-none">🔍</button>
+                    <input type="text" id="header-search" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-4 pr-10 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:border-green-500 text-sm transition" onkeydown="if(event.key==='Enter') goSearch()">
+                    <button onclick="goSearch()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 text-lg leading-none">🔍</button>
                 </div>
                 <div class="flex items-center space-x-6 shrink-0">
-                    <button class="relative text-slate-600 hover:text-green-700 transition" title="Thông báo">
-                        <span class="text-2xl pt-1 block">🔔</span>
-                        <span class="absolute top-0 right-0 bg-red-500 w-2.5 h-2.5 rounded-full border-2 border-white"></span>
-                    </button>
-                    <div class="w-px h-6 bg-slate-200 hidden sm:block"></div>
                     <a href="orders.html" class="flex items-center gap-2 text-slate-600 hover:text-green-700 transition font-medium text-sm">
                         <span class="text-2xl">📋</span>
                         <span class="hidden sm:inline font-medium">Lịch sử</span>
                     </a>
- <!-- Empty Header Cart Placeholder -->
                 </div>
             </div>
         </div>
@@ -93,65 +82,96 @@
             <div class="max-w-4xl mx-auto px-4">
                 <div class="text-center mb-12">
                     <h1 class="text-4xl font-black text-slate-800 mb-4 tracking-tight uppercase">Cài Đặt Tài Khoản</h1>
-                    <p class="text-slate-500 max-w-2xl mx-auto font-medium">Quản lý thông tin cá nhân và cấu hình bảo mật của bạn tại FreshFood.</p>
+                    <p class="text-slate-500 max-w-2xl mx-auto font-medium">Quản lý thông tin cá nhân và địa chỉ giao hàng của bạn.</p>
                 </div>
-                
+
                 <div class="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
-                    <div class="p-8 md:p-12 space-y-12">
+                    <div class="p-8 md:p-12 space-y-10">
+
+                        <!-- Avatar & Info Banner -->
+                        <div class="flex items-center gap-6 p-6 bg-gradient-to-r from-green-50 to-slate-50 rounded-2xl border border-green-100">
+                            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center shrink-0">
+                                <span class="text-4xl">🧑‍🌾</span>
+                            </div>
+                            <div>
+                                <div class="font-black text-2xl text-slate-800" id="profile-display-name">--</div>
+                                <div class="text-sm text-slate-500 font-medium mt-1" id="profile-username">@username</div>
+                                <div class="mt-2 inline-block bg-green-100 text-green-700 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest" id="profile-role">Thành viên</div>
+                            </div>
+                        </div>
+
                         <!-- Personal Info -->
                         <div>
-                            <h2 class="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-3">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
                                 <span class="text-green-600">👤</span> Thông tin cá nhân
                             </h2>
-                            <div class="grid md:grid-cols-2 gap-8">
+                            <div class="grid md:grid-cols-2 gap-6">
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Họ và tên</label>
-                                    <input type="text" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="Nhập họ và tên...">
+                                    <input type="text" id="set-fullname" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="Nguyễn Văn A">
                                 </div>
                                 <div class="space-y-2">
-                                    <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Email</label>
-                                    <input type="email" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="example@gmail.com">
+                                    <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Tên đăng nhập</label>
+                                    <input type="text" id="set-username" class="w-full px-5 py-4 bg-slate-100 border border-slate-100 rounded-2xl text-slate-400 cursor-not-allowed" placeholder="username123" readonly>
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Số điện thoại</label>
-                                    <input type="tel" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="0123xxx...">
+                                    <input type="tel" id="set-phone" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="0123xxx...">
                                 </div>
                                 <div class="space-y-2">
-                                    <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Địa chỉ</label>
-                                    <input type="text" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="Nhập địa chỉ của bạn...">
+                                    <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Email</label>
+                                    <input type="email" id="set-email" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="example@gmail.com">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delivery Address -->
+                        <div class="border-t border-slate-100 pt-10">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                                <span class="text-green-600">📍</span> Địa chỉ giao hàng mặc định
+                            </h2>
+                            <p class="text-sm text-slate-500 mb-4 font-medium">Địa chỉ này sẽ được tự động điền khi bạn đặt hàng.</p>
+                            <div class="space-y-4">
+                                <div class="space-y-2">
+                                    <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Địa chỉ chi tiết</label>
+                                    <textarea id="set-address" rows="3" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="Số nhà, ngõ, đường, phường/xã, quận/huyện, tỉnh/thành phố..."></textarea>
+                                </div>
+                                <div class="bg-green-50 border border-green-100 rounded-xl p-4 flex gap-3">
+                                    <span class="text-green-500 text-xl shrink-0">💡</span>
+                                    <p class="text-xs text-green-700 font-medium leading-relaxed">Điền địa chỉ đầy đủ để shipper giao hàng dễ dàng hơn. Địa chỉ này sẽ được tự động điền vào form đặt hàng giúp bạn tiết kiệm thời gian.</p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Security -->
-                        <div class="border-t border-slate-100 pt-12">
-                            <h2 class="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-3">
+                        <div class="border-t border-slate-100 pt-10">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
                                 <span class="text-green-600">🔒</span> Mật khẩu & Bảo mật
                             </h2>
-                            <div class="space-y-6 max-w-xl">
+                            <div class="space-y-4 max-w-xl">
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Mật khẩu hiện tại</label>
-                                    <input type="password" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+                                    <input type="password" id="set-oldpwd" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="••••••••">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Mật khẩu mới</label>
-                                    <input type="password" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+                                    <input type="password" id="set-newpwd" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 transition" placeholder="Để trống nếu không đổi">
                                 </div>
                             </div>
                         </div>
 
                         <!-- Notifications -->
-                        <div class="border-t border-slate-100 pt-12">
-                            <h2 class="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-3">
+                        <div class="border-t border-slate-100 pt-10">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
                                 <span class="text-green-600">🔔</span> Cài đặt thông báo
                             </h2>
                             <div class="space-y-4">
                                 <label class="flex items-center group cursor-pointer">
-                                    <input type="checkbox" class="w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-500 cursor-pointer" checked>
+                                    <input type="checkbox" id="notif-order" class="w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-500 cursor-pointer" checked>
                                     <span class="ml-4 text-slate-700 font-medium group-hover:text-green-700 transition">Nhận thông báo về tình trạng đơn hàng</span>
                                 </label>
                                 <label class="flex items-center group cursor-pointer">
-                                    <input type="checkbox" class="w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-500 cursor-pointer" checked>
+                                    <input type="checkbox" id="notif-promo" class="w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-500 cursor-pointer" checked>
                                     <span class="ml-4 text-slate-700 font-medium group-hover:text-green-700 transition">Cập nhật các chương trình khuyến mãi mới</span>
                                 </label>
                             </div>
@@ -159,8 +179,8 @@
 
                         <!-- Actions -->
                         <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                            <button onclick="showToast('Đã lưu thay đổi thành công!')" class="flex-1 bg-green-600 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-green-700 transition shadow-xl shadow-green-100 active:scale-95">Lưu thay đổi</button>
-                            <button class="flex-1 bg-slate-50 text-slate-600 px-8 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-slate-100 transition active:scale-95">Hủy bỏ</button>
+                            <button onclick="saveSettings()" class="flex-1 bg-green-600 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-green-700 transition shadow-xl shadow-green-100 active:scale-95">💾 Lưu thay đổi</button>
+                            <button onclick="resetForm()" class="flex-1 bg-slate-50 text-slate-600 px-8 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-slate-100 transition active:scale-95">Hủy bỏ</button>
                         </div>
                     </div>
                 </div>
@@ -168,31 +188,19 @@
         </section>
     </main>
 
-    <!-- Footer (Synced) -->
+    <!-- Footer -->
     <footer class="bg-slate-100 text-slate-600 border-t">
-        <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="col-span-1 md:col-span-2">
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="text-3xl text-green-600">🌿</span>
-                    <span class="font-black text-2xl text-green-700 tracking-tight uppercase">FreshFood</span>
-                </div>
-                <p class="text-sm mb-4 leading-relaxed max-w-sm">Hệ thống phân phối thực phẩm hữu cơ, thực phẩm tự nhiên và sản phẩm uy tín hàng đầu Việt Nam.</p>
+        <div class="max-w-7xl mx-auto px-4 py-8 text-center">
+            <div class="flex items-center justify-center gap-2 mb-3">
+                <span class="text-2xl text-green-600">🌿</span>
+                <span class="font-black text-xl text-green-700 tracking-tight uppercase">FreshFood</span>
             </div>
-            <div>
-                <h4 class="text-slate-800 font-bold mb-4 uppercase text-sm">Hỗ trợ khách hàng</h4>
-                <ul class="text-sm space-y-2">
-                    <li><a href="#" class="hover:text-green-600 transition">Hướng dẫn mua hàng</a></li>
-                    <li><a href="#" class="hover:text-green-600 transition">Chính sách giao hàng</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="border-t border-slate-200 py-6 text-center text-xs font-medium text-slate-400 uppercase tracking-widest">
-            © 2024 FRESHFOOD. TẤT CẢ QUYỀN ĐƯỢC BẢO LƯU.
+            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">© 2024 FRESHFOOD. TẤT CẢ QUYỀN ĐƯỢC BẢO LƯU.</p>
         </div>
     </footer>
 </div>
 
-<!-- Mobile Bottom Navbar (Synced) -->
+<!-- Mobile Bottom Navbar -->
 <nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] flex justify-around items-center py-2 pb-safe">
     <a href="index.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
         <span class="text-2xl leading-none">🏠</span>
@@ -212,8 +220,7 @@
     </a>
 </nav>
 
-<!-- Floating Cart Button (Synced) -->
-<a href="cart.html" class="fixed bottom-20 right-4 md:bottom-8 md:right-8 w-14 h-14 bg-green-600 text-white rounded-full shadow-2xl flex items-center justify-center group z-40 hover:bg-green-500 hover:-translate-y-1 active:scale-95 transition-all">
+<a href="cart.html" class="fixed bottom-20 right-4 md:bottom-8 md:right-8 w-14 h-14 bg-green-600 text-white rounded-full shadow-2xl flex items-center justify-center group z-40 hover:bg-green-500 hover:-translate-y-1 transition-all">
     <span class="text-2xl font-black block pt-1">🛒</span>
     <span id="fab-cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">0</span>
 </a>
@@ -221,6 +228,8 @@
 <div id="toast-container" class="fixed top-20 right-4 md:top-24 md:right-8 z-[70] flex flex-col gap-2 pointer-events-none"></div>
 
 <script>
+    let originalUser = null;
+
     document.addEventListener('DOMContentLoaded', () => {
         checkAuth();
         updateCartBadges();
@@ -231,20 +240,135 @@
         const userStr = localStorage.getItem('currentUser');
         if (isLoggedIn && userStr) {
             const user = JSON.parse(userStr);
-            document.getElementById('header-username').innerText = user.displayName || user.username;
+            originalUser = { ...user };
+            document.getElementById('header-username').innerText = user.displayName || user.fullName || user.username;
             document.getElementById('auth-section-guest').classList.add('hidden');
             document.getElementById('auth-section-user').classList.remove('hidden');
+            populateForm(user);
+            // Sync profile from backend (source of truth)
+            syncProfileFromServer();
         } else {
             document.getElementById('auth-section-guest').classList.remove('hidden');
             document.getElementById('auth-section-user').classList.add('hidden');
+            showToast('Vui lòng đăng nhập để chỉnh sửa thông tin.', 'error');
+            setTimeout(() => window.location.href = 'login.html', 1500);
         }
+    }
+
+    async function syncProfileFromServer() {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        try {
+            const res = await fetch('http://localhost:5000/api/auth/profile', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+
+            // Merge to localStorage currentUser for consistency across pages
+            const userStr = localStorage.getItem('currentUser');
+            if (!userStr) return;
+            const local = JSON.parse(userStr);
+            const merged = {
+                ...local,
+                fullName: data.fullName || local.fullName || '',
+                displayName: data.fullName || local.displayName || local.username,
+                phone: data.phone || local.phone || '',
+                email: data.email || local.email || '',
+                defaultAddress: data.defaultAddress || data.address || local.defaultAddress || ''
+            };
+            localStorage.setItem('currentUser', JSON.stringify(merged));
+            originalUser = { ...merged };
+            populateForm(merged);
+            document.getElementById('header-username').innerText = merged.displayName || merged.username;
+        } catch (e) {
+            // ignore offline mode
+        }
+    }
+
+    function populateForm(user) {
+        document.getElementById('profile-display-name').innerText = user.fullName || user.displayName || '--';
+        document.getElementById('profile-username').innerText = '@' + (user.username || '');
+        document.getElementById('profile-role').innerText = user.role || 'Thành viên';
+
+        document.getElementById('set-fullname').value = user.fullName || user.displayName || '';
+        document.getElementById('set-username').value = user.username || '';
+        document.getElementById('set-phone').value = user.phone || '';
+        document.getElementById('set-email').value = user.email || '';
+        document.getElementById('set-address').value = user.defaultAddress || '';
+    }
+
+    async function saveSettings() {
+        const userStr = localStorage.getItem('currentUser');
+        if (!userStr) return;
+        let user = JSON.parse(userStr);
+
+        const fullName = document.getElementById('set-fullname').value.trim();
+        const phone = document.getElementById('set-phone').value.trim();
+        const email = document.getElementById('set-email').value.trim();
+        const defaultAddress = document.getElementById('set-address').value.trim();
+
+        if (!fullName) {
+            showToast('Họ và tên không được để trống!', 'error');
+            return;
+        }
+
+        // Persist to backend first
+        const token = localStorage.getItem('token');
+        try {
+            const res = await fetch('http://localhost:5000/api/auth/profile', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ fullName, phone, email, defaultAddress })
+            });
+
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                showToast(err.message || 'Lưu thất bại. Vui lòng thử lại!', 'error');
+                return;
+            }
+            const saved = await res.json();
+            user.fullName = saved.fullName || fullName;
+            user.displayName = saved.fullName || fullName;
+            user.phone = saved.phone || phone;
+            user.email = saved.email || email;
+            user.defaultAddress = saved.defaultAddress || defaultAddress;
+        } catch (e) {
+            // Offline fallback: still save locally
+            user.fullName = fullName;
+            user.displayName = fullName;
+            user.phone = phone;
+            user.email = email;
+            user.defaultAddress = defaultAddress;
+        }
+
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        originalUser = { ...user };
+
+        document.getElementById('header-username').innerText = user.displayName || fullName;
+        document.getElementById('profile-display-name').innerText = user.displayName || fullName;
+
+        showToast('✅ Đã lưu thay đổi thành công!');
+    }
+
+    function resetForm() {
+        if (originalUser) populateForm(originalUser);
+        showToast('Đã hoàn tác thay đổi.');
     }
 
     function logout() {
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('currentUser');
-        checkAuth();
-        showToast('Đã đăng xuất thành công.');
+        localStorage.removeItem('token');
+        window.location.href = 'index.html';
+    }
+
+    function goSearch() {
+        const q = document.getElementById('header-search').value.trim();
+        if (q) window.location.href = `products.html?search=${encodeURIComponent(q)}`;
     }
 
     function updateCartBadges() {
@@ -253,8 +377,8 @@
         cart.forEach(c => total += c.qty);
         const headerBadge = document.getElementById('header-cart-count');
         const fabBadge = document.getElementById('fab-cart-count');
-        if(headerBadge) headerBadge.innerText = total;
-        if(fabBadge) fabBadge.innerText = total;
+        if (headerBadge) headerBadge.innerText = total;
+        if (fabBadge) fabBadge.innerText = total;
     }
 
     function showToast(message, type = 'success') {
@@ -262,13 +386,10 @@
         const toast = document.createElement('div');
         const color = type === 'success' ? 'bg-green-600' : 'bg-red-500';
         toast.className = `transform translate-x-10 opacity-0 smooth-transition px-4 py-3 rounded shadow-lg flex items-center gap-3 font-semibold text-sm text-white ${color} pointer-events-auto`;
-        toast.innerHTML = `<span class="text-xl">✅</span> <span>${message}</span>`;
+        toast.innerHTML = `<span class="text-xl">${type === 'success' ? '✅' : '⚠️'}</span> <span>${message}</span>`;
         container.appendChild(toast);
         setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
-        setTimeout(() => {
-            toast.classList.add('translate-x-10', 'opacity-0');
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
+        setTimeout(() => { toast.classList.add('translate-x-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3000);
     }
 </script>
 </body>
