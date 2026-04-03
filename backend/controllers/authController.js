@@ -41,7 +41,8 @@ const register = async (req, res) => {
             res.status(400).json({ message: 'Dữ liệu không hợp lệ' });
         }
     } catch (error) {
-        res.status(500).json({ message: 'Lỗi server' });
+        console.error('❌ Register Error:', error.message, error.stack);
+        res.status(500).json({ message: 'Lỗi server', detail: error.message });
     }
 };
 
@@ -65,7 +66,8 @@ const login = async (req, res) => {
             token: generateToken(user._id, user.role)
         });
     } catch (error) {
-        res.status(500).json({ message: 'Lỗi server' });
+        console.error('❌ Login Error:', error.message, error.stack);
+        res.status(500).json({ message: 'Lỗi server', detail: error.message });
     }
 };
 

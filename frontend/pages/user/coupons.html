@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
@@ -21,6 +22,11 @@
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'wght' 200;
+            display: inline-block;
+            vertical-align: middle;
         }
         
         .ticket {
@@ -78,13 +84,13 @@
                 </div>
                 <div id="auth-section-user" class="hidden flex items-center gap-3 relative">
                     <button onclick="toggleAccountMenu()" class="flex items-center gap-2 hover:text-green-200 transition focus:outline-none">
-                        <span class="text-green-200 text-xl">😎</span>
+                        <span class="material-symbols-outlined text-green-200 text-xl">person</span>
                         <span id="header-username" class="font-bold"></span>
                     </button>
                     <!-- Account Dropdown -->
                     <div id="account-dropdown" class="hidden absolute top-8 right-0 w-72 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden transform origin-top-right transition-all">
                         <div class="p-4 bg-green-50 border-b border-green-100 text-center">
-                            <span class="text-3xl block mb-2">🧑‍🌾</span>
+                            <span class="material-symbols-outlined text-green-700 text-4xl block mb-2">account_circle</span>
                             <div class="font-black text-green-800" id="dropdown-name">Họ Tên</div>
                             <div class="text-[10px] text-green-600 uppercase font-bold tracking-widest" id="dropdown-role">Khách hàng</div>
                         </div>
@@ -106,9 +112,14 @@
     <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-40 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
-                <a href="index.html" class="flex items-center gap-2 cursor-pointer shrink-0">
-                    <span class="text-4xl text-green-600">🌿</span>
-                    <div class="font-black text-3xl text-green-700 tracking-tighter uppercase">FreshFood</div>
+                <a href="index.html" class="flex items-center gap-3 transition hover:opacity-90 shrink-0">
+                    <div class="w-10 h-10 bg-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-200">
+                        <span class="material-symbols-outlined text-white text-2xl">eco</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xl font-bold text-slate-800 leading-none">FreshFood</span>
+                        <span class="text-[10px] text-green-600 font-bold uppercase tracking-widest mt-1">Organic Market</span>
+                    </div>
                 </a>
                 
                 <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
@@ -118,11 +129,11 @@
 
                 <div class="flex items-center space-x-6 shrink-0">
                     <a href="orders.html" class="flex items-center gap-2 text-slate-600 hover:text-green-700 transition font-medium text-sm">
-                        <span class="text-2xl">📋</span>
+                        <span class="material-symbols-outlined text-2xl">receipt_long</span>
                         <span class="hidden sm:inline font-bold">Đơn hàng</span>
                     </a>
                     <a href="cart.html" class="relative group flex items-center gap-2">
-                        <span class="text-2xl pt-1 block group-hover:text-green-600 transition">🛒</span>
+                        <span class="material-symbols-outlined text-2xl group-hover:text-green-600 transition">shopping_cart</span>
                         <span id="header-cart-count" class="hidden absolute -top-1 -right-2 bg-green-600 text-white text-[10px] font-black w-5 h-5 rounded-full items-center justify-center border-2 border-white">0</span>
                     </a>
                 </div>
@@ -130,7 +141,7 @@
         </div>
         
         <nav class="bg-white mt-4 hidden md:block">
-            <div class="max-w-7xl mx-auto px-4 flex justify-center space-x-12 text-[11px] font-black text-slate-400 uppercase tracking-widest">
+            <div class="max-w-7xl mx-auto px-4 flex justify-center space-x-12 text-xs font-bold text-slate-500 uppercase tracking-wider">
                 <a href="index.html" class="nav-link hover:text-green-700 transition pb-3">Trang Chủ</a>
                 <a href="products.html" class="nav-link hover:text-green-700 transition pb-3">Sản Phẩm</a>
                 <a href="explore.html" class="nav-link hover:text-green-700 transition pb-3">Khám Phá</a>
@@ -143,8 +154,8 @@
     <!-- Main Content -->
     <main class="flex-1 pb-24 max-w-7xl w-full mx-auto px-4 py-12 fade-in-up">
         <div class="text-center mb-12">
-            <h1 class="text-4xl font-black text-slate-800 mb-2 uppercase tracking-tighter">Kho Voucher</h1>
-            <p class="text-slate-400 font-bold text-sm tracking-widest uppercase">Thu thập mã để được giảm giá tức thì</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Kho Voucher</h1>
+            <p class="text-slate-400 font-bold text-sm tracking-wide">Thu thập mã để được giảm giá tức thì</p>
         </div>
 
         <!-- Layout 2 Cột -->
@@ -160,17 +171,17 @@
                     <!-- Ticket 1 -->
                     <div class="ticket hover:border-green-200 transition-colors group cursor-pointer" onclick="copyCoupon('FRESH20')">
                         <div class="ticket-left group-hover:bg-green-100 transition-colors">
-                            <span class="text-3xl font-black text-green-600 leading-none">20%</span>
-                            <span class="text-[10px] font-bold text-green-800 uppercase mt-1">Giảm Tối đa</span>
+                            <span class="text-3xl font-bold text-green-600 leading-none">20%</span>
+                            <span class="text-[10px] font-bold text-green-800 uppercase mt-1">Giảm tối đa</span>
                         </div>
                         <div class="ticket-right flex justify-between items-center gap-4">
                             <div>
-                                <h3 class="font-black text-slate-800 mb-1">Giảm 20% Đơn Hàng Mới</h3>
+                                <h3 class="font-bold text-slate-800 mb-1">Giảm 20% Đơn Hàng Mới</h3>
                                 <div class="text-xs text-slate-500 font-medium mb-2">Đơn tối thiểu 200k, giảm tối đa 50k</div>
                                 <div class="bg-slate-100 text-slate-500 text-[10px] uppercase font-black tracking-widest px-2 py-1 rounded inline-block">MÃ: FRESH20</div>
                             </div>
                             <button class="shrink-0 w-10 h-10 bg-slate-800 text-white rounded-xl flex items-center justify-center hover:bg-black transition shadow-lg group-hover:scale-110">
-                                <span>📋</span>
+                                <span class="material-symbols-outlined text-base">content_copy</span>
                             </button>
                         </div>
                     </div>
@@ -178,17 +189,17 @@
                     <!-- Ticket 2 -->
                     <div class="ticket hover:border-green-200 transition-colors group cursor-pointer" onclick="copyCoupon('GIAM50K')">
                         <div class="ticket-left group-hover:bg-green-100 transition-colors">
-                            <span class="text-3xl font-black text-green-600 leading-none">50K</span>
-                            <span class="text-[10px] font-bold text-green-800 uppercase mt-1">Giảm Tiền</span>
+                            <span class="text-3xl font-bold text-green-600 leading-none">50K</span>
+                            <span class="text-[10px] font-bold text-green-800 uppercase mt-1">Giảm tiền</span>
                         </div>
                         <div class="ticket-right flex justify-between items-center gap-4">
                             <div>
-                                <h3 class="font-black text-slate-800 mb-1">Giảm Trực Tiếp 50K</h3>
+                                <h3 class="font-bold text-slate-800 mb-1">Giảm Trực Tiếp 50K</h3>
                                 <div class="text-xs text-slate-500 font-medium mb-2">Áp dụng cho mọi đơn từ 500k</div>
                                 <div class="bg-slate-100 text-slate-500 text-[10px] uppercase font-black tracking-widest px-2 py-1 rounded inline-block">MÃ: GIAM50K</div>
                             </div>
                             <button class="shrink-0 w-10 h-10 bg-slate-800 text-white rounded-xl flex items-center justify-center hover:bg-black transition shadow-lg group-hover:scale-110">
-                                <span>📋</span>
+                                <span class="material-symbols-outlined text-base">content_copy</span>
                             </button>
                         </div>
                     </div>
@@ -197,25 +208,25 @@
 
             <!-- Cột 2: Voucher Freeship -->
             <div>
-                <h2 class="text-xl font-black text-slate-800 uppercase tracking-tighter mb-6 flex items-center gap-2 border-b border-slate-200 pb-3">
-                    <span class="text-2xl text-blue-500">🚚</span> Voucher Miễn Vận Chuyển
+                <h2 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2 border-b border-slate-200 pb-4">
+                    <span class="material-symbols-outlined text-blue-500 text-2xl">local_shipping</span> Voucher miễn vận chuyển
                 </h2>
                 
                 <div class="space-y-4">
                     <!-- Ticket 3 -->
                     <div class="ticket hover:border-blue-200 transition-colors group cursor-pointer" onclick="copyCoupon('FREESHIP')">
                         <div class="ticket-left !bg-blue-50 group-hover:bg-blue-100 transition-colors">
-                            <span class="text-3xl font-black text-blue-600 leading-none">100%</span>
-                            <span class="text-[10px] font-bold text-blue-800 uppercase mt-1">Free Ship</span>
+                            <span class="text-3xl font-bold text-blue-600 leading-none">100%</span>
+                            <span class="text-[10px] font-bold text-blue-800 uppercase mt-1">Miễn phí ship</span>
                         </div>
                         <div class="ticket-right flex justify-between items-center gap-4">
                             <div>
-                                <h3 class="font-black text-slate-800 mb-1">Miễn Phí Giao Hàng</h3>
+                                <h3 class="font-bold text-slate-800 mb-1">Miễn Phí Giao Hàng</h3>
                                 <div class="text-xs text-slate-500 font-medium mb-2">Cho đơn nội thành Hà Nội > 300k</div>
                                 <div class="bg-slate-100 text-slate-500 text-[10px] uppercase font-black tracking-widest px-2 py-1 rounded inline-block">MÃ: FREESHIP</div>
                             </div>
                             <button class="shrink-0 w-10 h-10 bg-slate-800 text-white rounded-xl flex items-center justify-center hover:bg-black transition shadow-lg group-hover:scale-110">
-                                <span>📋</span>
+                                <span class="material-symbols-outlined text-base">content_copy</span>
                             </button>
                         </div>
                     </div>
@@ -226,11 +237,70 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-slate-100 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 py-12 flex flex-col items-center">
-            <span class="text-4xl text-green-600 mb-2">🌿</span>
-            <span class="font-black text-2xl text-slate-800 tracking-tighter uppercase mb-4">FreshFood</span>
-            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Bán hàng bằng cả trái tim</p>
+    <footer class="bg-white border-t border-slate-200 pt-12 pb-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-4">
+                <div class="col-span-1 lg:col-span-1">
+                    <a href="../index.html" class="flex items-center gap-3 mb-4">
+                        <div class="w-9 h-9 bg-green-700 rounded-lg flex items-center justify-center">
+                            <span class="material-symbols-outlined text-white text-xl">eco</span>
+                        </div>
+                        <span class="text-xl font-bold text-slate-800">FreshFood</span>
+                    </a>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                        FreshFood - Hệ thống cung cấp thực phẩm hữu cơ, rau củ sạch đạt chuẩn VietGAP & GlobalGAP. Sức
+                        khỏe của bạn là niềm hạnh phúc của chúng tôi.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">MUA SẮM</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-slate-500 hover:text-green-600 transition">Tất cả sản phẩm</a></li>
+                        <li><a href="products.html?category=fruits" class="text-slate-500 hover:text-green-600 transition">Trái cây tươi</a></li>
+                        <li><a href="products.html?category=vegetables" class="text-slate-500 hover:text-green-600 transition">Rau củ hữu cơ</a></li>
+                        <li><a href="explore.html" class="text-slate-500 hover:text-green-600 transition">Combo khuyến mãi</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">CHÍNH SÁCH</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Chính sách vận chuyển</a></li>
+                        <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Chính sách đổi trả</a></li>
+                        <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Bảo mật thông tin</a></li>
+                        <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Điều khoản sử dụng</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">LIÊN HỆ</h4>
+                    <ul class="space-y-2">
+                        <li class="flex gap-3">
+                            <span class="material-symbols-outlined text-green-600 text-lg">location_on</span>
+                            <span class="text-slate-500 text-[13px]">123 Đường Organic, Quận 1, TP. HCM</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="material-symbols-outlined text-green-600 text-lg">call</span>
+                            <span class="text-slate-500 text-[13px]">1900 1234 - 0987 654 321</span>
+                        </li>
+                        <li class="flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-green-600 text-lg">mail</span>
+                                <span class="text-slate-500 text-[13px]">support@freshfood.vn</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="#" class="w-7 h-7 border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:border-green-500 hover:text-green-500 transition">
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.77,7.46H14.5v-1.9c0-.9.6-1.1,1-1.1h3V1h-4.33c-4.78,0-5.37,3.52-5.37,5.48v2.12H5.09v3.74h3.71v11.66h4.51V11.2h3.3l1.16-3.74Z"></path></svg>
+                                </a>
+                                <a href="#" class="w-7 h-7 border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:border-green-500 hover:text-green-500 transition">
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.31,2h-1c-2,0-3.35,0-4.42.08C5.8,2.17,5,2.32,4.3,2.7A4.6,4.6,0,0,0,2.7,4.3C2.32,5,2.17,5.8,2.08,6.86,2,7.93,2,9.28,2,11.31v1c0,2,0,3.35.08,4.42.09,1.07.24,1.82.62,2.51a4.6,4.6,0,0,0,1.6,1.6c.69.38,1.44.53,2.51.62,1.07.08,2.42.08,4.42.08h1c2,0,3.35,0,4.42-.08,1.07-.09,1.82-.24,2.51-.62a4.6,4.6,0,0,0,1.6-1.6c.38-.69.53-1.44.62-2.51.08-1.07.08-2.42.08-4.42v-1c0-2,0-3.35-.08-4.42-.09-1.07-.24-1.82-.62-2.51a4.6,4.6,0,0,0-1.6-1.6c-.69-.38-1.44-.53-2.51-.62C15.66,2,14.31,2,12.31,2ZM12,6.87A5.13,5.13,0,1,1,6.87,12,5.13,5.13,0,0,1,12,6.87Zm6.39-1.11a1.2,1.2,0,1,1-1.2-1.2A1.2,1.2,0,0,1,18.39,5.76ZM12,15.13A3.13,3.13,0,1,0,8.87,12,3.13,3.13,0,0,0,12,15.13Z"></path></svg>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </footer>
 </div>
