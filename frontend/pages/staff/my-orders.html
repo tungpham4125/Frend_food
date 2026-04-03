@@ -42,7 +42,7 @@
         
         <div class="mt-auto px-4 pb-8">
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-center ">
-                <p class="text-[10px] font-bold text-green-700 uppercase mb-3 tracking-widest">Ca trực sáng: #01</p>
+                <p id="sidebar-shift-label" class="text-[10px] font-bold text-green-700 uppercase mb-3 tracking-widest text-center">Ca làm việc: ---</p>
                 <button onclick="window.location.href='end.html'" class="w-full py-3 primary-gradient text-white font-extrabold rounded-xl shadow-lg flex items-center justify-center gap-2 text-xs uppercase tracking-widest active:scale-95 transition-transform">
                     <span class="material-symbols-outlined text-sm font-bold">logout</span> Kết thúc ca
                 </button>
@@ -134,6 +134,75 @@
     <script>
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
         let currentFilter = 'week';
+        let allOrders = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            ensureShift();
+            ensureStaffAuth();
+            loadMyOrders();
+        });
+
+        
+        function getShift() {
+            try { return JSON.parse(localStorage.getItem('STAFF_SHIFT_SESSION') || 'null'); } catch { return null; }
+        }
+        function ensureShift() {
+            const shift = getShift();
+            const sLabel = document.getElementById('sidebar-shift-label');
+            if (!shift || !shift.startedAt) {
+                alert('Vui lòng chọn ca làm việc trước!');
+                window.location.href = 'dashboard.html';
+            } else if(sLabel) {
+                sLabel.innerText = 'Ca làm việc: ' + shift.name;
+            }
+        }
+        function ensureStaffAuth() {
+            const token = localStorage.getItem('token');
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userStr = localStorage.getItem('currentUser');
+            if (!token || !isLoggedIn || !userStr) { window.location.href = '../user/login.html'; return; }
+            const u = JSON.parse(userStr);
+            if (u.role !== 'staff' && u.role !== 'admin') window.location.href = '../user/login.html';
+        }
+
+        async function loadMyOrders() {
+            // Ưu tiên đọc từ localStorage (đơn POS local)
+            const localOrders = JSON.parse(localStorage.getItem('STAFF_MY_ORDERS') || '[]');
+
+            // Thử lấy thêm từ API (đơn POS của staff hiện tại)
+            const token = localStorage.getItem('token');
+            let apiOrders = [];
+            try {
+                const res = await fetch('http://localhost:5000/api/orders/my-pos', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    // Chuyển đổi format API sang format local
+                    apiOrders = (data || []).map(o => ({
+                        id: '#POS-' + String(o._id || '').slice(-6).toUpperCase(),
+                        orderId: o._id || o.id,
+                        timestamp: o.createdAt || o.timestamp || new Date().toISOString(),
+                        items: (o.orderItems || []).map(it => ({ name: it.name, price: it.price, qty: it.qty })),
+                        subtotal: o.itemsPrice || o.totalPrice || 0,
+                        discount: o.discountAmount || 0,
+                        total: o.totalPrice || 0,
+                        staffName: o.staffName || '',
+                        status: o.status || 'Hoàn thành'
+                    }));
+                }
+            } catch (e) { /* Dùng localOrders nếu API lỗi */ }
+
+            // Gộp và loại trùng theo orderId
+            const mergedMap = new Map();
+            [...localOrders, ...apiOrders].forEach(o => {
+                if (o.orderId && !mergedMap.has(o.orderId)) mergedMap.set(o.orderId, o);
+                else if (!o.orderId) mergedMap.set(o.id + o.timestamp, o);
+            });
+            allOrders = Array.from(mergedMap.values()).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            renderOrders();
+        }
 
         function setFilter(type) {
             currentFilter = type;
@@ -147,14 +216,12 @@
         }
 
         function renderOrders() {
-            const history = JSON.parse(localStorage.getItem('MINI_MART_ORDERS') || '[]');
             const now = new Date();
             
-            const filtered = history.filter(order => {
+            const filtered = allOrders.filter(order => {
                 const orderDate = new Date(order.timestamp);
                 if (currentFilter === 'week') {
-                    const diffTime = Math.abs(now - orderDate);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    const diffDays = Math.ceil(Math.abs(now - orderDate) / (1000 * 60 * 60 * 24));
                     return diffDays <= 7;
                 } else {
                     return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
@@ -175,21 +242,30 @@
             let totalRev = 0;
 
             tbody.innerHTML = filtered.map(order => {
-                totalRev += order.total;
-                const itemsStr = order.items[0].name + (order.items.length > 1 ? ` + ${order.items.length-1} món` : '');
+                totalRev += Number(order.total) || 0;
+                const items = order.items || [];
+                const itemsStr = items.length > 0
+                    ? (items[0].name + (items.length > 1 ? ` + ${items.length - 1} món khác` : ''))
+                    : 'Không rõ';
                 const timeStr = new Date(order.timestamp).toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+                const statusClass = order.status === 'Hoàn thành' || order.status === 'POS'
+                    ? 'bg-green-50 text-green-700 border-green-100'
+                    : 'bg-amber-50 text-amber-700 border-amber-100';
+                const statusLabel = order.status === 'Hoàn thành' || order.status === 'POS' ? 'Hoàn thành' : (order.status || 'Hoàn thành');
 
                 return `
                     <tr class="hover:bg-green-50/20 transition-all border-l-4 border-l-transparent hover:border-l-green-600 group">
-                        <td class="px-10 py-6"><span class="font-black text-green-700 text-sm tracking-tighter  uppercase">${order.id}</span></td>
                         <td class="px-10 py-6">
-                            <p class="text-xs font-black text-slate-900 mb-1  uppercase tracking-tight">${itemsStr}</p>
-                            <p class="text-[9px] text-green-700 font-bold uppercase tracking-widest">In Bill tự động</p>
+                            <span class="font-black text-green-700 text-sm tracking-tighter uppercase">${escapeHtml(order.id || '')}</span>
                         </td>
-                        <td class="px-10 py-6 text-xs text-slate-400  -none ">${timeStr}</td>
-                        <td class="px-10 py-6 text-right font-black text-slate-900 text-lg  tracking-tighter tabular-nums">${order.total.toLocaleString()}đ</td>
+                        <td class="px-10 py-6">
+                            <p class="text-xs font-black text-slate-900 mb-1 uppercase tracking-tight">${escapeHtml(itemsStr)}</p>
+                            <p class="text-[9px] text-green-700 font-bold uppercase tracking-widest">${items.length} sản phẩm</p>
+                        </td>
+                        <td class="px-10 py-6 text-xs text-slate-400">${timeStr}</td>
+                        <td class="px-10 py-6 text-right font-black text-slate-900 text-lg tracking-tighter tabular-nums">${Number(order.total || 0).toLocaleString('vi-VN')}đ</td>
                         <td class="px-10 py-6 text-center">
-                            <span class="px-5 py-2 bg-green-50 text-green-700 border border-green-100 rounded-full text-[9px] font-black uppercase  tracking-widest">Thành công</span>
+                            <span class="px-5 py-2 border rounded-full text-[9px] font-black uppercase tracking-widest ${statusClass}">${statusLabel}</span>
                         </td>
                     </tr>
                 `;
@@ -200,10 +276,12 @@
 
         function updateStats(count, rev) {
             document.getElementById('statCount').innerText = count;
-            document.getElementById('statRevenue').innerText = rev.toLocaleString();
+            document.getElementById('statRevenue').innerText = rev.toLocaleString('vi-VN');
         }
 
-        renderOrders();
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+        }
     </script>
 </body>
 </html>

@@ -43,7 +43,7 @@
         
         <div class="mt-auto px-4 pb-8">
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-center ">
-                <p class="text-[10px] font-bold text-green-700 uppercase mb-3 tracking-widest">Ca trực sáng: #01</p>
+                <p id="sidebar-shift-label" class="text-[10px] font-bold text-green-700 uppercase mb-3 tracking-widest text-center">Ca làm việc: ---</p>
                 <button onclick="window.location.href='end.html'" class="w-full py-3 primary-gradient text-white font-extrabold rounded-xl shadow-lg flex items-center justify-center gap-2 text-xs uppercase tracking-widest active:scale-95 transition-transform">
                     <span class="material-symbols-outlined text-sm font-bold">logout</span> Kết thúc ca
                 </button>
@@ -106,74 +106,107 @@
             </div>
 
             <!-- Right: Checkout Sidebar -->
-            <div class="w-[420px] bg-white border-l border-slate-100 flex flex-col shrink-0 relative shadow-2xl">
-                <div class="p-8 border-b border-slate-50 bg-slate-50/20">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-black text-slate-900 uppercase tracking-widest  text-xs flex items-center gap-3">
+            <div class="w-[420px] bg-white border-l border-slate-100 flex flex-col shrink-0 relative shadow-2xl overflow-y-auto custom-scrollbar">
+                <!-- Header -->
+                <div class="px-6 pt-6 pb-4 border-b border-slate-50 bg-white sticky top-0 z-10">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-black text-slate-900 uppercase tracking-widest text-xs flex items-center gap-3">
                             <span class="material-symbols-outlined text-green-600 bg-green-50 p-2 rounded-xl text-lg">list_alt</span> Bảng đơn hàng
                         </h3>
-                        <button onclick="if(confirm('Hủy toàn bộ hàng trong giỏ?')) clearCart()" class="text-[10px] font-black text-rose-500 uppercase tracking-widest  hover:opacity-70 transition-opacity">Xóa giỏ</button>
+                        <button onclick="if(confirm('Hủy toàn bộ hàng trong giỏ?')) clearCart()" class="text-[10px] font-black text-rose-500 uppercase tracking-widest hover:opacity-70 transition-opacity">Xóa giỏ</button>
                     </div>
-                    <div class="bg-white border border-slate-100 p-4 rounded-2xl flex items-center gap-3">
-                        <span class="material-symbols-outlined text-slate-300">person</span>
+                    <div class="bg-slate-50 border border-slate-100 px-4 py-2.5 rounded-2xl flex items-center gap-3">
+                        <span class="material-symbols-outlined text-slate-300 text-lg">person</span>
                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Khách lẻ tại quầy</p>
                     </div>
                 </div>
 
-                <div id="cartItems" class="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar min-h-0">
+                <!-- Cart Items - NO scroll, sized for 5 products -->
+                <div id="cartItems" class="px-5 py-4 space-y-3">
                     <!-- Empty State -->
-                    <div class="p-24 text-center opacity-30 flex flex-col items-center ">
-                        <span class="material-symbols-outlined text-8xl text-slate-100">shopping_bag</span>
-                        <p class="font-black uppercase tracking-widest mt-6 text-[10px] leading-relaxed">Giỏ hàng rỗng <br> Quét mã vạch để bắt đầu</p>
+                    <div class="py-16 text-center opacity-30 flex flex-col items-center">
+                        <span class="material-symbols-outlined text-7xl text-slate-100">shopping_bag</span>
+                        <p class="font-black uppercase tracking-widest mt-4 text-[10px] leading-relaxed">Giỏ hàng rỗng <br> Chọn sản phẩm để bắt đầu</p>
                     </div>
                 </div>
 
-                <div class="p-10 bg-slate-900 text-white rounded-t-[4rem] space-y-8 shadow-[0_-20px_50px_rgba(0,110,37,0.1)] shrink-0">
-                    <div class="space-y-4">
+                <!-- Checkout Panel -->
+                <div class="px-5 pb-6 bg-white">
+                    <!-- Voucher -->
+                    <div class="mb-4 bg-slate-900 text-white rounded-2xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-white/70 flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-emerald-400 text-sm">sell</span> Mã giảm giá
+                            </span>
+                            <button onclick="removeVoucher()" class="text-[9px] font-black uppercase tracking-widest text-white/30 hover:text-rose-400 transition">Xóa mã</button>
+                        </div>
+                        <div class="flex gap-2">
+                            <input id="pos-voucher" type="text" placeholder="Nhập mã voucher..." class="flex-1 px-3 py-2.5 bg-white/10 border border-white/10 rounded-xl text-[11px] font-black uppercase tracking-widest outline-none focus:ring-2 focus:ring-emerald-400/30 placeholder:text-white/20" oninput="this.value=this.value.toUpperCase()">
+                            <button onclick="applyVoucher()" class="px-4 py-2.5 rounded-xl bg-emerald-500 text-slate-900 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-400 active:scale-95 transition-all">Áp dụng</button>
+                        </div>
+                        <div id="pos-voucher-msg" class="hidden mt-2 text-[10px] font-bold"></div>
+                    </div>
+
+                    <!-- Totals -->
+                    <div class="bg-slate-900 text-white rounded-2xl p-5 space-y-3">
                         <div class="flex justify-between items-center opacity-70">
-                            <span id="pos-subtotal-label" class="text-[10px] font-black uppercase tracking-widest ">Tạm tính (0 món)</span>
-                            <span id="pos-subtotal" class="font-black  text-sm">0đ</span>
+                            <span id="pos-subtotal-label" class="text-[10px] font-black uppercase tracking-widest">Tạm tính (0 món)</span>
+                            <span id="pos-subtotal" class="font-black text-sm tabular-nums">0đ</span>
                         </div>
-
-                        <!-- Voucher -->
-                        <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-[10px] font-black uppercase tracking-widest text-white/70">Voucher</span>
-                                <button onclick="removeVoucher()" class="text-[9px] font-black uppercase tracking-widest text-white/30 hover:text-white/70 transition">Hủy</button>
-                            </div>
-                            <div class="flex gap-2">
-                                <input id="pos-voucher" type="text" placeholder="Nhập mã..." class="flex-1 px-4 py-3 bg-slate-800 border border-white/10 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none focus:ring-2 focus:ring-emerald-400/20" oninput="this.value=this.value.toUpperCase()">
-                                <button onclick="applyVoucher()" class="px-4 py-3 rounded-2xl bg-emerald-500 text-slate-900 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-400 transition">Áp dụng</button>
-                            </div>
-                            <div id="pos-voucher-msg" class="hidden mt-2 text-[10px] font-bold"></div>
-                        </div>
-
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] font-black uppercase tracking-widest text-white/40">Ưu đãi giảm giá</span>
                             <span id="pos-discount" class="font-black text-sm tabular-nums text-emerald-300">0đ</span>
                         </div>
-                        <div class="flex justify-between items-end pt-8 border-t border-white/5">
-                            <span class="text-[10px] font-black uppercase tracking-[0.3em]  text-slate-400 pb-2">Tổng thanh toán</span>
+                        <div class="flex justify-between items-end pt-3 border-t border-white/10">
+                            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 pb-1">Tổng thanh toán</span>
                             <div class="text-right">
-                                <span id="pos-total" class="text-6xl font-black  text-emerald-400 tracking-tighter tabular-nums leading-none">0</span>
-                                <span class="text-lg font-black  text-emerald-400 ml-1">đ</span>
+                                <span id="pos-total" class="text-4xl font-black text-emerald-400 tracking-tighter tabular-nums leading-none">0</span>
+                                <span class="text-base font-black text-emerald-400 ml-1">đ</span>
                             </div>
                         </div>
                     </div>
 
-                    <button onclick="checkoutPOS()" class="w-full py-6 primary-gradient text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-2xl shadow-green-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-4  h-20">
-                        <span class="material-symbols-outlined font-black text-2xl">payments</span>
+                    <!-- Action Buttons -->
+                    <button onclick="checkoutPOS()" class="w-full mt-4 py-5 primary-gradient text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-green-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+                        <span class="material-symbols-outlined font-black text-xl">payments</span>
                         XUẤT HÓA ĐƠN (F9)
                     </button>
-                    
-                    <div class="flex justify-between pt-2">
-                        <button onclick="saveDraft()" class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-[9px] font-black text-white/70 uppercase tracking-widest transition-all">Lưu đơn (F4)</button>
-                        <button onclick="markPending()" class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-[9px] font-black text-white/70 uppercase tracking-widest transition-all">Chờ xử lý (F6)</button>
+                    <div class="flex justify-between mt-3">
+                        <button onclick="saveDraft()" class="flex-1 mr-2 px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[9px] font-black text-slate-500 uppercase tracking-widest transition-all">Lưu đơn (F4)</button>
+                        <button onclick="markPending()" class="flex-1 ml-2 px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[9px] font-black text-slate-500 uppercase tracking-widest transition-all">Chờ xử lý (F6)</button>
                     </div>
                 </div>
             </div>
         </section>
     </main>
+
+    
+    <!-- Start Shift Modal -->
+    <div id="shift-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[200] items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] w-full max-w-lg shadow-2xl overflow-hidden border border-slate-100">
+            <div class="bg-gradient-to-r from-green-600 to-green-700 p-6 text-white">
+                <div class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Bắt đầu bán hàng</div>
+                <h3 class="text-2xl font-black">Xác nhận vào ca</h3>
+            </div>
+            <div class="p-6 space-y-5">
+                <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm">
+                    <div class="text-slate-500 font-bold">Chọn ca để hệ thống tính doanh thu theo ca và thống kê làm việc.</div>
+                    <div class="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-2">Gợi ý: nếu đổi ca, hãy “Kết thúc ca” trước.</div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <button onclick="selectShift('Sáng')" id="shift-btn-morning" class="shift-btn px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-600 font-black text-xs uppercase tracking-widest hover:bg-green-50 hover:border-green-200 transition">Ca Sáng</button>
+                    <button onclick="selectShift('Chiều')" id="shift-btn-afternoon" class="shift-btn px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-600 font-black text-xs uppercase tracking-widest hover:bg-green-50 hover:border-green-200 transition">Ca Chiều</button>
+                    <button onclick="selectShift('Tối')" id="shift-btn-evening" class="shift-btn px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-600 font-black text-xs uppercase tracking-widest hover:bg-green-50 hover:border-green-200 transition">Ca Tối</button>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button onclick="logoutStaff()" class="flex-1 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition text-sm">Đăng xuất</button>
+                    <button onclick="confirmStartShift()" class="flex-1 py-3 bg-green-600 text-white rounded-xl font-black hover:bg-green-500 transition text-sm uppercase tracking-widest">Vào ca</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
@@ -190,6 +223,7 @@
         let appliedVoucherCode = '';
 
         document.addEventListener('DOMContentLoaded', () => {
+            ensureShift();
             ensureStaffAuth();
             displayStaffName();
             loadProducts();
@@ -205,6 +239,94 @@
                 const el = document.getElementById('pos-staff-name');
                 if (el) el.innerText = u.displayName || u.fullName || u.username || 'NHÂN VIÊN POS';
             }
+        }
+
+        
+        function getShift() {
+            try { return JSON.parse(localStorage.getItem('STAFF_SHIFT_SESSION') || 'null'); } catch { return null; }
+        }
+        function ensureShift() {
+            const shift = getShift();
+            const sLabel = document.getElementById('sidebar-shift-label');
+            if (!shift || !shift.startedAt) {
+                openShiftModal();
+            } else if(sLabel) {
+                sLabel.innerText = 'Ca làm việc: ' + shift.name;
+            }
+        }
+        
+        const SHIFT_KEY = 'STAFF_SHIFT_SESSION';
+        const SHIFT_HISTORY_KEY = 'STAFF_SHIFT_HISTORY';
+        let selectedShiftName = getAutoShiftName();
+
+        function getAutoShiftName() {
+            const h = new Date().getHours();
+            if (h >= 7 && h < 14) return 'Sáng';
+            if (h >= 14 && h < 22) return 'Chiều';
+            return 'Tối';
+        }
+
+        function openShiftModal() {
+            const modal = document.getElementById('shift-modal');
+            if(modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+            selectShift(selectedShiftName);
+        }
+
+        function selectShift(name) {
+            selectedShiftName = name;
+            document.querySelectorAll('.shift-btn').forEach(b => {
+                b.classList.remove('bg-green-600', 'text-white', 'border-green-600');
+                b.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+            });
+            const map = { 'Sáng': 'shift-btn-morning', 'Chiều': 'shift-btn-afternoon', 'Tối': 'shift-btn-evening' };
+            const id = map[name];
+            const btn = document.getElementById(id);
+            if (btn) {
+                btn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+                btn.classList.add('bg-green-600', 'text-white', 'border-green-600');
+            }
+        }
+
+        function confirmStartShift() {
+            const userStr = localStorage.getItem('currentUser');
+            const u = userStr ? JSON.parse(userStr) : {};
+            const shift = {
+                staffUsername: u.username || 'staff',
+                staffRole: u.role || 'staff',
+                name: selectedShiftName,
+                startedAt: new Date().toISOString(),
+            };
+            localStorage.setItem(SHIFT_KEY, JSON.stringify(shift));
+
+            try {
+                const history = JSON.parse(localStorage.getItem(SHIFT_HISTORY_KEY) || '[]');
+                const next = Array.isArray(history) ? history : [];
+                next.unshift({ ...shift });
+                localStorage.setItem(SHIFT_HISTORY_KEY, JSON.stringify(next.slice(0, 200)));
+            } catch {
+                localStorage.setItem(SHIFT_HISTORY_KEY, JSON.stringify([{ ...shift }]));
+            }
+
+            const modal = document.getElementById('shift-modal');
+            if(modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            
+            const sLabel = document.getElementById('sidebar-shift-label');
+            if (sLabel) {
+                sLabel.classList.remove('hidden');
+                sLabel.innerText = 'Ca làm việc: ' + selectedShiftName;
+            }
+        }
+
+        function logoutStaff() {
+            localStorage.removeItem(SHIFT_KEY);
+            localStorage.clear();
+            window.location.href = '../user/login.html';
         }
 
         function ensureStaffAuth() {
@@ -380,32 +502,31 @@
             const wrap = document.getElementById('cartItems');
             if (!cart.length) {
                 wrap.innerHTML = `
-                    <div class="p-24 text-center opacity-30 flex flex-col items-center">
-                        <span class="material-symbols-outlined text-8xl text-slate-100">shopping_bag</span>
-                        <p class="font-black uppercase tracking-widest mt-6 text-[10px] leading-relaxed">Giỏ hàng rỗng <br> Chọn sản phẩm để bắt đầu</p>
+                    <div class="py-16 text-center opacity-30 flex flex-col items-center">
+                        <span class="material-symbols-outlined text-7xl text-slate-100">shopping_bag</span>
+                        <p class="font-black uppercase tracking-widest mt-4 text-[10px] leading-relaxed">Giỏ hàng rỗng <br> Chọn sản phẩm để bắt đầu</p>
                     </div>
                 `;
                 updateTotals();
                 return;
             }
 
+            // Compact card: each item ~100px, 5 items visible without scroll
             wrap.innerHTML = cart.map(it => `
-                <div class="bg-white border border-slate-100 rounded-3xl p-5 flex gap-4 items-center shadow-sm">
-                    <img src="${escapeHtmlAttr(it.image || '')}" class="w-14 h-14 rounded-2xl object-cover bg-slate-50 border border-slate-100 shrink-0">
+                <div class="bg-white border border-slate-100 rounded-2xl p-3 flex gap-3 items-center shadow-sm hover:border-green-200 transition-all">
+                    <img src="${escapeHtmlAttr(it.image || '')}" class="w-12 h-12 rounded-xl object-cover bg-slate-50 border border-slate-100 shrink-0">
                     <div class="flex-1 min-w-0">
-                        <div class="text-[10px] font-black text-slate-300 uppercase tracking-widest line-clamp-1">${escapeHtml(it.category || '')}</div>
-                        <div class="font-black text-slate-900 text-sm uppercase tracking-tight line-clamp-2">${escapeHtml(it.name || '')}</div>
-                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">${escapeHtml(it.unit || '')}</div>
-                        <div class="mt-3 flex items-center gap-2">
-                            <button onclick="changeCartQty('${escapeHtmlAttr(it.productId)}', -1)" class="w-9 h-9 rounded-2xl bg-slate-50 text-slate-500 hover:bg-slate-100 font-black">-</button>
-                            <div class="w-10 text-center font-black text-slate-800 tabular-nums">${it.qty}</div>
-                            <button onclick="changeCartQty('${escapeHtmlAttr(it.productId)}', 1)" class="w-9 h-9 rounded-2xl bg-slate-50 text-slate-500 hover:bg-slate-100 font-black">+</button>
-                            <button onclick="removeFromCart('${escapeHtmlAttr(it.productId)}')" class="ml-auto text-[10px] font-black uppercase tracking-widest text-rose-500 hover:text-rose-600">Xóa</button>
+                        <div class="font-black text-slate-900 text-[11px] uppercase tracking-tight line-clamp-1 leading-tight">${escapeHtml(it.name || '')}</div>
+                        <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">${escapeHtml(it.unit || '')}</div>
+                        <div class="mt-2 flex items-center gap-1.5">
+                            <button onclick="changeCartQty('${escapeHtmlAttr(it.productId)}', -1)" class="w-7 h-7 rounded-xl bg-slate-50 text-slate-500 hover:bg-red-50 hover:text-red-500 font-black text-sm transition-all">-</button>
+                            <div class="w-8 text-center font-black text-slate-800 tabular-nums text-sm">${it.qty}</div>
+                            <button onclick="changeCartQty('${escapeHtmlAttr(it.productId)}', 1)" class="w-7 h-7 rounded-xl bg-slate-50 text-slate-500 hover:bg-green-50 hover:text-green-600 font-black text-sm transition-all">+</button>
+                            <span class="ml-auto font-black text-green-700 text-sm tabular-nums">${formatMoney((it.price || 0) * (it.qty || 0))}</span>
+                            <button onclick="removeFromCart('${escapeHtmlAttr(it.productId)}')" class="w-6 h-6 rounded-lg bg-rose-50 text-rose-400 hover:bg-rose-100 hover:text-rose-600 flex items-center justify-center transition-all" title="Xóa">
+                                <span class="material-symbols-outlined text-xs" style="font-size:14px">close</span>
+                            </button>
                         </div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-[10px] font-black text-slate-300 uppercase tracking-widest">Thành tiền</div>
-                        <div class="text-lg font-black text-green-700 tracking-tighter tabular-nums">${formatMoney((it.price || 0) * (it.qty || 0))}</div>
                     </div>
                 </div>
             `).join('');
@@ -475,8 +596,11 @@
         async function checkoutPOS() {
             if (!cart.length) return;
             const token = localStorage.getItem('token');
+            const uStr = localStorage.getItem('currentUser');
+            const currentUser = uStr ? JSON.parse(uStr) : {};
             const subtotal = getSubtotal();
             const total = Math.max(0, subtotal - discountValue);
+            const timestamp = new Date().toISOString();
 
             const orderItems = cart.map(it => ({
                 product: it.productId,
@@ -498,6 +622,7 @@
                 orderType: 'POS'
             };
 
+            let orderId;
             try {
                 const res = await fetch('http://localhost:5000/api/orders/pos', {
                     method: 'POST',
@@ -509,11 +634,43 @@
                     alert(err.message || 'Tạo đơn POS thất bại');
                     return;
                 }
-                clearCart();
-                alert('✅ Đã tạo đơn POS thành công!');
+                const result = await res.json().catch(() => ({}));
+                // Backend trả về { order: {...}, qrCodeUrl } nên đọc result.order._id
+                const orderObj = result.order || result;
+                orderId = (orderObj._id || orderObj.id || result.orderId || Date.now()).toString();
             } catch (e) {
-                alert('⚠️ Không kết nối được server để tạo đơn.');
+                // Fallback: vẫn in hóa đơn dù mất kết nối
+                orderId = 'LOCAL-' + Date.now();
             }
+
+            // Tạo object đơn hàng để lưu local
+            const orderRecord = {
+                id: '#POS-' + String(orderId).slice(-6).toUpperCase(),
+                orderId: orderId,
+                timestamp: timestamp,
+                items: cart.map(it => ({ name: it.name, price: it.price, qty: it.qty, image: it.image, unit: it.unit })),
+                subtotal: subtotal,
+                discount: discountValue,
+                voucherCode: appliedVoucherCode,
+                total: total,
+                staffName: currentUser.displayName || currentUser.fullName || currentUser.username || 'NV POS',
+                staffId: currentUser._id || currentUser.id || '',
+                paymentMethod: 'Tiền mặt (POS)',
+                status: 'Hoàn thành'
+            };
+
+            // Lưu đơn mới nhất để receipt-preview.html đọc
+            localStorage.setItem('LATEST_ORDER', JSON.stringify(orderRecord));
+
+            // Lưu vào lịch sử đơn của staff
+            const myOrders = JSON.parse(localStorage.getItem('STAFF_MY_ORDERS') || '[]');
+            myOrders.unshift(orderRecord);
+            if (myOrders.length > 500) myOrders.length = 500; // Giới hạn 500 đơn
+            localStorage.setItem('STAFF_MY_ORDERS', JSON.stringify(myOrders));
+
+            clearCart();
+            // Chuyển sang trang in hóa đơn
+            window.location.href = 'receipt-preview.html';
         }
 
         function saveDraft() {

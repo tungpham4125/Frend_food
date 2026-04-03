@@ -53,10 +53,6 @@
         </nav>
         
         <div class="px-4 py-6 border-t border-slate-100 mt-auto">
-            <a href="../user/index.html" class="flex items-center gap-4 w-full py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all mb-2">
-                <span class="material-symbols-outlined text-xl">storefront</span>
-                <span class="text-sm font-bold">Cửa hàng</span>
-            </a>
             <button onclick="logoutAdmin()" class="flex items-center gap-4 w-full py-3 px-4 text-red-500 hover:bg-red-50 rounded-xl transition-all">
                 <span class="material-symbols-outlined text-xl">logout</span>
                 <span class="text-sm font-bold">Đăng xuất</span>
@@ -126,10 +122,10 @@
                 </div>
 
                 <div class="p-8 border-t border-slate-100 flex justify-between items-center bg-white cursor-default">
-                    <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Trang 1 / 1</span>
+                    <span id="page-info" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Trang 1 / 1</span>
                     <div class="flex gap-2">
-                        <button class="w-10 h-10 rounded-full border border-slate-100 text-slate-400 flex items-center justify-center hover:bg-slate-50 transition"><span class="material-symbols-outlined text-lg font-bold">chevron_left</span></button>
-                        <button class="w-10 h-10 rounded-full border border-slate-100 text-slate-400 flex items-center justify-center hover:bg-slate-50 transition"><span class="material-symbols-outlined text-lg font-bold">chevron_right</span></button>
+                        <button id="prev-btn" onclick="prevPage()" class="w-10 h-10 rounded-full border border-slate-100 text-slate-400 flex items-center justify-center hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed"><span class="material-symbols-outlined text-lg font-bold">chevron_left</span></button>
+                        <button id="next-btn" onclick="nextPage()" class="w-10 h-10 rounded-full border border-slate-100 text-slate-400 flex items-center justify-center hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed"><span class="material-symbols-outlined text-lg font-bold">chevron_right</span></button>
                     </div>
                 </div>
             </div>
@@ -223,6 +219,9 @@
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
 
         let products = [];
+        let filteredProducts = [];
+        let currentPage = 1;
+        const itemsPerPage = 8;
         const API_URL = 'http://localhost:5000/api/products';
         let token = localStorage.getItem('token');
 
@@ -279,12 +278,13 @@
         function applyFilters() {
             const q = (document.getElementById('search-input')?.value || '').trim().toLowerCase();
             const cat = document.getElementById('category-filter')?.value || 'all';
-            const filtered = products.filter(p => {
+            filteredProducts = products.filter(p => {
                 const byCat = cat === 'all' || getParentCategory(p.category) === cat;
                 const bySearch = !q || String(p.name || '').toLowerCase().includes(q) || String(p.category || '').toLowerCase().includes(q);
                 return byCat && bySearch;
             });
-            renderTable(filtered);
+            currentPage = 1;
+            renderTable();
         }
 
         function resetFilters() {
@@ -295,16 +295,24 @@
             applyFilters();
         }
 
-        function renderTable(items = products) {
+        function renderTable() {
             const tbody = document.getElementById('product-table-body');
             tbody.innerHTML = '';
             
-            if(items.length === 0) {
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage) || 1;
+            const startIdx = (currentPage - 1) * itemsPerPage;
+            const paginatedItems = filteredProducts.slice(startIdx, startIdx + itemsPerPage);
+
+            document.getElementById('page-info').innerText = `Trang ${currentPage} / ${totalPages}`;
+            document.getElementById('prev-btn').disabled = currentPage === 1;
+            document.getElementById('next-btn').disabled = currentPage === totalPages;
+
+            if(paginatedItems.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" class="py-10 text-center font-bold text-slate-400">Không có sản phẩm nào.</td></tr>';
                 return;
             }
 
-            items.forEach(p => {
+            paginatedItems.forEach(p => {
                 const stockVal = p.stock !== undefined ? p.stock : 100; // Mock if undefined
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition group';
@@ -326,7 +334,10 @@
                         ${p.oldPrice ? `<span class="block text-[10px] line-through text-slate-400 font-bold mt-1">${formatMoney(p.oldPrice)}</span>` : ''}
                     </td>
                     <td class="px-8 py-6 text-center">
-                        <span class="${stockVal > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'} text-[10px] px-3 py-1 font-black rounded-lg uppercase tracking-widest">${stockVal > 0 ? 'Sẵn Hàng' : 'Hết Hàng'}</span>
+                        <div class="flex flex-col items-center gap-1">
+                            <span class="${stockVal > 5 ? 'bg-green-100 text-green-700' : stockVal > 0 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-600'} text-[10px] px-3 py-1 font-black rounded-lg uppercase tracking-widest">${stockVal > 5 ? 'Còn Hàng' : stockVal > 0 ? 'Sắp Hết' : 'Hết Hàng'}</span>
+                            <span class="text-[10px] text-slate-400 font-bold">${stockVal} × ${p.unit || ''}</span>
+                        </div>
                     </td>
                     <td class="px-8 py-6 uppercase font-bold text-[10px] tracking-widest text-slate-500">
                         ${categoryLabel(p.category)} - <span class="text-slate-400">${p.unit}</span>
@@ -340,6 +351,21 @@
                 `;
                 tbody.appendChild(tr);
             });
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage) || 1;
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+            }
         }
 
         // --- Form Modal Logic ---

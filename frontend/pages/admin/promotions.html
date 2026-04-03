@@ -45,14 +45,24 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
-            min-width: 140px;
+            min-width: 100px;
+            max-width: 130px;
         }
         .ticket-right { padding: 2rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .coupon-code {
             position: relative;
             background-size: 20px 20px;
             background-image: radial-gradient(circle at 10px 10px, #f1f5f9 2px, transparent 0);
+        }
+        
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
         }
     </style>
 </head>
@@ -79,10 +89,6 @@
         </nav>
         
         <div class="px-4 py-6 border-t border-slate-100 mt-auto">
-            <a href="../user/index.html" class="flex items-center gap-4 w-full py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all mb-2">
-                <span class="material-symbols-outlined text-xl">storefront</span>
-                <span class="text-sm font-bold">Cửa hàng</span>
-            </a>
             <button onclick="logoutAdmin()" class="flex items-center gap-4 w-full py-3 px-4 text-red-500 hover:bg-red-50 rounded-xl transition-all">
                 <span class="material-symbols-outlined text-xl">logout</span>
                 <span class="text-sm font-bold">Đăng xuất</span>
@@ -120,12 +126,13 @@
         <div class="bg-white rounded-[2rem] w-full max-w-xl shadow-2xl overflow-hidden border border-slate-100">
             <div class="bg-gradient-to-r from-green-600 to-green-700 p-6 text-white flex justify-between items-center">
                 <div>
-                    <div class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Tạo voucher</div>
-                    <h3 class="text-2xl font-black">Tạo mã giảm giá mới</h3>
+                    <div class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1" id="modal-subtitle">Tạo voucher</div>
+                    <h3 class="text-2xl font-black" id="modal-title">Tạo mã giảm giá mới</h3>
                 </div>
                 <button onclick="closeCreateModal()" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition text-xl font-bold">&times;</button>
             </div>
             <div class="p-6 space-y-5">
+                <input type="hidden" id="promo-id">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mã voucher</label>
@@ -155,15 +162,23 @@
                     <input id="promo-expiry" type="date" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-green-500/20">
                 </div>
 
+                <div class="flex items-center gap-2 mt-4 hidden" id="promo-active-container">
+                    <input type="checkbox" id="promo-active" class="w-4 h-4 text-green-600 rounded bg-slate-50 border-slate-300 focus:ring-green-500" checked>
+                    <label class="text-sm font-bold text-slate-700">Đang kích hoạt</label>
+                </div>
+
                 <div class="flex gap-3 pt-2">
                     <button onclick="closeCreateModal()" class="flex-1 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition">Hủy</button>
-                    <button onclick="createPromotion()" class="flex-1 py-3 bg-green-600 text-white rounded-xl font-black hover:bg-green-500 transition uppercase tracking-widest text-sm">Tạo voucher</button>
+                    <button onclick="savePromotion()" class="flex-1 py-3 bg-green-600 text-white rounded-xl font-black hover:bg-green-500 transition uppercase tracking-widest text-sm" id="modal-save-btn">Tạo voucher</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        let promosData = [];
+        let isEditMode = false;
+
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
 
         function logoutAdmin() {
@@ -176,6 +191,17 @@
         });
 
         function openCreateModal() {
+            isEditMode = false;
+            document.getElementById('modal-subtitle').innerText = 'Tạo voucher';
+            document.getElementById('modal-title').innerText = 'Tạo mã giảm giá mới';
+            document.getElementById('modal-save-btn').innerText = 'Tạo voucher';
+            document.getElementById('promo-id').value = '';
+            document.getElementById('promo-code').value = '';
+            document.getElementById('promo-min').value = '';
+            document.getElementById('promo-percent').value = '';
+            document.getElementById('promo-amount').value = '';
+            document.getElementById('promo-active-container').classList.add('hidden');
+            
             const modal = document.getElementById('create-modal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -203,14 +229,15 @@
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (!res.ok) throw new Error('API error');
-                const promos = await res.json();
-                renderTickets(promos || []);
+                promosData = await res.json();
+                renderTickets(promosData || []);
             } catch (e) {
                 // demo fallback
-                renderTickets([
-                    { code: 'FRESHNEW', discountPercentage: 15, discountAmount: 0, minPurchase: 200000, expiryDate: '2026-12-31', isActive: true },
-                    { code: 'FREESHIP', discountPercentage: 0, discountAmount: 30000, minPurchase: 300000, expiryDate: '2026-12-31', isActive: true },
-                ]);
+                promosData = [
+                    { _id: '1', code: 'FRESHNEW', discountPercentage: 15, discountAmount: 0, minPurchase: 200000, expiryDate: '2026-12-31', isActive: true },
+                    { _id: '2', code: 'FREESHIP', discountPercentage: 0, discountAmount: 30000, minPurchase: 300000, expiryDate: '2026-12-31', isActive: true },
+                ];
+                renderTickets(promosData);
             }
         }
 
@@ -225,29 +252,33 @@
                 const leftBg = isPct ? 'bg-green-50 group-hover:bg-green-100' : 'bg-blue-50 group-hover:bg-blue-100';
                 const leftText = isPct ? 'text-green-600' : 'text-blue-600';
                 const main = isPct ? `${Number(p.discountPercentage) || 0}%` : `${(Number(p.discountAmount) || 0).toLocaleString('vi-VN')}đ`;
+                const mainSize = isPct ? 'text-4xl' : 'text-2xl';
                 const subtitle = isPct ? `Giảm theo %` : `Giảm thẳng`;
                 const exp = p.expiryDate ? new Date(p.expiryDate).toLocaleDateString('vi-VN') : '--';
                 const status = p.isActive ? { cls: 'bg-green-50 text-green-700', label: 'Đang chạy' } : { cls: 'bg-amber-50 text-amber-700', label: 'Tạm dừng' };
                 return `
                     <div class="ticket group">
-                        <div class="ticket-left ${leftBg} transition-colors">
-                            <span class="text-4xl font-black ${leftText} tracking-tighter leading-none mb-1">${main}</span>
-                            <span class="text-[10px] font-black text-slate-700 uppercase tracking-widest text-center">${subtitle}</span>
+                        <div class="ticket-left ${leftBg} transition-colors px-4">
+                            <span class="${mainSize} font-black ${leftText} tracking-tighter leading-none mb-1 text-center truncate w-full">${main}</span>
+                            <span class="text-[9px] font-black text-slate-700 uppercase tracking-widest text-center">${subtitle}</span>
                         </div>
-                        <div class="ticket-right">
+                        <div class="ticket-right p-4 sm:p-6 overflow-hidden">
                             <div>
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-black text-slate-800 text-lg leading-tight w-2/3">${escapeHtml(p.code || '')}</h3>
-                                    <span class="px-2 py-1 ${status.cls} text-[9px] font-black uppercase tracking-widest rounded relative top-1">${status.label}</span>
+                                <div class="flex justify-between items-start mb-2 gap-2">
+                                    <h3 class="font-black text-slate-800 text-xs sm:text-sm leading-tight whitespace-nowrap overflow-x-auto no-scrollbar flex-1" title="${escapeHtml(p.code || '')}">${escapeHtml(p.code || '')}</h3>
+                                    <span class="px-2 py-1 ${status.cls} text-[9px] font-black uppercase tracking-widest rounded relative top-1 whitespace-nowrap shrink-0">${status.label}</span>
                                 </div>
                                 <p class="text-[11px] text-slate-500 font-bold mb-4">Đơn tối thiểu: ${(Number(p.minPurchase) || 0).toLocaleString('vi-VN')}đ</p>
-                                <div class="coupon-code inline-block bg-slate-50 border border-slate-200 rounded-lg px-4 py-2">
-                                    <span class="font-black text-slate-600 tracking-[0.2em] uppercase text-sm">${escapeHtml(p.code || '')}</span>
+                                <div class="coupon-code inline-flex max-w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 overflow-hidden">
+                                    <span class="font-black text-slate-600 tracking-wider uppercase text-[10px] sm:text-xs whitespace-nowrap max-w-full overflow-x-auto no-scrollbar" title="${escapeHtml(p.code || '')}">${escapeHtml(p.code || '')}</span>
                                 </div>
                             </div>
-                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between relative z-10">
                                 <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">HSD: ${exp}</span>
-                                <span class="text-[9px] font-bold text-slate-300 uppercase tracking-widest">API</span>
+                                <div class="flex gap-2">
+                                    <button onclick="editPromotion('${p._id}')" class="w-7 h-7 bg-slate-50 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg flex items-center justify-center transition" title="Sửa"><span class="material-symbols-outlined text-sm">edit</span></button>
+                                    <button onclick="deletePromotion('${p._id}')" class="w-7 h-7 bg-slate-50 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg flex items-center justify-center transition" title="Xóa"><span class="material-symbols-outlined text-sm">delete</span></button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -255,31 +286,77 @@
             }).join('');
         }
 
-        async function createPromotion() {
+        function editPromotion(id) {
+            const promo = promosData.find(p => p._id === id);
+            if(!promo) return;
+            isEditMode = true;
+            document.getElementById('modal-subtitle').innerText = 'Chỉnh sửa voucher';
+            document.getElementById('modal-title').innerText = 'Cập nhật mã giảm giá';
+            document.getElementById('modal-save-btn').innerText = 'Lưu thay đổi';
+            
+            document.getElementById('promo-id').value = promo._id;
+            document.getElementById('promo-code').value = promo.code || '';
+            document.getElementById('promo-min').value = promo.minPurchase || '';
+            document.getElementById('promo-percent').value = promo.discountPercentage || '';
+            document.getElementById('promo-amount').value = promo.discountAmount || '';
+            document.getElementById('promo-expiry').value = promo.expiryDate ? new Date(promo.expiryDate).toISOString().slice(0, 10) : '';
+            
+            document.getElementById('promo-active-container').classList.remove('hidden');
+            document.getElementById('promo-active').checked = promo.isActive;
+            
+            const modal = document.getElementById('create-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        async function savePromotion() {
             const token = localStorage.getItem('token');
+            const id = document.getElementById('promo-id').value;
             const code = (document.getElementById('promo-code')?.value || '').trim().toUpperCase();
             const minPurchase = Number(document.getElementById('promo-min')?.value || 0);
             const discountPercentage = Number(document.getElementById('promo-percent')?.value || 0);
             const discountAmount = Number(document.getElementById('promo-amount')?.value || 0);
             const expiryDate = document.getElementById('promo-expiry')?.value;
+            const isActive = document.getElementById('promo-active')?.checked;
 
             if (!code) return alert('Vui lòng nhập mã voucher.');
             if (!expiryDate) return alert('Vui lòng chọn hạn sử dụng.');
             if ((discountPercentage <= 0) && (discountAmount <= 0)) return alert('Vui lòng nhập % hoặc số tiền giảm.');
 
+            const url = isEditMode ? `http://localhost:5000/api/promotions/${id}` : `http://localhost:5000/api/promotions`;
+            const method = isEditMode ? 'PUT' : 'POST';
+            const bodyData = { code, minPurchase, discountPercentage, discountAmount, expiryDate };
+            if (isEditMode) bodyData.isActive = isActive;
+
             try {
-                const res = await fetch('http://localhost:5000/api/promotions', {
-                    method: 'POST',
+                const res = await fetch(url, {
+                    method: method,
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ code, minPurchase, discountPercentage, discountAmount, expiryDate })
+                    body: JSON.stringify(bodyData)
                 });
                 const data = await res.json();
-                if (!res.ok) return alert(data.message || 'Tạo voucher thất bại');
+                if (!res.ok) return alert(data.message || 'Thao tác thất bại');
                 closeCreateModal();
                 await loadPromotions();
-                alert('✅ Tạo voucher thành công!');
+                alert(isEditMode ? '✅ Cập nhật voucher thành công!' : '✅ Tạo voucher thành công!');
             } catch (e) {
-                alert('⚠️ Không kết nối được server để tạo voucher.');
+                alert('⚠️ Không kết nối được server.');
+            }
+        }
+
+        async function deletePromotion(id) {
+            if(!confirm('Bạn có chắc chắn muốn xóa mã voucher này? Hành động này sẽ vô hiệu hóa các mã chưa sử dụng.')) return;
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch(`http://localhost:5000/api/promotions/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) throw new Error('Delete failed');
+                await loadPromotions();
+                alert('🗑️ Đã xóa mã voucher!');
+            } catch (e) {
+                alert('⚠️ Không kết nối được server để xóa voucher.');
             }
         }
 

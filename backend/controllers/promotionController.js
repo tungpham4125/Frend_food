@@ -42,4 +42,41 @@ const applyPromotion = async (req, res) => {
     }
 };
 
-module.exports = { getPromotions, createPromotion, applyPromotion };
+const updatePromotion = async (req, res) => {
+    try {
+        const { code, discountPercentage, discountAmount, minPurchase, expiryDate, isActive } = req.body;
+        const promo = await Promotion.findById(req.params.id);
+        if (!promo) return res.status(404).json({ message: 'Mã không tồn tại' });
+        
+        // Prevent changing to an existing code
+        if (code && code !== promo.code) {
+            const exists = await Promotion.findOne({ code });
+            if (exists) return res.status(400).json({ message: 'Mã này đã có người sử dụng' });
+        }
+
+        promo.code = code || promo.code;
+        promo.discountPercentage = discountPercentage !== undefined ? discountPercentage : promo.discountPercentage;
+        promo.discountAmount = discountAmount !== undefined ? discountAmount : promo.discountAmount;
+        promo.minPurchase = minPurchase !== undefined ? minPurchase : promo.minPurchase;
+        promo.expiryDate = expiryDate || promo.expiryDate;
+        if (isActive !== undefined) promo.isActive = isActive;
+        
+        const updatedPromo = await promo.save();
+        res.json(updatedPromo);
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi khi cập nhật mã' });
+    }
+};
+
+const deletePromotion = async (req, res) => {
+    try {
+        const promo = await Promotion.findById(req.params.id);
+        if (!promo) return res.status(404).json({ message: 'Mã không tồn tại' });
+        await promo.deleteOne();
+        res.json({ message: 'Đã xóa mã voucher' });
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi khi xóa mã' });
+    }
+};
+
+module.exports = { getPromotions, createPromotion, applyPromotion, updatePromotion, deletePromotion };
