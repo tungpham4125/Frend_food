@@ -7,8 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -24,7 +22,11 @@
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.2s ease-out forwards; }
-        .material-symbols-outlined { font-variation-settings: 'wght' 200; display: inline-block; vertical-align: middle; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
     </style>
 </head>
 <body class="text-slate-800 antialiased h-[100dvh] flex flex-col overflow-hidden">
@@ -76,62 +78,51 @@
         </div>
 
     <!-- Header -->
-    <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-50">
+    <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-40 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
-                <a href="index.html" class="flex items-center gap-2 cursor-pointer shrink-0">
-                    <span class="text-4xl text-green-600">🌿</span>
-                    <div class="font-black text-3xl text-green-700 tracking-tighter uppercase">FreshFood</div>
+                <a href="index.html" class="flex items-center gap-3 transition hover:opacity-90 shrink-0">
+                    <div class="w-10 h-10 bg-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-200">
+                        <span class="material-symbols-outlined text-white text-2xl">eco</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xl font-bold text-slate-800 leading-none">FreshFood</span>
+                        <span class="text-[10px] text-green-600 font-bold uppercase tracking-widest mt-1">Organic Market</span>
+                    </div>
                 </a>
                 <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
-                    <input type="text" id="header-search" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition" onkeydown="if(event.key==='Enter') typeof goSearch === 'function' ? goSearch() : window.location.href='products.html?search='+encodeURIComponent(this.value.trim())">
-                    <button onclick="const q = document.getElementById('header-search').value.trim(); if(q) { if(typeof goSearch === 'function') goSearch(); else window.location.href='products.html?search='+encodeURIComponent(q); }" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 text-lg">🔍</button>
+                    <input type="text" id="header-search" placeholder="Tìm kiếm sản phẩm..."
+                        class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition font-medium"
+                        onkeydown="if(event.key==='Enter') { const q=this.value.trim(); if(q) window.location.href='products.html?search='+encodeURIComponent(q); }">
+                    <button onclick="const q=document.getElementById('header-search').value.trim(); if(q) window.location.href='products.html?search='+encodeURIComponent(q);"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 transition">
+                        <span class="material-symbols-outlined text-xl">search</span>
+                    </button>
                 </div>
                 <div class="flex items-center space-x-6 shrink-0">
-                    <a href="orders.html" class="flex items-center gap-2 text-green-700 font-black text-sm">
-                        <span class="text-2xl">📋</span>
-                        <span class="hidden sm:inline">Đơn hàng</span>
+                    <a href="orders.html"
+                        class="flex items-center gap-2 text-green-700 transition font-medium text-sm">
+                        <span class="material-symbols-outlined text-2xl">receipt_long</span>
+                        <span class="hidden sm:inline font-bold">Đơn hàng</span>
                     </a>
                     <a href="cart.html" class="relative group flex items-center gap-2">
-                        <span class="text-2xl pt-1 block group-hover:text-green-600 transition">🛒</span>
+                        <span class="material-symbols-outlined text-2xl group-hover:text-green-600 transition">shopping_cart</span>
+                        <span id="header-cart-count"
+                            class="hidden absolute -top-1 -right-2 bg-green-600 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
                     </a>
-
-                    <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
-                        <input type="text" placeholder="Tìm kiếm sản phẩm..."
-                            class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition font-medium">
-                        <button
-                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 transition">
-                            <span class="material-symbols-outlined text-xl">search</span>
-                        </button>
-                    </div>
-
-                    <div class="flex items-center space-x-6 shrink-0">
-                        <a href="orders.html"
-                            class="flex items-center gap-2 text-green-700 transition font-medium text-sm">
-                            <span class="material-symbols-outlined text-2xl">receipt_long</span>
-                            <span class="hidden sm:inline font-bold">Đơn hàng</span>
-                        </a>
-                        <a href="cart.html" class="relative group flex items-center gap-2">
-                            <span
-                                class="material-symbols-outlined text-2xl group-hover:text-green-600 transition">shopping_cart</span>
-                            <span id="header-cart-count"
-                                class="absolute -top-1 -right-2 bg-green-600 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
-                        </a>
-                    </div>
                 </div>
             </div>
-
-            <nav class="bg-white mt-4 hidden md:block">
-                <div
-                    class="max-w-7xl mx-auto px-4 flex justify-center space-x-12 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                    <a href="index.html" class="nav-link hover:text-green-700 transition pb-3">Trang Chủ</a>
-                    <a href="products.html" class="nav-link hover:text-green-700 transition pb-3">Sản Phẩm</a>
-                    <a href="explore.html" class="nav-link hover:text-green-700 transition pb-3">Khám Phá</a>
-                    <a href="coupons.html" class="nav-link hover:text-green-700 transition pb-3">Khuyến Mãi</a>
-                    <a href="favorite.html" class="nav-link hover:text-green-700 transition pb-3">Yêu Thích</a>
-                </div>
-            </nav>
-        </header>
+        </div>
+        <nav class="bg-white mt-4 hidden md:block">
+            <div class="max-w-7xl mx-auto px-4 flex justify-center space-x-12 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <a href="index.html" class="nav-link hover:text-green-700 transition pb-3">Trang Chủ</a>
+                <a href="products.html" class="nav-link hover:text-green-700 transition pb-3">Sản Phẩm</a>
+                <a href="explore.html" class="nav-link hover:text-green-700 transition pb-3">Khám Phá</a>
+                <a href="coupons.html" class="nav-link hover:text-green-700 transition pb-3">Khuyến Mãi</a>
+                <a href="favorite.html" class="nav-link hover:text-green-700 transition pb-3">Yêu Thích</a>
+            </div>
+        </nav>
+    </header>
 
     <!-- Main Content -->
     <main class="flex-1 pb-24 fade-in-up">
