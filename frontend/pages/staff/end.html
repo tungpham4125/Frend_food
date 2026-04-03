@@ -1,14 +1,16 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kết kết thúc ca | MINI MART Staff</title>
+    <title>Kết thúc ca | FreshFood Staff</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', system-ui, sans-serif, sans-serif; background-color: #f8f9fa; }
+        body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8f9fa; }
         .sidebar-active { background-color: #f0fdf4; color: #15803d; font-weight: 800; border-left: 4px solid #16a34a; }
         .primary-gradient { background: linear-gradient(135deg, #28a745 0%, #006e25 100%); }
     </style>
@@ -18,7 +20,7 @@
     <!-- Sidebar (Admin Style) -->
     <aside id="sidebar" class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300">
         <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6 shrink-0">
-            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">MINI MART<br>
+            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">FreshFood<br>
             <span class="text-[10px] text-slate-300 tracking-widest font-bold uppercase">Nhân viên trực</span></span>
         </div>
         <nav class="flex flex-col gap-1 flex-1 overflow-y-auto px-4">
@@ -109,29 +111,68 @@
     </main>
 
     <script>
-        function renderShiftReport() {
-            const startTimeStr = localStorage.getItem('SHIFT_START_TIME');
-            if(!startTimeStr) return;
-            const start = new Date(startTimeStr); const now = new Date();
+        // --- Shift session from dashboard.html ---
+        const SHIFT_KEY = 'STAFF_SHIFT_SESSION';
+
+        async function renderShiftReport() {
+            const shiftStr = localStorage.getItem(SHIFT_KEY);
+            if(!shiftStr) {
+                document.getElementById('shiftDuration').innerText = '0h 0m';
+                return;
+            }
+            const shift = JSON.parse(shiftStr);
+            if(!shift.startedAt) return;
+
+            const start = new Date(shift.startedAt); 
+            const now = new Date();
             const diffMs = now - start;
-            const diffHrs = Math.floor(diffMs / 3600000); const diffMins = Math.floor((diffMs % 3600000) / 60000);
+            const diffHrs = Math.floor(diffMs / 3600000); 
+            const diffMins = Math.floor((diffMs % 3600000) / 60000);
             document.getElementById('shiftDuration').innerText = `${diffHrs}h ${diffMins}m`;
-            const history = JSON.parse(localStorage.getItem('MINI_MART_ORDERS') || '[]');
-            const shiftOrders = history.filter(o => new Date(o.timestamp) >= start);
-            const totalRevenue = shiftOrders.reduce((sum, o) => sum + o.total, 0); const orderCount = shiftOrders.length;
+
+            const token = localStorage.getItem('token');
+            let allOrders = [];
+            try {
+                const res = await fetch('http://localhost:5000/api/orders', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if(res.ok) {
+                    allOrders = await res.json();
+                }
+            } catch(e) {}
+
+            // Chỉ tính doanh thu từ đơn Hoàn thành trong ca
+            const shiftOrders = allOrders.filter(o => {
+                const st = (o.status || '').toLowerCase();
+                const isCompleted = st.includes('hoàn thành') || st.includes('hoan thanh');
+                return isCompleted && new Date(o.createdAt) >= start;
+            });
+            const totalRevenue = shiftOrders.reduce((sum, o) => sum + (Number(o.totalPrice) || 0), 0); 
+            const orderCount = shiftOrders.length;
+            
             document.getElementById('shiftRevenue').innerText = totalRevenue.toLocaleString() + 'đ';
             document.getElementById('shiftCount').innerText = orderCount;
-            const cash = Math.floor(totalRevenue * 0.6); const qr = totalRevenue - cash;
+            
+            // Tạm tính (vì BE không tách PaymentMethod rõ ràng)
+            const cashOrders = shiftOrders.filter(o => !o.paymentMethod || o.paymentMethod.includes('Tiền mặt') || o.paymentMethod.includes('COD'));
+            const qrOrders = shiftOrders.filter(o => o.paymentMethod && o.paymentMethod.includes('QR'));
+            
+            const cash = cashOrders.reduce((sum, o) => sum + (Number(o.totalPrice) || 0), 0);
+            const qr = totalRevenue - cash; // qr and other
+
             document.getElementById('cashAmount').innerText = cash.toLocaleString() + 'đ';
             document.getElementById('qrAmount').innerText = qr.toLocaleString() + 'đ';
         }
+
         document.getElementById('endShiftForm').onsubmit = function(e) {
             e.preventDefault();
             if(confirm('Bạn có chắc chắn muốn kết thúc ca trực? Tất cả dữ liệu sẽ được đồng bộ hoá ngay bây giờ.')) {
-                localStorage.removeItem('SHIFT_START_TIME'); window.location.href = '../user/login.html'; 
+                localStorage.removeItem(SHIFT_KEY); 
+                window.location.href = '../user/login.html'; 
             }
         };
-        renderShiftReport();
+
+        document.addEventListener('DOMContentLoaded', renderShiftReport);
     </script>
 </body>
 </html>

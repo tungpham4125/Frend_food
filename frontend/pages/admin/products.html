@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sản phẩm - MINI MART Admin</title>
+    <title>Sản phẩm - FreshFood Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
     <!-- Sidebar -->
     <aside id="sidebar" class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300">
         <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6">
-            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">MINI MART<br>
+            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">FreshFood<br>
             <span class="text-[10px] text-slate-300 tracking-widest font-bold">Hệ thống Admin</span></span>
         </div>
 
@@ -49,13 +49,14 @@
                 <span class="material-symbols-outlined text-xl">badge</span>
                 <span class="text-sm font-bold">Nhân viên</span>
             </a>
-            <a href="create-order.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
-                <span class="material-symbols-outlined text-xl">add_circle</span>
-                <span class="text-sm font-bold">POS Bán lẻ</span>
-            </a>
+            
         </nav>
         
         <div class="px-4 py-6 border-t border-slate-100 mt-auto">
+            <a href="../user/index.html" class="flex items-center gap-4 w-full py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all mb-2">
+                <span class="material-symbols-outlined text-xl">storefront</span>
+                <span class="text-sm font-bold">Cửa hàng</span>
+            </a>
             <button onclick="logoutAdmin()" class="flex items-center gap-4 w-full py-3 px-4 text-red-500 hover:bg-red-50 rounded-xl transition-all">
                 <span class="material-symbols-outlined text-xl">logout</span>
                 <span class="text-sm font-bold">Đăng xuất</span>
@@ -70,7 +71,7 @@
                 <button onclick="toggleSidebar()" class="lg:hidden text-slate-500"><span class="material-symbols-outlined">menu</span></button>
                 <div class="relative w-64 hidden md:block">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
-                    <input type="text" placeholder="Tìm sản phẩm..." class="w-full bg-slate-100 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-green-600/20 outline-none font-medium">
+                    <input id="search-input" type="text" placeholder="Tìm sản phẩm theo tên..." oninput="applyFilters()" class="w-full bg-slate-100 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-green-600/20 outline-none font-medium">
                 </div>
             </div>
 
@@ -89,15 +90,14 @@
             <!-- Filter Bar Mới Cùng Hàng Nút Thêm -->
             <div class="flex flex-wrap items-center justify-between bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100">
                 <div class="flex gap-4">
-                    <select class="bg-slate-50 border-none rounded-full px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-600 outline-none focus:ring-2 focus:ring-green-500/10 cursor-pointer hover:bg-slate-100 transition">
-                        <option>Tất cả danh mục</option>
-                        <option>Rau</option>
-                        <option>Thịt</option>
-                        <option>Trái cây</option>
-                        <option>Sữa</option>
+                    <select id="category-filter" onchange="applyFilters()" class="bg-slate-50 border-none rounded-full px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-600 outline-none focus:ring-2 focus:ring-green-500/10 cursor-pointer hover:bg-slate-100 transition">
+                        <option value="all">Tất cả danh mục</option>
+                        <option value="Rau củ quả">Rau củ quả</option>
+                        <option value="Thịt các loại">Thịt các loại</option>
+                        <option value="Thủy hải sản">Thủy hải sản</option>
                     </select>
-                    <button class="bg-slate-50 rounded-full px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-600 outline-none hover:bg-green-50 hover:text-green-700 transition">
-                        Áp dụng lọc
+                    <button onclick="resetFilters()" class="bg-slate-50 rounded-full px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-600 outline-none hover:bg-green-50 hover:text-green-700 transition">
+                        Bỏ lọc
                     </button>
                 </div>
                 <button onclick="openProductModal()" class="primary-gradient text-white px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:-translate-y-1 transition duration-300 shadow-[0_4px_14px_0_rgba(22,163,74,0.39)] flex items-center gap-2">
@@ -157,10 +157,22 @@
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Danh mục *</label>
                             <select id="pcategory" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition">
-                                <option value="rau">Rau củ quả</option>
-                                <option value="thit">Thịt & Hải sản</option>
-                                <option value="traicay">Trái cây</option>
-                                <option value="sua">Sữa</option>
+                                <optgroup label="Rau củ quả">
+                                    <option value="Rau ăn lá">Rau ăn lá</option>
+                                    <option value="Củ & Quả">Củ & Quả</option>
+                                    <option value="Nấm tươi">Nấm tươi</option>
+                                    <option value="Trái cây">Trái cây</option>
+                                </optgroup>
+                                <optgroup label="Thịt các loại">
+                                    <option value="Thịt heo">Thịt heo</option>
+                                    <option value="Thịt bò">Thịt bò</option>
+                                    <option value="Gia cầm (gà, vịt)">Gia cầm (gà, vịt)</option>
+                                </optgroup>
+                                <optgroup label="Thủy hải sản">
+                                    <option value="Cá tươi">Cá tươi</option>
+                                    <option value="Tôm/Cua/Mực">Tôm/Cua/Mực</option>
+                                    <option value="Hải sản đông lạnh">Hải sản đông lạnh</option>
+                                </optgroup>
                             </select>
                         </div>
                         <div>
@@ -238,25 +250,61 @@
                 const res = await fetch(API_URL);
                 if(res.ok) {
                     products = await res.json();
-                    renderTable();
+                    applyFilters();
                 }
             } catch(e) { console.log(e); showToast('Lỗi hiển thị dữ liệu server', 'error'); }
+        }
+
+        function getParentCategory(cat) {
+            const c = String(cat || '');
+            if (['Rau ăn lá', 'Củ & Quả', 'Nấm tươi', 'Trái cây'].includes(c)) return 'Rau củ quả';
+            if (['Thịt heo', 'Thịt bò', 'Gia cầm (gà, vịt)'].includes(c)) return 'Thịt các loại';
+            if (['Cá tươi', 'Tôm/Cua/Mực', 'Hải sản đông lạnh'].includes(c)) return 'Thủy hải sản';
+            // Fallback backward compatibility
+            const lowC = c.toLowerCase();
+            if (['rau', 'traicay', 'raucu', 'cuqua', 'nam', 'raucu'].includes(lowC)) return 'Rau củ quả';
+            if (['thit', 'thitheo', 'thitbo', 'giacam'].includes(lowC)) return 'Thịt các loại';
+            if (['thuyhai', 'hai', 'catuoi', 'tomcua', 'haisan'].includes(lowC)) return 'Thủy hải sản';
+            return 'Rau củ quả';
+        }
+
+        function categoryLabel(cat) {
+            return String(cat || '');
         }
 
         function formatMoney(amount) {
             return amount ? amount.toLocaleString('vi-VN') + 'đ' : '0đ';
         }
 
-        function renderTable() {
+        function applyFilters() {
+            const q = (document.getElementById('search-input')?.value || '').trim().toLowerCase();
+            const cat = document.getElementById('category-filter')?.value || 'all';
+            const filtered = products.filter(p => {
+                const byCat = cat === 'all' || getParentCategory(p.category) === cat;
+                const bySearch = !q || String(p.name || '').toLowerCase().includes(q) || String(p.category || '').toLowerCase().includes(q);
+                return byCat && bySearch;
+            });
+            renderTable(filtered);
+        }
+
+        function resetFilters() {
+            const s = document.getElementById('search-input');
+            const c = document.getElementById('category-filter');
+            if (s) s.value = '';
+            if (c) c.value = 'all';
+            applyFilters();
+        }
+
+        function renderTable(items = products) {
             const tbody = document.getElementById('product-table-body');
             tbody.innerHTML = '';
             
-            if(products.length === 0) {
+            if(items.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" class="py-10 text-center font-bold text-slate-400">Không có sản phẩm nào.</td></tr>';
                 return;
             }
 
-            products.forEach(p => {
+            items.forEach(p => {
                 const stockVal = p.stock !== undefined ? p.stock : 100; // Mock if undefined
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition group';
@@ -281,12 +329,12 @@
                         <span class="${stockVal > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'} text-[10px] px-3 py-1 font-black rounded-lg uppercase tracking-widest">${stockVal > 0 ? 'Sẵn Hàng' : 'Hết Hàng'}</span>
                     </td>
                     <td class="px-8 py-6 uppercase font-bold text-[10px] tracking-widest text-slate-500">
-                        ${p.category} - <span class="text-slate-400">${p.unit}</span>
+                        ${categoryLabel(p.category)} - <span class="text-slate-400">${p.unit}</span>
                     </td>
                     <td class="px-8 py-6">
                         <div class="flex items-center justify-center gap-3">
                             <button onclick="editProduct('${p._id}')" class="p-2.5 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800 transition shadow-sm"><span class="material-symbols-outlined text-sm font-bold">edit</span></button>
-                            <button onclick="deleteProduct('${p._id}')" class="p-2.5 rounded-full bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-700 transition shadow-sm"><span class="material-symbols-outlined text-sm font-bold">delete</span></button>
+                            <button onclick="deleteProduct('${p._id}')" class="px-3 py-1.5 bg-red-50 text-red-500 rounded-full text-xs font-bold hover:bg-red-100 hover:text-red-700 transition shadow-sm">Xóa</button>
                         </div>
                     </td>
                 `;
@@ -319,7 +367,25 @@
             if(!p) return;
             document.getElementById('pid').value = p._id;
             document.getElementById('pname').value = p.name;
-            document.getElementById('pcategory').value = p.category;
+            
+            // Set the correct option or fallback
+            const catSelect = document.getElementById('pcategory');
+            let found = false;
+            for(let i = 0; i < catSelect.options.length; i++) {
+                if(catSelect.options[i].value === p.category) {
+                    found = true; break;
+                }
+            }
+            if(!found && p.category) {
+                // If it's an old "raucu" "thit" category from old DB, try mapping it
+                const pcat = getParentCategory(p.category);
+                if(pcat === 'Rau củ quả') catSelect.value = 'Rau ăn lá'; // default
+                else if(pcat === 'Thịt các loại') catSelect.value = 'Thịt heo'; // default
+                else catSelect.value = 'Cá tươi'; // default
+            } else {
+                catSelect.value = p.category || 'Rau ăn lá';
+            }
+
             document.getElementById('punit').value = p.unit;
             document.getElementById('pprice').value = p.price;
             document.getElementById('poldPrice').value = p.oldPrice || '';
@@ -402,5 +468,17 @@
             setTimeout(() => { toast.classList.add('translate-x-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
     </script>
-</body>
+
+        <script>
+            // Set Admin Name
+            document.addEventListener('DOMContentLoaded', () => {
+                const uStr = localStorage.getItem('currentUser');
+                if (uStr) {
+                    const u = JSON.parse(uStr);
+                    const el = document.getElementById('admin-header-name');
+                    if (el) el.innerText = u.displayName || u.username || 'Admin';
+                }
+            });
+        </script>
+    </body>
 </html>

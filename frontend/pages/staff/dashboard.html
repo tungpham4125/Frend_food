@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tổng quan ca trực | MINI MART Staff</title>
+    <title>Tổng quan ca trực | FreshFood Staff</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -36,7 +36,7 @@
     <aside id="sidebar"
         class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300">
         <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6 shrink-0">
-            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">MINI MART<br>
+            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">FreshFood<br>
                 <span class="text-[10px] text-slate-300 tracking-widest font-bold uppercase">Hệ thống
                     Staff</span></span>
         </div>
@@ -64,7 +64,7 @@
 
         <div class="mt-auto px-4 pb-8">
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-center">
-                <p class="text-[10px] font-bold text-green-700 uppercase mb-3  tracking-widest">Ca làm việc: Sáng
+                <p id="sidebar-shift-label" class="text-[10px] font-bold text-green-700 uppercase mb-3  tracking-widest">Ca làm việc: ---
                 </p>
                 <button onclick="window.location.href='end.html'"
                     class="w-full py-3 primary-gradient text-white font-extrabold rounded-xl shadow-lg flex items-center justify-center gap-2 text-xs uppercase tracking-widest">
@@ -91,7 +91,7 @@
                 </div>
                 <div class="flex items-center gap-4 border-l border-slate-100 pl-6">
                     <div class="text-right">
-                        <p class="text-sm font-extrabold text-slate-900 leading-none">NHÂN VIÊN #01</p>
+                        <p id="staff-header-name" class="text-sm font-extrabold text-slate-900 leading-none">NHÂN VIÊN</p>
                         <p class="text-[9px] text-green-700 font-bold uppercase mt-1 tracking-tight">Trực máy POS</p>
                     </div>
                     <div class="w-10 h-10 rounded-full border-2 border-green-100 overflow-hidden shadow-sm">
@@ -147,6 +147,20 @@
                         <span class="material-symbols-outlined text-xl mb-2 font-bold">verified_user</span>
                     </div>
                 </div>
+                <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm transition-all hover:bg-blue-50/30">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-3 ">Doanh thu 7 ngày</p>
+                    <div class="flex items-end gap-2">
+                        <span id="statWeekRevenue" class="text-4xl font-black text-slate-900 tracking-tighter">0</span>
+                        <span class="text-[10px] font-bold text-slate-300 uppercase mb-2">đ</span>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm transition-all hover:bg-amber-50/30">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-3 ">Số ca trong tháng</p>
+                    <div class="flex items-end gap-2 text-amber-600">
+                        <span id="statShiftsMonth" class="text-4xl font-black tracking-tighter">0</span>
+                        <span class="material-symbols-outlined text-xl mb-2 font-bold">calendar_month</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Table -->
@@ -185,51 +199,256 @@
 
         <footer
             class="mt-auto border-t border-slate-100 bg-white px-10 py-4 flex items-center justify-between text-[10px] text-slate-300 font-bold uppercase tracking-[0.3em]  shrink-0">
-            <span class="text-green-700 font-black">MINI MART STAFF v2.0</span>
+            <span class="text-green-700 font-black">FreshFood STAFF v2.0</span>
             <div class="hidden sm:block">Terminal ID: POS-MACHINE-01</div>
         </footer>
     </main>
+
+    <!-- Start Shift Modal -->
+    <div id="shift-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[200] items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] w-full max-w-lg shadow-2xl overflow-hidden border border-slate-100">
+            <div class="bg-gradient-to-r from-green-600 to-green-700 p-6 text-white">
+                <div class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Bắt đầu bán hàng</div>
+                <h3 class="text-2xl font-black">Xác nhận vào ca</h3>
+            </div>
+            <div class="p-6 space-y-5">
+                <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm">
+                    <div class="text-slate-500 font-bold">Chọn ca để hệ thống tính doanh thu theo ca và thống kê làm việc.</div>
+                    <div class="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-2">Gợi ý: nếu đổi ca, hãy “Kết thúc ca” trước.</div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <button onclick="selectShift('Sáng')" id="shift-btn-morning" class="shift-btn px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-600 font-black text-xs uppercase tracking-widest hover:bg-green-50 hover:border-green-200 transition">Ca Sáng</button>
+                    <button onclick="selectShift('Chiều')" id="shift-btn-afternoon" class="shift-btn px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-600 font-black text-xs uppercase tracking-widest hover:bg-green-50 hover:border-green-200 transition">Ca Chiều</button>
+                    <button onclick="selectShift('Tối')" id="shift-btn-evening" class="shift-btn px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-600 font-black text-xs uppercase tracking-widest hover:bg-green-50 hover:border-green-200 transition">Ca Tối</button>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button onclick="logoutStaff()" class="flex-1 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition text-sm">Đăng xuất</button>
+                    <button onclick="confirmStartShift()" class="flex-1 py-3 bg-green-600 text-white rounded-xl font-black hover:bg-green-500 transition text-sm uppercase tracking-widest">Vào ca</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
         function updateTime() { document.getElementById('liveClock').innerText = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
         setInterval(updateTime, 1000); updateTime();
 
-        function renderDashboard() {
-            const history = JSON.parse(localStorage.getItem('MINI_MART_ORDERS') || '[]');
+        // --- Shift session ---
+        const SHIFT_KEY = 'STAFF_SHIFT_SESSION';
+        const SHIFT_HISTORY_KEY = 'STAFF_SHIFT_HISTORY';
+        let selectedShiftName = getAutoShiftName();
+        let allOrders = [];
+
+        // Auto-detect shift by current time
+        function getAutoShiftName() {
+            const h = new Date().getHours();
+            if (h >= 7 && h < 14) return 'Sáng';
+            if (h >= 14 && h < 22) return 'Chiều';
+            return 'Tối';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            ensureStaffAuth();
+            displayStaffName();
+            ensureShift();
+            loadOrdersForDashboard();
+        });
+
+        function displayStaffName() {
+            const uStr = localStorage.getItem('currentUser');
+            if (uStr) {
+                const u = JSON.parse(uStr);
+                const el = document.getElementById('staff-header-name');
+                if (el) el.innerText = u.displayName || u.fullName || u.username || 'NHÂN VIÊN';
+            }
+        }
+
+        function ensureStaffAuth() {
+            const token = localStorage.getItem('token');
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userStr = localStorage.getItem('currentUser');
+            if (!token || !isLoggedIn || !userStr) {
+                window.location.href = '../user/login.html';
+                return;
+            }
+            const u = JSON.parse(userStr);
+            if (u.role !== 'staff' && u.role !== 'admin') window.location.href = '../user/login.html';
+        }
+
+        function ensureShift() {
+            const shift = getShift();
+            if (!shift || !shift.startedAt) {
+                openShiftModal();
+            }
+        }
+
+        function getShift() {
+            try {
+                return JSON.parse(localStorage.getItem(SHIFT_KEY) || 'null');
+            } catch {
+                return null;
+            }
+        }
+
+        function openShiftModal() {
+            const modal = document.getElementById('shift-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // default selection
+            selectShift(selectedShiftName);
+        }
+
+        function selectShift(name) {
+            selectedShiftName = name;
+            document.querySelectorAll('.shift-btn').forEach(b => {
+                b.classList.remove('bg-green-600', 'text-white', 'border-green-600');
+                b.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+            });
+            const map = { 'Sáng': 'shift-btn-morning', 'Chiều': 'shift-btn-afternoon', 'Tối': 'shift-btn-evening' };
+            const id = map[name];
+            const btn = document.getElementById(id);
+            if (btn) {
+                btn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+                btn.classList.add('bg-green-600', 'text-white', 'border-green-600');
+            }
+        }
+
+        function confirmStartShift() {
+            const userStr = localStorage.getItem('currentUser');
+            const u = userStr ? JSON.parse(userStr) : {};
+            const shift = {
+                staffUsername: u.username || '',
+                staffRole: u.role || '',
+                name: selectedShiftName,
+                startedAt: new Date().toISOString(),
+            };
+            localStorage.setItem(SHIFT_KEY, JSON.stringify(shift));
+
+            // append shift history (for month count)
+            try {
+                const history = JSON.parse(localStorage.getItem(SHIFT_HISTORY_KEY) || '[]');
+                const next = Array.isArray(history) ? history : [];
+                next.unshift({ ...shift });
+                localStorage.setItem(SHIFT_HISTORY_KEY, JSON.stringify(next.slice(0, 200)));
+            } catch {
+                localStorage.setItem(SHIFT_HISTORY_KEY, JSON.stringify([{ ...shift }]));
+            }
+
+            const modal = document.getElementById('shift-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            // Update sidebar shift label
+            const sLabel = document.getElementById('sidebar-shift-label');
+            if (sLabel) sLabel.innerText = 'Ca làm việc: ' + selectedShiftName;
+            loadOrdersForDashboard();
+        }
+
+        function logoutStaff() {
+            localStorage.clear();
+            window.location.href = '../user/login.html';
+        }
+
+        async function loadOrdersForDashboard() {
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch('http://localhost:5000/api/orders', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) throw new Error('API error');
+                allOrders = await res.json();
+            } catch (e) {
+                // Demo fallback
+                allOrders = [
+                    { _id: 'demo001', createdAt: new Date(Date.now() - 3600000).toISOString(), totalPrice: 100000, isPaid: true, status: 'Hoàn thành' },
+                    { _id: 'demo002', createdAt: new Date(Date.now() - 7200000).toISOString(), totalPrice: 195000, isPaid: false, status: 'Đang giao hàng' },
+                    { _id: 'demo003', createdAt: new Date(Date.now() - 86400000).toISOString(), totalPrice: 120000, isPaid: true, status: 'Hoàn thành' },
+                ];
+            }
+            renderDashboardFromOrders();
+        }
+
+        function renderDashboardFromOrders() {
             const tbody = document.getElementById('recentOrdersBody');
             const emptyState = document.getElementById('emptyDashboardState');
 
-            if (history.length === 0) {
+            const sorted = [...(allOrders || [])].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            const recent = sorted.slice(0, 5);
+            if (!recent.length) {
                 emptyState.classList.remove('hidden');
                 emptyState.classList.add('flex');
-                return;
+                tbody.innerHTML = '';
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+                tbody.innerHTML = recent.map(order => {
+                    const id = order._id || '';
+                    const shortId = '#' + String(id).slice(-6).toUpperCase();
+                    const timeStr = new Date(order.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+                    const total = (Number(order.totalPrice) || 0).toLocaleString('vi-VN') + 'đ';
+                    const st = (order.status || '').toLowerCase();
+                    let badge, label;
+                    if (st.includes('hoàn thành') || st.includes('hoan thanh')) { badge = 'bg-green-50 text-green-700 border-green-100'; label = 'Hoàn thành'; }
+                    else if (st.includes('đang giao') || st.includes('dang giao')) { badge = 'bg-blue-50 text-blue-700 border-blue-100'; label = 'Đang giao'; }
+                    else if (st.includes('hủy') || st.includes('huy')) { badge = 'bg-red-50 text-red-700 border-red-100'; label = 'Đã hủy'; }
+                    else { badge = 'bg-amber-50 text-amber-700 border-amber-100'; label = 'Chờ xử lý'; }
+                    return `
+                        <tr class="hover:bg-green-50/20 transition-all border-l-4 border-l-transparent hover:border-l-green-600">
+                            <td class="px-10 py-6 font-black text-green-700 uppercase tracking-tighter text-sm">${shortId}</td>
+                            <td class="px-10 py-6 text-slate-400 text-xs tracking-tight">${timeStr}</td>
+                            <td class="px-10 py-6 text-right font-black text-slate-900 text-lg tracking-tighter tabular-nums">${total}</td>
+                            <td class="px-10 py-6 text-center">
+                                <span class="px-4 py-1.5 ${badge} border rounded-full text-[9px] font-black uppercase tracking-widest">${label}</span>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
             }
 
-            emptyState.classList.add('hidden');
-            emptyState.classList.remove('flex');
-            const recent = history.slice(0, 5);
-            let totalRev = 0;
+            // Stats — chỉ tính doanh thu từ đơn Hoàn thành
+            const shift = getShift();
+            const startedAt = shift?.startedAt ? new Date(shift.startedAt) : null;
+            const completedOrders = (allOrders || []).filter(o => {
+                const st = (o.status || '').toLowerCase();
+                return st.includes('hoàn thành') || st.includes('hoan thanh');
+            });
 
-            tbody.innerHTML = recent.map(order => {
-                totalRev += order.total;
-                const timeStr = new Date(order.timestamp).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-                return `
-                    <tr class="hover:bg-green-50/20 transition-all border-l-4 border-l-transparent hover:border-l-green-600">
-                        <td class="px-10 py-6 font-black text-green-700 uppercase tracking-tighter  text-sm">${order.id}</td>
-                        <td class="px-10 py-6 text-slate-400 text-xs  tracking-tight">${timeStr}</td>
-                        <td class="px-10 py-6 text-right font-black text-slate-900 text-lg  tracking-tighter tabular-nums">${order.total.toLocaleString()}đ</td>
-                        <td class="px-10 py-6 text-center">
-                            <span class="px-4 py-1.5 bg-green-50 text-green-700 border border-green-100 rounded-full text-[9px] font-black uppercase  tracking-widest">Đã In Bill</span>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
+            const shiftCompleted = startedAt ? completedOrders.filter(o => new Date(o.createdAt) >= startedAt) : [];
+            const shiftRevenue = shiftCompleted.reduce((s, o) => s + (Number(o.totalPrice) || 0), 0);
 
-            document.getElementById('statRevenue').innerText = totalRev.toLocaleString();
-            document.getElementById('statOrders').innerText = history.length;
+            const since7d = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+            const weekRevenue = completedOrders.filter(o => new Date(o.createdAt) >= since7d).reduce((s, o) => s + (Number(o.totalPrice) || 0), 0);
+
+            document.getElementById('statRevenue').innerText = shiftRevenue.toLocaleString('vi-VN');
+            document.getElementById('statOrders').innerText = shiftCompleted.length;
+
+            // Update sidebar shift label
+            if (shift?.name) {
+                const sLabel = document.getElementById('sidebar-shift-label');
+                if (sLabel) sLabel.innerText = 'Ca làm việc: ' + shift.name;
+            }
+            document.getElementById('statWeekRevenue').innerText = weekRevenue.toLocaleString('vi-VN');
+
+            // Shift count in month (from local history)
+            const userStr = localStorage.getItem('currentUser');
+            const u = userStr ? JSON.parse(userStr) : {};
+            const now = new Date();
+            const month = now.getMonth();
+            const year = now.getFullYear();
+            let count = 0;
+            try {
+                const hist = JSON.parse(localStorage.getItem(SHIFT_HISTORY_KEY) || '[]');
+                if (Array.isArray(hist)) {
+                    count = hist.filter(s => {
+                        const d = new Date(s.startedAt);
+                        return (s.staffUsername === (u.username || s.staffUsername)) && d.getFullYear() === year && d.getMonth() === month;
+                    }).length;
+                }
+            } catch {}
+            document.getElementById('statShiftsMonth').innerText = count;
         }
-        renderDashboard();
     </script>
 </body>
 

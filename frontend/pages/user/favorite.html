@@ -39,8 +39,8 @@
     <div class="bg-green-700 text-white text-xs py-2">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
             <div class="flex gap-4 sm:gap-6 font-medium">
-                <a href="#" class="hover:text-green-200 transition">Chính sách giao hàng</a>
-                <a href="#" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
+                <a href="policy.html" class="hover:text-green-200 transition">Chính sách giao hàng</a>
+                <a href="guide.html" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
             </div>
             <div class="flex gap-4 items-center">
                 <div id="auth-section-guest" class="flex gap-3">
@@ -61,9 +61,9 @@
                             <div class="text-[10px] text-green-600 uppercase font-bold tracking-widest" id="dropdown-role">Khách hàng</div>
                         </div>
                         <div class="p-4 space-y-3">
-                            <button onclick="alert('Tính năng chỉnh sửa Đang phát triển!')" class="w-full text-left px-4 py-2 hover:bg-slate-50 text-sm font-bold text-slate-600 rounded-lg transition flex items-center gap-2">
-                                <span class="material-symbols-outlined text-base">edit</span> Chỉnh sửa thông tin
-                            </button>
+                            <a href="settings.html" class="w-full text-left px-4 py-2 hover:bg-slate-50 text-sm font-bold text-slate-600 rounded-lg transition flex items-center gap-2">
+                                <span>✏️</span> Chỉnh sửa thông tin
+                            </a>
                             <button onclick="logoutConfirm()" class="w-full text-left px-4 py-2 hover:bg-red-50 text-sm font-bold text-red-600 rounded-lg transition flex items-center gap-2">
                                 <span class="material-symbols-outlined text-lg">logout</span> Đăng xuất
                             </button>
@@ -89,10 +89,8 @@
                 </a>
                 
                 <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
-                    <input type="text" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition font-medium">
-                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600">
-                        <span class="material-symbols-outlined text-xl">search</span>
-                    </button>
+                    <input type="text" id="header-search" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition" onkeydown="if(event.key==='Enter') typeof goSearch === 'function' ? goSearch() : window.location.href='products.html?search='+encodeURIComponent(this.value.trim())">
+                    <button onclick="const q = document.getElementById('header-search').value.trim(); if(q) { if(typeof goSearch === 'function') goSearch(); else window.location.href='products.html?search='+encodeURIComponent(q); }" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 text-lg">🔍</button>
                 </div>
 
                 <div class="flex items-center space-x-6 shrink-0">
@@ -129,9 +127,10 @@
             
             <!-- Category Filters -->
             <div id="filter-container" class="hidden flex gap-2 overflow-x-auto hide-scroll pb-2">
-                <button onclick="filterFav('all')" class="category-btn active px-5 py-2.5 border border-slate-200 bg-white text-slate-600 rounded-full text-sm font-bold whitespace-nowrap transition cursor-pointer">Tất cả</button>
-                <button onclick="filterFav('rau')" class="category-btn px-5 py-2.5 border border-slate-200 bg-white text-slate-600 rounded-full text-sm font-bold whitespace-nowrap transition cursor-pointer">Rau củ quả</button>
-                <button onclick="filterFav('thit')" class="category-btn px-5 py-2.5 border border-slate-200 bg-white text-slate-600 rounded-full text-sm font-bold whitespace-nowrap transition cursor-pointer">Thịt & hải sản</button>
+                <button onclick="filterFav('all')" class="category-btn active px-4 py-2 border border-slate-200 bg-white text-slate-600 rounded-xl text-xs font-bold uppercase tracking-widest whitespace-nowrap transition cursor-pointer">Tất Cả</button>
+                <button onclick="filterFav('Rau củ quả')" class="category-btn px-4 py-2 border border-slate-200 bg-white text-slate-600 rounded-xl text-xs font-bold uppercase tracking-widest whitespace-nowrap transition cursor-pointer">Rau Củ Quả</button>
+                <button onclick="filterFav('Thịt các loại')" class="category-btn px-4 py-2 border border-slate-200 bg-white text-slate-600 rounded-xl text-xs font-bold uppercase tracking-widest whitespace-nowrap transition cursor-pointer">Thịt các loại</button>
+                <button onclick="filterFav('Thủy hải sản')" class="category-btn px-4 py-2 border border-slate-200 bg-white text-slate-600 rounded-xl text-xs font-bold uppercase tracking-widest whitespace-nowrap transition cursor-pointer">Thủy hải sản</button>
             </div>
         </div>
 
@@ -311,18 +310,50 @@
         updateCartBadges(); 
     }
 
+    // Sản phẩm mặc định khi API offline
+    const DEFAULT_FAVORITES = [
+        { _id: 'df1', name: 'Cải Chíp Thủy Canh Hữu Cơ', category: 'rau', price: 35000, unit: '500g', image: 'https://images.unsplash.com/photo-1557844352-761f2565b576?w=400&q=80' },
+        { _id: 'df2', name: 'Thịt Lợn Sinh Học Omega-3', category: 'thit', price: 120000, unit: '1kg', image: 'https://images.unsplash.com/photo-1607623814075-e512199b4482?w=400&q=80' },
+        { _id: 'df3', name: 'Cà Chua Bi Hữu Cơ', category: 'rau', price: 45000, unit: '300g', image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&q=80' },
+        { _id: 'df4', name: 'Rau Bina Baby Organic', category: 'rau', price: 28000, unit: '200g', image: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&q=80' },
+        { _id: 'df5', name: 'Trứng Gà Ta Thả Vườn', category: 'thit', price: 55000, unit: '10 quả', image: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=400&q=80' },
+        { _id: 'df6', name: 'Nấm Hương Tươi Sạch', category: 'rau', price: 38000, unit: '300g', image: 'https://images.unsplash.com/photo-1504545102780-26774c1bb073?w=400&q=80' }
+    ];
+
+    function getFavKey() {
+        const userStr = localStorage.getItem('currentUser');
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            return 'favorites_' + (user.id || user._id || user.username);
+        }
+        return 'favorites';
+    }
+
     async function fetchFakeFavorites() {
         if (localStorage.getItem('isLoggedIn') !== 'true') return;
+
+        // Đọc favorites từ localStorage trước theo User
+        const savedFavIds = JSON.parse(localStorage.getItem(getFavKey()) || '[]');
+
+        // Nếu user chưa có sản phẩm yêu thích nào → hiển thị empty state
+        if (savedFavIds.length === 0) {
+            rawFavorites = [];
+            renderGrid(rawFavorites);
+            return;
+        }
+
         try {
             const response = await fetch('http://localhost:5000/api/products');
             if (response.ok) {
                 const data = await response.json();
-                rawFavorites = data.slice(0, 3); // Lấy giả định 3 sản phẩm làm Favorite
-                renderGrid(rawFavorites);
+                rawFavorites = data.filter(p => savedFavIds.includes(String(p._id || p.id)));
+            } else {
+                throw new Error();
             }
         } catch (error) {
-            document.getElementById('fav-grid').innerHTML = '<div class="col-span-4 text-center text-slate-400 py-10 font-bold">Không kết nối được Backend.</div>';
+            rawFavorites = DEFAULT_FAVORITES.filter(p => savedFavIds.includes(String(p._id)));
         }
+        renderGrid(rawFavorites);
     }
 
     function toggleAccountMenu() {
@@ -381,6 +412,18 @@
 
     // --- Render Favorites ---
 
+    function getParentCategory(cat) {
+        const c = String(cat || '');
+        if (['Rau ăn lá', 'Củ & Quả', 'Nấm tươi', 'Trái cây'].includes(c)) return 'Rau củ quả';
+        if (['Thịt heo', 'Thịt bò', 'Gia cầm (gà, vịt)'].includes(c)) return 'Thịt các loại';
+        if (['Cá tươi', 'Tôm/Cua/Mực', 'Hải sản đông lạnh'].includes(c)) return 'Thủy hải sản';
+        const lowC = c.toLowerCase();
+        if (['rau', 'traicay', 'raucu', 'cuqua', 'nam', 'raucu'].includes(lowC)) return 'Rau củ quả';
+        if (['thit', 'thitheo', 'thitbo', 'giacam'].includes(lowC)) return 'Thịt các loại';
+        if (['thuyhai', 'hai', 'catuoi', 'tomcua', 'haisan'].includes(lowC)) return 'Thủy hải sản';
+        return 'Rau củ quả';
+    }
+
     function filterFav(cat) {
         currentCategory = cat;
         const btns = document.querySelectorAll('.category-btn');
@@ -394,7 +437,7 @@
             activeBtn.classList.add('bg-green-600', 'text-white', 'border-green-600');
         }
         
-        let filtered = currentCategory === 'all' ? [...rawFavorites] : rawFavorites.filter(p => p.category === currentCategory);
+        let filtered = currentCategory === 'all' ? [...rawFavorites] : rawFavorites.filter(p => getParentCategory(p.category) === currentCategory || p.category === currentCategory);
         renderGrid(filtered);
     }
 
@@ -448,6 +491,9 @@
 
     function removeFavorite(idStr) {
         rawFavorites = rawFavorites.filter(p => (p._id || p.id) != idStr);
+        let savs = JSON.parse(localStorage.getItem(getFavKey()) || '[]');
+        savs = savs.filter(id => id != idStr);
+        localStorage.setItem(getFavKey(), JSON.stringify(savs));
         filterFav(currentCategory);
         closeProductModal();
         showToastDesign('Đã xóa khỏi danh sách Yêu thích', '🗑️');
@@ -460,7 +506,7 @@
         document.getElementById('modal-name').innerText = product.name;
         document.getElementById('modal-price').innerText = formatMoney(product.price);
         document.getElementById('modal-img').src = product.image;
-        document.getElementById('modal-category').innerText = product.category === 'rau' ? 'Rau & Củ quả' : 'Thực phẩm sạch';
+        document.getElementById('modal-category').innerText = getParentCategory(product.category);
         
         // Cập nhật sự kiện nút
         const btnBuy = document.getElementById('modal-btn-buy');

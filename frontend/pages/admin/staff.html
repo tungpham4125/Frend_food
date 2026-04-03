@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nhân viên - MINI MART Admin</title>
+    <title>Nhân viên - FreshFood Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +21,7 @@
     <!-- Sidebar -->
     <aside id="sidebar" class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300">
         <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6">
-            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">MINI MART<br>
+            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">FreshFood<br>
             <span class="text-[10px] text-slate-300 tracking-widest font-bold">Hệ thống Admin</span></span>
         </div>
 
@@ -32,10 +32,14 @@
             <a href="users.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all"><span class="material-symbols-outlined text-xl">group</span><span class="text-sm font-bold">Khách hàng</span></a>
             <a href="promotions.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all"><span class="material-symbols-outlined text-xl">sell</span><span class="text-sm font-bold">Khuyến mãi</span></a>
             <a href="staff.html" class="flex items-center gap-4 py-3 px-4 rounded-xl sidebar-active"><span class="material-symbols-outlined text-xl">badge</span><span class="text-sm">Nhân viên</span></a>
-            <a href="create-order.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all"><span class="material-symbols-outlined text-xl">add_circle</span><span class="text-sm font-bold">POS Bán lẻ</span></a>
+            
         </nav>
         
         <div class="px-4 py-6 border-t border-slate-100 mt-auto">
+            <a href="../user/index.html" class="flex items-center gap-4 w-full py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all mb-2">
+                <span class="material-symbols-outlined text-xl">storefront</span>
+                <span class="text-sm font-bold">Cửa hàng</span>
+            </a>
             <button onclick="logoutAdmin()" class="flex items-center gap-4 w-full py-3 px-4 text-red-500 hover:bg-red-50 rounded-xl transition-all">
                 <span class="material-symbols-outlined text-xl">logout</span>
                 <span class="text-sm font-bold">Đăng xuất</span>
@@ -49,7 +53,7 @@
                 <button onclick="toggleSidebar()" class="lg:hidden text-slate-500"><span class="material-symbols-outlined">menu</span></button>
                 <h1 class="text-lg font-bold text-slate-800 tracking-tight">Cơ cấu Nhân sự</h1>
             </div>
-            <button class="primary-gradient text-white px-8 py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest hover:scale-[1.02] shadow-lg shadow-green-600/10 flex items-center gap-2">
+            <button onclick="openCreateStaffModal()" class="primary-gradient text-white px-8 py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest hover:scale-[1.02] shadow-lg shadow-green-600/10 flex items-center gap-2">
                 <span class="material-symbols-outlined text-sm">how_to_reg</span> Thêm Nhân Sự
             </button>
         </header>
@@ -117,6 +121,102 @@
         </main>
     </div>
 
+    <!-- Create Staff Modal -->
+    <div id="create-staff-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[200] items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] w-full max-w-xl shadow-2xl overflow-hidden border border-slate-100">
+            <div class="bg-gradient-to-r from-green-600 to-green-700 p-6 text-white flex justify-between items-center">
+                <div>
+                    <div class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Đăng ký nhân viên</div>
+                    <h3 class="text-2xl font-black">Tạo tài khoản Staff</h3>
+                </div>
+                <button onclick="closeCreateStaffModal()" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition text-xl font-bold">&times;</button>
+            </div>
+            <div class="p-6 space-y-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Username</label>
+                        <input id="staff-username" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-green-500/20" placeholder="staff01">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mật khẩu</label>
+                        <input id="staff-password" type="password" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-green-500/20" placeholder="••••••••">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Họ tên</label>
+                        <input id="staff-fullname" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-green-500/20" placeholder="Nguyễn Văn A">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">SĐT</label>
+                        <input id="staff-phone" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-green-500/20" placeholder="09xx xxx xxx">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email</label>
+                    <input id="staff-email" type="email" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-green-500/20" placeholder="staff@freshfood.vn">
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button onclick="closeCreateStaffModal()" class="flex-1 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition">Hủy</button>
+                    <button onclick="createStaff()" class="flex-1 py-3 bg-green-600 text-white rounded-xl font-black hover:bg-green-500 transition uppercase tracking-widest text-sm">Tạo staff</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Staff Modal -->
+    <div id="edit-staff-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[200] items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] w-full max-w-xl shadow-2xl overflow-hidden border border-slate-100">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-6 text-white flex justify-between items-center">
+                <div>
+                    <div class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Cập nhật hồ sơ</div>
+                    <h3 class="text-2xl font-black">Chỉnh sửa thông tin</h3>
+                </div>
+                <button onclick="closeEditStaffModal()" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition text-xl font-bold">&times;</button>
+            </div>
+            <div class="p-6 space-y-5">
+                <input type="hidden" id="edit-staff-id">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Vai trò</label>
+                        <select id="edit-staff-role" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500/20">
+                            <option value="staff">Nhân viên (Staff)</option>
+                            <option value="admin">Quản lý (Admin)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Đổi Mật khẩu (Tùy chọn)</label>
+                        <input id="edit-staff-password" type="password" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500/20" placeholder="Tùy chọn">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Họ tên</label>
+                        <input id="edit-staff-fullname" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500/20">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">SĐT</label>
+                        <input id="edit-staff-phone" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500/20">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email</label>
+                    <input id="edit-staff-email" type="email" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500/20">
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button onclick="closeEditStaffModal()" class="flex-1 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition">Hủy</button>
+                    <button onclick="submitEditStaff()" class="flex-1 py-3 bg-blue-600 text-white rounded-xl font-black hover:bg-blue-500 transition uppercase tracking-widest text-sm">Lưu cập nhật</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
         function logoutAdmin() {
@@ -135,6 +235,53 @@
             }
             fetchStaff();
         });
+
+        function openCreateStaffModal() {
+            const modal = document.getElementById('create-staff-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCreateStaffModal() {
+            const modal = document.getElementById('create-staff-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function createStaff() {
+            const token = localStorage.getItem('token');
+            const username = document.getElementById('staff-username')?.value?.trim();
+            const password = document.getElementById('staff-password')?.value;
+            const fullName = document.getElementById('staff-fullname')?.value?.trim();
+            const phone = document.getElementById('staff-phone')?.value?.trim();
+            const email = document.getElementById('staff-email')?.value?.trim();
+
+            if (!username || !password) {
+                alert('Vui lòng nhập username và mật khẩu.');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/staff`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ username, password, fullName, phone, email })
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    alert(data.message || 'Tạo staff thất bại');
+                    return;
+                }
+                closeCreateStaffModal();
+                await fetchStaff();
+                alert('✅ Tạo staff thành công!');
+            } catch (e) {
+                alert('⚠️ Không kết nối được server để tạo staff.');
+            }
+        }
 
         async function fetchStaff() {
             try {
@@ -156,6 +303,61 @@
                 console.log(e);
             }
         }
+
+        function openEditStaffModal(id) {
+            const u = staffMembers.find(s => s._id === id);
+            if (!u) return;
+            document.getElementById('edit-staff-id').value = id;
+            document.getElementById('edit-staff-fullname').value = u.fullName || '';
+            document.getElementById('edit-staff-phone').value = u.phone || '';
+            document.getElementById('edit-staff-email').value = u.email || '';
+            document.getElementById('edit-staff-role').value = u.role || 'staff';
+            document.getElementById('edit-staff-password').value = '';
+
+            const modal = document.getElementById('edit-staff-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeEditStaffModal() {
+            const modal = document.getElementById('edit-staff-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function submitEditStaff() {
+            const id = document.getElementById('edit-staff-id').value;
+            const fullName = document.getElementById('edit-staff-fullname').value.trim();
+            const phone = document.getElementById('edit-staff-phone').value.trim();
+            const email = document.getElementById('edit-staff-email').value.trim();
+            const role = document.getElementById('edit-staff-role').value;
+            const password = document.getElementById('edit-staff-password').value;
+
+            const payload = { fullName, phone, email, role };
+            if (password) payload.password = password;
+
+            try {
+                const res = await fetch(`${API_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) {
+                    alert('✅ Cập nhật thay đổi hồ sơ thành công!');
+                    closeEditStaffModal();
+                    await fetchStaff();
+                } else {
+                    const err = await res.json();
+                    alert(err.message || 'Lỗi hệ thống');
+                }
+            } catch(e) {
+                alert('Có lỗi máy chủ.');
+            }
+        }
+
 
         function filterStaff(roleStr) {
             const btns = document.querySelectorAll('.tab-btn');
@@ -182,11 +384,15 @@
                 return;
             }
 
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            const currentUserId = currentUser.id || currentUser._id;
+
             items.forEach(u => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50/50 transition duration-300 group';
                 
                 const initial = (u.fullName || u.username).charAt(0).toUpperCase();
+                const isSelf = String(u._id) === String(currentUserId);
 
                 tr.innerHTML = `
                     <td class="px-8 py-6">
@@ -194,7 +400,7 @@
                             <div class="w-12 h-12 rounded-[1rem] ${u.role === 'admin' ? 'bg-amber-500' : 'bg-blue-500'} text-white flex items-center justify-center font-extrabold text-xl shadow-lg shrink-0">${initial}</div>
                             <div>
                                 <p class="text-slate-900 font-extrabold uppercase">${u.fullName || 'Chưa định danh'}</p>
-                                <p class="text-[10px] text-slate-400 font-bold tracking-widest uppercase mt-1">ID: ${u._id.substr(-6)}</p>
+                                <p class="text-[10px] text-slate-400 font-bold tracking-widest uppercase mt-1">ID: ${u._id.substring(u._id.length - 6)}</p>
                             </div>
                         </div>
                     </td>
@@ -210,16 +416,29 @@
                     <td class="px-8 py-6 text-center">
                         <span class="px-4 py-1.5 rounded-full bg-slate-100 text-slate-400 text-[9px] font-black uppercase tracking-widest border border-slate-200">Ngoại Tuyến</span>
                     </td>
-                    <td class="px-8 py-6">
+                    <td class="px-8 py-6 text-center">
+                        ${isSelf ? '<span class="text-[10px] text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full font-bold uppercase tracking-widest">Bạn</span>' : `
                         <div class="flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition duration-300">
-                            <button class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-slate-200 hover:text-slate-800 transition shadow-sm"><span class="material-symbols-outlined text-sm font-bold">edit</span></button>
-                            <button class="w-8 h-8 rounded-full bg-red-50 text-red-400 flex items-center justify-center hover:bg-red-100 hover:text-red-700 transition shadow-sm"><span class="material-symbols-outlined text-sm font-bold">block</span></button>
+                            <button onclick="openEditStaffModal('${u._id}')" class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-slate-200 hover:text-slate-800 transition shadow-sm"><span class="material-symbols-outlined text-sm font-bold">edit</span></button>
                         </div>
+                        `}
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
     </script>
-</body>
+
+        <script>
+            // Set Admin Name
+            document.addEventListener('DOMContentLoaded', () => {
+                const uStr = localStorage.getItem('currentUser');
+                if (uStr) {
+                    const u = JSON.parse(uStr);
+                    const el = document.getElementById('admin-header-name');
+                    if (el) el.innerText = u.displayName || u.username || 'Admin';
+                }
+            });
+        </script>
+    </body>
 </html>

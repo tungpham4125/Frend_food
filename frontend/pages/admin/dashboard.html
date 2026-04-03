@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - MINI MART Admin</title>
+    <title>Dashboard - FreshFood Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@
     <!-- Sidebar -->
     <aside id="sidebar" class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300">
         <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6">
-            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">MINI MART<br>
+            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">FreshFood<br>
             <span class="text-[10px] text-slate-300 tracking-widest font-bold">Hệ thống Admin</span></span>
         </div>
 
@@ -50,13 +50,14 @@
                 <span class="material-symbols-outlined text-xl">badge</span>
                 <span class="text-sm font-bold">Nhân viên</span>
             </a>
-            <a href="create-order.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
-                <span class="material-symbols-outlined text-xl">add_circle</span>
-                <span class="text-sm font-bold">POS Bán lẻ</span>
-            </a>
+            
         </nav>
 
         <div class="px-4 py-6 border-t border-slate-100 mt-auto">
+            <a href="../user/index.html" class="flex items-center gap-4 w-full py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all mb-2">
+                <span class="material-symbols-outlined text-xl">storefront</span>
+                <span class="text-sm font-bold">Cửa hàng</span>
+            </a>
             <button onclick="logoutAdmin()" class="flex items-center gap-4 w-full py-3 px-4 text-red-500 hover:bg-red-50 rounded-xl transition-all">
                 <span class="material-symbols-outlined text-xl">logout</span>
                 <span class="text-sm font-bold">Đăng xuất</span>
@@ -77,7 +78,7 @@
 
             <div class="flex items-center gap-6">
                 <div class="text-right">
-                    <p class="text-sm font-extrabold text-slate-900 leading-none uppercase">Admin</p>
+                    <p id="admin-header-name" class="text-sm font-extrabold text-slate-900 leading-none uppercase">Admin</p>
                     <p class="text-[10px] text-green-700 font-bold uppercase mt-1 tracking-tight">Hệ thống</p>
                 </div>
                 <div class="w-10 h-10 rounded-full border-2 border-green-100 overflow-hidden shadow-sm">
@@ -112,13 +113,13 @@
                     <p class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Khách hàng</p>
                     <p class="text-2xl font-extrabold text-slate-800 mt-1" id="stat-users">24</p>
                 </div>
-                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all hover:bg-emerald-50/30">
                     <div class="flex items-center justify-between mb-4">
-                        <span class="material-symbols-outlined text-rose-500 bg-rose-50 p-2 rounded-xl">trending_up</span>
-                        <span class="text-green-600 text-[11px] font-bold">+2.4%</span>
+                        <span class="material-symbols-outlined text-emerald-600 bg-emerald-50 p-2 rounded-xl">inventory_2</span>
+                        <span class="text-slate-400 text-[11px] font-bold">—</span>
                     </div>
-                    <p class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Tỉ lệ chốt</p>
-                    <p class="text-2xl font-extrabold text-slate-800 mt-1">82%</p>
+                    <p class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Sản phẩm</p>
+                    <p class="text-2xl font-extrabold text-slate-800 mt-1" id="stat-products">0</p>
                 </div>
             </div>
 
@@ -131,22 +132,7 @@
                 </div>
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col">
                     <h3 class="text-sm font-extrabold text-slate-900 uppercase tracking-widest mb-6">Đơn mới nhất</h3>
-                    <div class="space-y-4 flex-1">
-                        <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
-                            <div>
-                                <p class="text-xs font-extrabold text-slate-800">#FF-8921</p>
-                                <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Nguyễn Huy</p>
-                            </div>
-                            <p class="text-xs font-extrabold text-green-700 ">450k đ</p>
-                        </div>
-                        <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
-                            <div>
-                                <p class="text-xs font-extrabold text-slate-800">#FF-8920</p>
-                                <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Minh Thư</p>
-                            </div>
-                            <p class="text-xs font-extrabold text-green-700 ">1.2tr đ</p>
-                        </div>
-                    </div>
+                    <div id="latest-orders" class="space-y-4 flex-1"></div>
                     <a href="orders.html" class="mt-6 text-center text-[10px] font-bold text-slate-300 hover:text-green-700 uppercase tracking-widest transition-colors">Xem toàn bộ hệ thống</a>
                 </div>
             </div>
@@ -158,6 +144,7 @@
         function logoutAdmin() { localStorage.clear(); window.location.href = '../user/login.html'; }
 
         // Load thống kê thực từ API
+        let revenueChart;
         async function loadDashboardStats() {
             const token = localStorage.getItem('token');
             if (!token) { window.location.href = '../user/login.html'; return; }
@@ -171,22 +158,61 @@
                     const revEl = document.getElementById('stat-revenue');
                     const ordEl = document.getElementById('stat-orders');
                     const usrEl = document.getElementById('stat-users');
+                    const prodEl = document.getElementById('stat-products');
                     if (revEl) revEl.innerText = (data.revenue || 0).toLocaleString('vi-VN') + 'đ';
                     if (ordEl) ordEl.innerText = data.totalOrders || 0;
                     if (usrEl) usrEl.innerText = data.totalUsers || 0;
+                    if (prodEl) prodEl.innerText = data.totalProducts || 0;
+
+                    // latest 3 orders
+                    renderLatestOrders(data.latestOrders || []);
+                    // chart from API (completed orders only)
+                    updateRevenueChart(data.revenueSeries || []);
                 }
             } catch(e) { console.log('Lỗi tải stats:', e); }
         }
         document.addEventListener('DOMContentLoaded', loadDashboardStats);
 
-        const ctx = document.getElementById('revenueChart').getContext('2d');
-        new Chart(ctx, {
+        function renderLatestOrders(orders) {
+            const el = document.getElementById('latest-orders');
+            if (!el) return;
+            if (!orders.length) {
+                el.innerHTML = `<div class="p-4 bg-slate-50 rounded-2xl text-xs font-bold text-slate-400">Chưa có đơn hàng</div>`;
+                return;
+            }
+            el.innerHTML = orders.slice(0, 3).map(o => {
+                const shortId = '#' + String(o._id || '').slice(-6).toUpperCase();
+                const name = o.shippingAddress?.fullName || 'Khách';
+                const total = (Number(o.totalPrice) || 0).toLocaleString('vi-VN') + 'đ';
+                return `
+                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+                        <div>
+                            <p class="text-xs font-extrabold text-slate-800">${shortId}</p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">${name}</p>
+                        </div>
+                        <p class="text-xs font-extrabold text-green-700 ">${total}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateRevenueChart(series) {
+            const labels = (series || []).map(s => s.label);
+            const values = (series || []).map(s => s.value || 0);
+            if (revenueChart) {
+                revenueChart.data.labels = labels;
+                revenueChart.data.datasets[0].data = values;
+                revenueChart.update();
+                return;
+            }
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+                labels,
                 datasets: [{
                     label: 'Doanh thu',
-                    data: [8000000, 12000000, 10000000, 15000000, 14000000, 20000000, 25000000],
+                    data: values,
                     backgroundColor: '#16a34a',
                     borderRadius: 8,
                 }]
@@ -221,6 +247,19 @@
                 }
             }
         });
+        }
     </script>
-</body>
+
+        <script>
+            // Set Admin Name
+            document.addEventListener('DOMContentLoaded', () => {
+                const uStr = localStorage.getItem('currentUser');
+                if (uStr) {
+                    const u = JSON.parse(uStr);
+                    const el = document.getElementById('admin-header-name');
+                    if (el) el.innerText = u.displayName || u.username || 'Admin';
+                }
+            });
+        </script>
+    </body>
 </html>
