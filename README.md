@@ -29,16 +29,19 @@ cd Frend_food
 ### 3. Cài đặt Backend
 Di chuyển vào thư mục backend và cài đặt thư viện:
 npm install
+
 Quan trọng: Tạo file .env trong thư mục backend và dán cấu hình sau:
+```bash
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/freshfood_db
 JWT_SECRET=your_secret_key_here
-
+```
 ### 4. Khởi tạo dữ liệu (Seeding)
 # Tại thư mục gốc hoặc thư mục database
-cd database
+```bash
 node seed.js        # Nạp danh sách sản phẩm
 node seedUsers.js   # Nạp tài khoản admin/staff mẫu
+```
 
 ### 5. Chạy ứng dụng
 Chạy Server: Tại thư mục backend, gõ npm start.
