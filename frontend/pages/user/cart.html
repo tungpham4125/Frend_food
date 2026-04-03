@@ -89,7 +89,7 @@
                     <div id="auth-section-user" class="hidden flex items-center gap-3 relative">
                         <button onclick="toggleAccountMenu()"
                             class="flex items-center gap-2 hover:text-green-200 transition focus:outline-none">
-                            <span class="text-green-200 text-xl">😎</span>
+                       <span class="material-symbols-outlined text-green-200 text-xl">person</span>
                             <span id="header-username" class="font-bold"></span>
                         </button>
                         <!-- Account Dropdown -->
@@ -116,8 +116,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Header -->
+
+        <!-- Header -->
     <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-40 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
@@ -147,12 +147,6 @@
                         class="flex items-center gap-2 text-slate-600 hover:text-green-700 transition font-medium text-sm">
                         <span class="material-symbols-outlined text-2xl">receipt_long</span>
                         <span class="hidden sm:inline font-bold">Đơn hàng</span>
-                    </a>
-                    <a href="cart.html" class="relative group flex items-center gap-2 text-green-700">
-                        <span
-                            class="material-symbols-outlined text-2xl group-hover:text-green-600 transition">shopping_cart</span>
-                        <span id="header-cart-count"
-                            class="hidden absolute -top-1 -right-2 bg-green-600 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
                     </a>
                 </div>
             </div>
@@ -309,35 +303,77 @@
                             <span class="material-symbols-outlined text-green-600 text-lg font-medium">call</span>
                             <span class="text-slate-500 text-[13px]">1900 1234 - 0987 654 321</span>
                         </li>
-                        <li class="flex items-center justify-between gap-3">
-                            <div class="flex items-center gap-3">
-                                <span class="material-symbols-outlined text-green-600 text-lg font-medium">mail</span>
-                                <span class="text-slate-500 text-[13px]">support@freshfood.vn</span>
+        <!-- Footer -->
+        <footer class="bg-white border-t border-slate-200 pt-12 pb-4 mt-auto">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-4">
+                    <div class="col-span-1 lg:col-span-1">
+                        <a href="index.html" class="flex items-center gap-3 mb-4">
+                            <div class="w-9 h-9 bg-green-700 rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-xl">eco</span>
                             </div>
-                            <div class="flex gap-2">
-                                <a href="#"
-                                    class="w-7 h-7 border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:border-green-500 hover:text-green-500 transition">
-                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                                        <path
-                                            d="M18.77,7.46H14.5v-1.9c0-.9.6-1.1,1-1.1h3V1h-4.33c-4.78,0-5.37,3.52-5.37,5.48v2.12H5.09v3.74h3.71v11.66h4.51V11.2h3.3l1.16-3.74Z">
-                                        </path>
-                                    </svg>
-                                </a>
-                                <a href="#"
-                                    class="w-7 h-7 border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:border-green-500 hover:text-green-500 transition">
-                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                                        <path
-                                            d="M12.31,2h-1c-2,0-3.35,0-4.42.08C5.8,2.17,5,2.32,4.3,2.7A4.6,4.6,0,0,0,2.7,4.3C2.32,5,2.17,5.8,2.08,6.86,2,7.93,2,9.28,2,11.31v1c0,2,0,3.35.08,4.42.09,1.07.24,1.82.62,2.51a4.6,4.6,0,0,0,1.6,1.6c.69.38,1.44.53,2.51.62,1.07.08,2.42.08,4.42.08h1c2,0,3.35,0,4.42-.08,1.07-.09,1.82-.24,2.51-.62a4.6,4.6,0,0,0,1.6-1.6c.38-.69.53-1.44.62-2.51.08-1.07.08-2.42.08-4.42v-1c0-2,0-3.35-.08-4.42-.09-1.07-.24-1.82-.62-2.51a4.6,4.6,0,0,0-1.6-1.6c-.69-.38-1.44-.53-2.51-.62C15.66,2,14.31,2,12.31,2ZM12,6.87A5.13,5.13,0,1,1,6.87,12,5.13,5.13,0,0,1,12,6.87Zm6.39-1.11a1.2,1.2,0,1,1-1.2-1.2A1.2,1.2,0,0,1,18.39,5.76ZM12,15.13A3.13,3.13,0,1,0,8.87,12,3.13,3.13,0,0,0,12,15.13Z">
-                                        </path>
-                                    </svg>
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
+                            <span class="text-xl font-bold text-slate-800">FreshFood</span>
+                        </a>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                            FreshFood - Hệ thống cung cấp thực phẩm hữu cơ, rau củ sạch đạt chuẩn VietGAP & GlobalGAP.
+                            Sức khỏe của bạn là niềm hạnh phúc của chúng tôi.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">MUA SẮM</h4>
+                        <ul class="space-y-2">
+                            <li><a href="index.html" class="text-slate-500 hover:text-green-600 transition">Tất cả sản phẩm</a></li>
+                            <li><a href="products.html?category=fruits" class="text-slate-500 hover:text-green-600 transition">Trái cây tươi</a></li>
+                            <li><a href="products.html?category=vegetables" class="text-slate-500 hover:text-green-600 transition">Rau củ hữu cơ</a></li>
+                            <li><a href="explore.html" class="text-slate-500 hover:text-green-600 transition">Combo khuyến mãi</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">CHÍNH SÁCH</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Chính sách vận chuyển</a></li>
+                            <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Chính sách đổi trả</a></li>
+                            <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Bảo mật thông tin</a></li>
+                            <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Điều khoản sử dụng</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">LIÊN HỆ</h4>
+                        <ul class="space-y-2">
+                            <li class="flex gap-3">
+                                <span class="material-symbols-outlined text-green-600 text-lg">location_on</span>
+                                <span class="text-slate-500 text-[13px]">123 Đường Organic, Quận 1, TP. HCM</span>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="material-symbols-outlined text-green-600 text-lg">call</span>
+                                <span class="text-slate-500 text-[13px]">1900 1234 - 0987 654 321</span>
+                            </li>
+                            <li class="flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-green-600 text-lg">mail</span>
+                                    <span class="text-slate-500 text-[13px]">support@freshfood.vn</span>
+                                </div>
+                                <div class="flex gap-2">
+                                    <a href="#" class="w-7 h-7 border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:border-green-500 hover:text-green-500 transition">
+                                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.77,7.46H14.5v-1.9c0-.9.6-1.1,1-1.1h3V1h-4.33c-4.78,0-5.37,3.52-5.37,5.48v2.12H5.09v3.74h3.71v11.66h4.51V11.2h3.3l1.16-3.74Z"></path></svg>
+                                    </a>
+                                    <a href="#" class="w-7 h-7 border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:border-green-500 hover:text-green-500 transition">
+                                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.31,2h-1c-2,0-3.35,0-4.42.08C5.8,2.17,5,2.32,4.3,2.7A4.6,4.6,0,0,0,2.7,4.3C2.32,5,2.17,5.8,2.08,6.86,2,7.93,2,9.28,2,11.31v1c0,2,0,3.35.08,4.42.09,1.07.24,1.82.62,2.51a4.6,4.6,0,0,0,1.6,1.6c.69.38,1.44.53,2.51.62,1.07.08,2.42.08,4.42.08h1c2,0,3.35,0,4.42-.08,1.07-.09,1.82-.24,2.51-.62a4.6,4.6,0,0,0,1.6-1.6c.38-.69.53-1.44.62-2.51.08-1.07.08-2.42.08-4.42v-1c0-2,0-3.35-.08-4.42-.09-1.07-.24-1.82-.62-2.51a4.6,4.6,0,0,0-1.6-1.6c-.69-.38-1.44-.53-2.51-.62C15.66,2,14.31,2,12.31,2ZM12,6.87A5.13,5.13,0,1,1,6.87,12,5.13,5.13,0,0,1,12,6.87Zm6.39-1.11a1.2,1.2,0,1,1-1.2-1.2A1.2,1.2,0,0,1,18.39,5.76ZM12,15.13A3.13,3.13,0,1,0,8.87,12,3.13,3.13,0,0,0,12,15.13Z"></path></svg>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-slate-100 pt-4 text-center">
+                    <p class="text-slate-400 text-xs text-bold uppercase tracking-widest">© 2024 FreshFood. Bán hàng bằng cả trái tim 💚</p>
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <!-- Logout Confirm Modal -->
     <div id="logout-modal"
@@ -387,8 +423,9 @@
             return amount.toLocaleString('vi-VN') + 'đ';
         }
 
-        function renderCart() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        async function renderCart() {
+            const cartStr = localStorage.getItem('cart') || '[]';
+            let cart = JSON.parse(cartStr);
             const listContainer = document.getElementById('cart-list');
             const emptyContainer = document.getElementById('cart-empty');
             const subtotalEl = document.getElementById('cart-subtotal');
@@ -404,6 +441,30 @@
                 return;
             }
 
+            // Đồng bộ giỏ hàng với Database để lấy đúng ảnh và giá mới nhất
+            try {
+                const response = await fetch('http://localhost:5000/api/products');
+                if (response.ok) {
+                    const dbProducts = await response.json();
+                    let updated = false;
+                    cart = cart.map(item => {
+                        const realProduct = dbProducts.find(p => p._id == (item._id || item.id));
+                        if (realProduct && (!item.image || item.image !== realProduct.image || item.price !== realProduct.price)) {
+                            updated = true;
+                            item.image = realProduct.image;
+                            item.price = realProduct.price;
+                            item.name = realProduct.name;
+                        }
+                        return item;
+                    });
+                    if (updated) {
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                    }
+                }
+            } catch (error) {
+                console.error("Không thể tải thông tin sản phẩm mới nhất từ DB", error);
+            }
+
             emptyContainer.classList.add('hidden');
             listContainer.classList.remove('hidden');
 
@@ -411,10 +472,16 @@
             listContainer.innerHTML = cart.map((item, index) => {
                 const totalItem = item.price * (item.qty || 1);
                 subtotal += totalItem;
+                const defaultImg = "https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&q=80";
+                let imgSrc = defaultImg;
+                if (item.image) {
+                    imgSrc = (item.image.startsWith('http') || item.image.startsWith('/') || item.image.startsWith('.')) ? item.image : '/' + item.image;
+                }
+                
                 return `
                 <div class="flex items-center gap-4 sm:gap-6 p-4 rounded-3xl bg-slate-50 border border-slate-100 group transition hover:bg-white hover:shadow-lg">
                     <div class="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl overflow-hidden border border-slate-100 shrink-0">
-                        <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <img src="${imgSrc}" onerror="this.onerror=null; this.src='${defaultImg}';" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="${item.name || 'Sản phẩm'}">
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">${item.origin || 'Viet Nam'}</div>
