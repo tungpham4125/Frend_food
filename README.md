@@ -29,7 +29,7 @@ git clone <link-repo>
 Di chuyển vào thư mục backend và cài đặt thư viện:
 npm install
 
-####Quan trọng: Tạo file .env trong thư mục backend và dán cấu hình sau thì mới đăng nhập được:
+###Quan trọng: Tạo file .env trong thư mục backend và dán cấu hình sau thì mới đăng nhập được:
 ```bash
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/freshfood_db
@@ -41,7 +41,14 @@ JWT_SECRET=your_secret_key_here
 node seed.js        # Nạp danh sách sản phẩm
 node seedUsers.js   # Nạp tài khoản admin/staff mẫu
 ```
-
+# Nhưng thay vì chạy 2 lệnh trên, chạy lệnh sau để cập nhật db mới nhất (Nga đã sửa lại db): 
+```bash
+node database/importDB.js
+```
+hoặc nếu bạn thay đổi db và muốn cập nhật:
+```bash
+node database/exportDB.js
+```
 ### 5. Chạy ứng dụng
 Chạy Server: Tại thư mục backend, gõ npm start.
 Chạy Frontend: Mở file frontend/index.html bằng công cụ Live Server trên VS Code
