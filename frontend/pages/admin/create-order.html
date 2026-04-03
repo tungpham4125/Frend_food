@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS Bán lẻ - MINI MART Admin</title>
+    <title>POS Bán lẻ - FreshFood Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,7 @@
     <!-- Sidebar - Desktop: Static Flow, Mobile: Fixed Overlay -->
     <aside id="sidebar" class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300">
         <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6 shrink-0">
-            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">MINI MART<br>
+            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">FreshFood<br>
             <span class="text-[10px] text-slate-300 tracking-widest font-bold">Hệ thống Admin</span></span>
         </div>
         <nav class="flex flex-col gap-1 flex-1 overflow-y-auto px-4">
@@ -44,9 +44,7 @@
             <a href="staff.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
                 <span class="material-symbols-outlined text-xl">badge</span><span class="text-sm font-bold">Nhân viên</span>
             </a>
-            <a href="create-order.html" class="flex items-center gap-4 py-3 px-4 rounded-xl sidebar-active">
-                <span class="material-symbols-outlined text-xl">add_circle</span><span class="text-sm">POS Bán lẻ</span>
-            </a>
+            
         </nav>
     </aside>
 
@@ -113,7 +111,7 @@
                                         <input type="number" value="1" min="1" oninput="updateTotal()" class="qty-input w-12 bg-transparent border-none text-center text-sm font-extrabold focus:ring-0">
                                         <button type="button" onclick="changeQty(this, 1)" class="p-2 text-slate-400 hover:text-green-700 font-bold">+</button>
                                     </div>
-                                    <button type="button" onclick="removeProductRow(this)" class="text-slate-300 hover:text-red-500 transition-colors ml-2 shrink-0"><span class="material-symbols-outlined">delete</span></button>
+                                    <button type="button" onclick="removeProductRow(this)" class="px-3 py-1.5 bg-red-50 text-red-500 rounded-full text-[10px] uppercase font-bold hover:bg-red-100 hover:text-red-700 transition ml-2 shrink-0">Xóa</button>
                                 </div>
                                 <button type="button" onclick="addProductRow()" class="flex items-center gap-2 text-green-700 text-[10px] font-black uppercase tracking-widest hover:opacity-70 transition-opacity">
                                     <span class="material-symbols-outlined text-sm">add_circle</span> Thêm Sản phẩm mới
@@ -144,7 +142,7 @@
         </section>
         
         <footer class="mt-auto border-t border-slate-50 bg-white px-10 py-4 flex items-center justify-between text-[10px] text-slate-300 font-bold uppercase tracking-[0.2em] shrink-0">
-            <span class="text-green-700 font-extrabold">MINI MART ERP System</span>
+            <span class="text-green-700 font-extrabold">FreshFood ERP System</span>
             <div class="hidden sm:block">Hotline: +84 28 1234 5678</div>
         </footer>
     </main>
@@ -191,5 +189,17 @@
         }
         updateTotal();
     </script>
-</body>
+
+        <script>
+            // Set Admin Name
+            document.addEventListener('DOMContentLoaded', () => {
+                const uStr = localStorage.getItem('currentUser');
+                if (uStr) {
+                    const u = JSON.parse(uStr);
+                    const el = document.getElementById('admin-header-name');
+                    if (el) el.innerText = u.displayName || u.username || 'Admin';
+                }
+            });
+        </script>
+    </body>
 </html>

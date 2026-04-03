@@ -92,66 +92,68 @@
 
 <body class="text-slate-800 antialiased h-[100dvh] flex flex-col overflow-hidden">
 
-    <div class="flex-1 flex flex-col overflow-y-auto bg-white relative min-h-0">
-
-        <!-- Top Bar -->
-        <div class="bg-green-700 text-white text-xs py-2">
-            <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
-                <div class="flex gap-4 sm:gap-6 font-medium">
-                    <a href="#" class="hover:text-green-200 transition">Chính sách giao hàng</a>
-                    <a href="#" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
+<div class="flex-1 flex flex-col overflow-y-auto bg-white relative min-h-0">
+    
+    <!-- Top Bar -->
+    <div class="bg-green-700 text-white text-xs py-2">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
+            <div class="flex gap-4 sm:gap-6 font-medium">
+                <a href="policy.html" class="hover:text-green-200 transition">Chính sách giao hàng</a>
+                <a href="guide.html" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div id="auth-section-guest" class="flex gap-3">
+                    <a href="register.html" class="hover:text-green-200 transition">Đăng ký</a>
+                    <span class="text-green-500">|</span>
+                    <a href="login.html" class="hover:text-green-200 transition font-bold">Đăng nhập</a>
                 </div>
-                <div class="flex gap-4 items-center">
-                    <div id="auth-section-guest" class="flex gap-3">
-                        <a href="register.html" class="hover:text-green-200 transition">Đăng ký</a>
-                        <span class="text-green-500">|</span>
-                        <a href="login.html" class="hover:text-green-200 transition font-bold">Đăng nhập</a>
-                    </div>
-                    <div id="auth-section-user" class="hidden flex items-center gap-3 relative">
-                        <button onclick="toggleAccountMenu()"
-                            class="flex items-center gap-2 hover:text-green-200 transition focus:outline-none">
-                            <span class="text-green-200 text-xl">😎</span>
-                            <span id="header-username" class="font-bold"></span>
-                        </button>
-                        <!-- Account Dropdown -->
-                        <div id="account-dropdown"
-                            class="hidden absolute top-8 right-0 w-72 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden transform origin-top-right transition-all">
-                            <div class="p-4 bg-green-50 border-b border-green-100 text-center">
-                                <span class="text-3xl block mb-2">🧑‍🌾</span>
-                                <div class="font-black text-green-800" id="dropdown-name">Họ Tên</div>
-                                <div class="text-[10px] text-green-600 uppercase font-bold tracking-widest"
-                                    id="dropdown-role">Khách hàng</div>
-                            </div>
-                            <div class="p-4 space-y-3">
-                                <button onclick="alert('Tính năng chỉnh sửa Đang phát triển!')"
-                                    class="w-full text-left px-4 py-2 hover:bg-slate-50 text-sm font-bold text-slate-600 rounded-lg transition flex items-center gap-2">
-                                    <span>✏️</span> Chỉnh sửa thông tin
-                                </button>
-                                <button onclick="logoutConfirm()"
-                                    class="w-full text-left px-4 py-2 hover:bg-red-50 text-sm font-bold text-red-600 rounded-lg transition flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-lg">logout</span> Đăng xuất
-                                </button>
-                            </div>
+                <div id="auth-section-user" class="hidden flex items-center gap-3 relative">
+                    <button onclick="toggleAccountMenu()" class="flex items-center gap-2 hover:text-green-200 transition focus:outline-none">
+                        <span class="text-green-200 text-xl">😎</span>
+                        <span id="header-username" class="font-bold"></span>
+                    </button>
+                    <!-- Account Dropdown -->
+                    <div id="account-dropdown" class="hidden absolute top-8 right-0 w-72 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden transform origin-top-right transition-all">
+                        <div class="p-4 bg-green-50 border-b border-green-100 text-center">
+                            <span class="text-3xl block mb-2">🧑‍🌾</span>
+                            <div class="font-black text-green-800" id="dropdown-name">Họ Tên</div>
+                            <div class="text-[10px] text-green-600 uppercase font-bold tracking-widest" id="dropdown-role">Khách hàng</div>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <a href="settings.html" class="w-full text-left px-4 py-2 hover:bg-slate-50 text-sm font-bold text-slate-600 rounded-lg transition flex items-center gap-2">
+                                <span>✏️</span> Chỉnh sửa thông tin
+                            </a>
+                            <button onclick="logoutConfirm()" class="w-full text-left px-4 py-2 hover:bg-red-50 text-sm font-bold text-red-600 rounded-lg transition flex items-center gap-2">
+                                <span>🚪</span> Đăng xuất
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Header -->
-        <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-40 shadow-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center">
-                    <a href="index.html" class="flex items-center gap-3 transition hover:opacity-90 shrink-0">
-                        <div
-                            class="w-10 h-10 bg-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-200">
-                            <span class="material-symbols-outlined text-white text-2xl">eco</span>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-xl font-bold text-slate-800 leading-none">FreshFood</span>
-                            <span class="text-[10px] text-green-600 font-bold uppercase tracking-widest mt-1">Organic
-                                Market</span>
-                        </div>
+    <!-- Header -->
+    <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2 cursor-pointer shrink-0">
+                    <span class="text-4xl text-green-600">🌿</span>
+                    <div class="font-black text-3xl text-green-700 tracking-tighter uppercase">FreshFood</div>
+                </a>
+                
+                <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
+                    <input type="text" id="header-search" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition" oninput="liveSearch()" onkeydown="if(event.key==='Enter') liveSearch()">
+                    <button onclick="liveSearch()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 text-lg">🔍</button>
+                </div>
+
+                <div class="flex items-center space-x-6 shrink-0">
+                    <a href="orders.html" class="flex items-center gap-2 text-slate-600 hover:text-green-700 transition font-medium text-sm">
+                        <span class="text-2xl">📋</span>
+                        <span class="hidden sm:inline font-bold">Đơn hàng</span>
+                    </a>
+                    <a href="cart.html" class="relative group flex items-center gap-2">
+                        <span class="text-2xl pt-1 block group-hover:text-green-600 transition">🛒</span>
+                        <span id="header-cart-count" class="hidden absolute -top-1 -right-2 bg-green-600 text-white text-[10px] font-black w-5 h-5 rounded-full items-center justify-center border-2 border-white">0</span>
                     </a>
 
                     <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
@@ -179,14 +181,38 @@
                 </div>
             </div>
 
-            <nav class="bg-white mt-4 hidden md:block">
-                <div
-                    class="max-w-7xl mx-auto px-4 flex justify-center space-x-12 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                    <a href="index.html" class="nav-link hover:text-green-700 transition pb-3">Trang Chủ</a>
-                    <a href="products.html" class="nav-link active hover:text-green-700 transition pb-3">Sản Phẩm</a>
-                    <a href="explore.html" class="nav-link hover:text-green-700 transition pb-3">Khám Phá</a>
-                    <a href="coupons.html" class="nav-link hover:text-green-700 transition pb-3">Khuyến Mãi</a>
-                    <a href="favorite.html" class="nav-link hover:text-green-700 transition pb-3">Yêu Thích</a>
+    <!-- Main Content -->
+    <main class="fade-in-up w-full flex-1 pb-24 bg-slate-50 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
+            
+            <!-- Sidebar (Category Filter) -->
+            <aside class="w-full md:w-64 shrink-0">
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 sticky top-40">
+                    <h3 class="font-black text-slate-800 text-sm mb-6 border-b border-slate-100 pb-4 uppercase tracking-widest">Danh mục</h3>
+                    <ul class="space-y-2 mb-10" id="category-list">
+                        <li><button onclick="filterCategory('all', this)" class="category-btn active w-full text-left px-4 py-3 rounded-2xl transition text-sm">Tất cả sản phẩm</button></li>
+                        <li><button onclick="filterCategory('Rau củ quả', this)" class="category-btn w-full text-left px-4 py-3 rounded-2xl transition text-sm text-slate-500 hover:bg-slate-50 font-bold">Rau củ quả</button></li>
+                        <li><button onclick="filterCategory('Thịt các loại', this)" class="category-btn w-full text-left px-4 py-3 rounded-2xl transition text-sm text-slate-500 hover:bg-slate-50 font-bold">Thịt các loại</button></li>
+                        <li><button onclick="filterCategory('Thủy hải sản', this)" class="category-btn w-full text-left px-4 py-3 rounded-2xl transition text-sm text-slate-500 hover:bg-slate-50 font-bold">Thủy hải sản</button></li>
+                    </ul>
+                    
+                    <h3 class="font-black text-slate-800 text-sm mb-6 border-b border-slate-100 pb-4 uppercase tracking-widest">Lọc theo giá</h3>
+                    <div class="space-y-4 px-2 mb-6" id="price-filters">
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="radio" name="price" value="<100k" onchange="enableFilterBtn()" class="w-5 h-5 rounded-full border-slate-200 text-green-600 focus:ring-green-500">
+                            <span class="text-[11px] font-bold text-slate-600 group-hover:text-green-700 transition uppercase tracking-tighter">Dưới 100.000đ</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="radio" name="price" value="100k-300k" onchange="enableFilterBtn()" class="w-5 h-5 rounded-full border-slate-200 text-green-600 focus:ring-green-500">
+                            <span class="text-[11px] font-bold text-slate-600 group-hover:text-green-700 transition uppercase tracking-tighter">100.000đ - 300.000đ</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="radio" name="price" value=">300k" onchange="enableFilterBtn()" class="w-5 h-5 rounded-full border-slate-200 text-green-600 focus:ring-green-500">
+                            <span class="text-[11px] font-bold text-slate-600 group-hover:text-green-700 transition uppercase tracking-tighter">Hơn 300.000đ</span>
+                        </label>
+                    </div>
+                    <button id="btn-apply-filter" onclick="applyFilters()" disabled class="w-full bg-green-600 disabled:bg-slate-200 disabled:text-slate-400 text-white font-black text-[11px] uppercase tracking-widest py-3 hover:-translate-y-1 disabled:hover:translate-y-0 rounded-2xl transition shadow-[0_4px_14px_0_rgba(22,163,74,0.39)] disabled:shadow-none">Lọc kết quả</button>
+                    <button onclick="resetFilters()" class="w-full text-slate-400 mt-2 font-bold text-[10px] uppercase tracking-widest hover:text-slate-600">Bỏ lọc</button>
                 </div>
             </nav>
         </header>
@@ -443,70 +469,116 @@
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Mobile Nav -->
-    <nav
-        class="md:hidden fixed bottom-0 left-0 w-full z-40 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] flex justify-around items-center py-3 pb-safe">
-        <a href="index.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
-            <span class="text-xl">🏠</span>
-        </a>
-        <a href="explore.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
-            <span class="text-xl">📰</span>
-        </a>
-        <a href="favorite.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
-            <span class="text-xl">❤️</span>
-        </a>
-    </nav>
+<!-- Mobile Nav -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-40 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] flex justify-around items-center py-3 pb-safe">
+    <a href="index.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="text-xl">🏠</span>
+    </a>
+    <a href="explore.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="text-xl">📰</span>
+    </a>
+    <a href="favorite.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="text-xl">❤️</span>
+    </a>
+</nav>
 
-    <div id="toast-container"
-        class="fixed top-20 right-4 md:top-24 md:right-8 z-[150] flex flex-col gap-2 pointer-events-none"></div>
+<div id="toast-container" class="fixed top-20 right-4 md:top-24 md:right-8 z-[150] flex flex-col gap-2 pointer-events-none"></div>
 
-    <script>
-        let productsData = [];
-        let currentCategory = 'all';
+<script>
+    let productsData = [];
+    let currentCategory = 'all';
+    let searchKeyword = '';
 
-        document.addEventListener('DOMContentLoaded', () => {
-            checkAuth();
-            fetchProducts();
-        });
-
-        async function fetchProducts() {
-            try {
-                const response = await fetch('http://localhost:5000/api/products');
-                if (response.ok) {
-                    productsData = await response.json();
-                    applyFilters();
-                } else { throw new Error('API Error'); }
-            } catch (error) {
-                productsData = [];
-                document.getElementById('product-grid').innerHTML = '<div class="col-span-3 text-center text-slate-400 py-10 font-bold">Không tải được dữ liệu. Hãy bật Backend Server.</div>';
-            }
+    document.addEventListener('DOMContentLoaded', () => {
+        checkAuth();
+        // Đọc từ khoá từ URL nếu có
+        const urlParams = new URLSearchParams(window.location.search);
+        const q = urlParams.get('search') || '';
+        if (q) {
+            searchKeyword = q.toLowerCase();
+            const searchEl = document.getElementById('header-search');
+            if (searchEl) searchEl.value = q;
+            document.getElementById('main-products-title').innerText = `Kết quả: "${q}"`;
         }
+        fetchProducts();
+    });
 
-        // --- Authentication ---
-        function checkAuth() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const userStr = localStorage.getItem('currentUser');
-            if (isLoggedIn && userStr) {
-                const user = JSON.parse(userStr);
-                document.getElementById('header-username').innerText = user.displayName;
-                document.getElementById('dropdown-name').innerText = user.displayName;
-                document.getElementById('dropdown-role').innerText = user.role || 'Thành viên';
-                document.getElementById('auth-section-guest').classList.add('hidden');
-                document.getElementById('auth-section-user').classList.remove('hidden');
-            } else {
-                document.getElementById('auth-section-guest').classList.remove('hidden');
-                document.getElementById('auth-section-user').classList.add('hidden');
-            }
-            updateCartBadges();
+    function goSearch() {
+        const q = document.getElementById('header-search').value.trim();
+        if (q) {
+            searchKeyword = q.toLowerCase();
+            document.getElementById('main-products-title').innerText = `Kết quả: "${q}"`;
+            applyFilters();
         }
+    }
 
-        function toggleAccountMenu() {
-            document.getElementById('account-dropdown').classList.toggle('hidden');
+    function liveSearch() {
+        const q = document.getElementById('header-search').value.trim();
+        searchKeyword = q.toLowerCase();
+        if (q) {
+            document.getElementById('main-products-title').innerText = `Kết quả: "${q}"`;
+        } else {
+            document.getElementById('main-products-title').innerText = 'Tất Cả Sản Phẩm';
         }
+        applyFilters();
+    }
 
-        function logoutConfirm() {
-            document.getElementById('account-dropdown').classList.add('hidden');
+    async function fetchProducts() {
+        try {
+            const response = await fetch('http://localhost:5000/api/products');
+            if (response.ok) {
+                productsData = await response.json();
+                applyFilters();
+            } else { throw new Error('API Error'); }
+        } catch (error) {
+            // Fallback dữ liệu demo
+            productsData = [
+                { _id: 'p1', name: 'Cải Chíp Thủy Canh Hữu Cơ', category: 'rau', price: 35000, unit: '500g', image: 'https://images.unsplash.com/photo-1557844352-761f2565b576?w=400&q=80', sale: true, bestseller: true },
+                { _id: 'p2', name: 'Thịt Lợn Sinh Học Omega-3', category: 'thit', price: 120000, unit: '1kg', image: 'https://images.unsplash.com/photo-1607623814075-e512199b4482?w=400&q=80', bestseller: true },
+                { _id: 'p3', name: 'Cà Chua Bi Hữu Cơ', category: 'rau', price: 45000, unit: '300g', image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&q=80', sale: true },
+                { _id: 'p4', name: 'Rau Bina Baby Organic', category: 'rau', price: 28000, unit: '200g', image: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&q=80' },
+                { _id: 'p5', name: 'Trứng Gà Ta Thả Vườn', category: 'thit', price: 55000, unit: '10 quả', image: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=400&q=80' },
+                { _id: 'p6', name: 'Nấm Hương Tươi Sạch', category: 'rau', price: 38000, unit: '300g', image: 'https://images.unsplash.com/photo-1504545102780-26774c1bb073?w=400&q=80' }
+            ];
+            applyFilters();
+        }
+    }
+
+    // --- Authentication ---
+    function checkAuth() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const userStr = localStorage.getItem('currentUser');
+        if (isLoggedIn && userStr) {
+            const user = JSON.parse(userStr);
+            document.getElementById('header-username').innerText = user.displayName;
+            document.getElementById('dropdown-name').innerText = user.displayName;
+            document.getElementById('dropdown-role').innerText = user.role || 'Thành viên';
+            document.getElementById('auth-section-guest').classList.add('hidden');
+            document.getElementById('auth-section-user').classList.remove('hidden');
+        } else {
+            document.getElementById('auth-section-guest').classList.remove('hidden');
+            document.getElementById('auth-section-user').classList.add('hidden');
+        }
+        updateCartBadges(); 
+    }
+
+    function toggleAccountMenu() {
+        document.getElementById('account-dropdown').classList.toggle('hidden');
+    }
+
+    function logoutConfirm() {
+        document.getElementById('account-dropdown').classList.add('hidden');
+        const modal = document.getElementById('logout-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => document.getElementById('logout-modal-content').classList.remove('scale-95'), 10);
+    }
+
+    function closeLogoutModal() {
+        document.getElementById('logout-modal-content').classList.add('scale-95');
+        setTimeout(() => {
             const modal = document.getElementById('logout-modal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -591,41 +663,88 @@
         window.addEventListener('click', () => {
             closeAllDropdowns();
         });
+        btn.className = "category-btn active w-full text-left px-4 py-3 rounded-2xl transition text-sm";
+        applyFilters();
+    }
 
-        function applyFilters() {
-            let filtered = currentCategory === 'all' ? [...productsData] : productsData.filter(p => p.category === currentCategory);
+    function resetFilters() {
+        document.querySelectorAll('input[name="price"]').forEach(i => i.checked = false);
+        document.getElementById('btn-apply-filter').disabled = true;
+        applyFilters();
+    }
 
-            // Lọc Giá
-            const priceFilter = document.querySelector('input[name="price"]:checked');
-            if (priceFilter) {
-                const val = priceFilter.value;
-                if (val === '<100k') filtered = filtered.filter(p => p.price < 100000);
-                else if (val === '100k-300k') filtered = filtered.filter(p => p.price >= 100000 && p.price <= 300000);
-                else if (val === '>300k') filtered = filtered.filter(p => p.price > 300000);
-            }
+    function getParentCategory(cat) {
+        const c = String(cat || '');
+        if (['Rau ăn lá', 'Củ & Quả', 'Nấm tươi', 'Trái cây'].includes(c)) return 'Rau củ quả';
+        if (['Thịt heo', 'Thịt bò', 'Gia cầm (gà, vịt)'].includes(c)) return 'Thịt các loại';
+        if (['Cá tươi', 'Tôm/Cua/Mực', 'Hải sản đông lạnh'].includes(c)) return 'Thủy hải sản';
+        // Fallback backward compatibility
+        const lowC = c.toLowerCase();
+        if (['rau', 'traicay', 'raucu', 'cuqua', 'nam', 'raucu'].includes(lowC)) return 'Rau củ quả';
+        if (['thit', 'thitheo', 'thitbo', 'giacam'].includes(lowC)) return 'Thịt các loại';
+        if (['thuyhai', 'hai', 'catuoi', 'tomcua', 'haisan'].includes(lowC)) return 'Thủy hải sản';
+        return 'Rau củ quả';
+    }
 
-            // Sắp xếp
-            const sortMode = document.getElementById('sort-select').value;
-            if (sortMode === 'asc') filtered.sort((a, b) => a.price - b.price);
-            if (sortMode === 'desc') filtered.sort((a, b) => b.price - a.price);
+    function applyFilters() {
+        let filtered = currentCategory === 'all' ? [...productsData] : productsData.filter(p => getParentCategory(p.category) === currentCategory || p.category === currentCategory);
 
-            renderGrid(filtered);
+        // Tìm kiếm theo từ khoá
+        if (searchKeyword) {
+            filtered = filtered.filter(p =>
+                p.name.toLowerCase().includes(searchKeyword) ||
+                (p.category || '').toLowerCase().includes(searchKeyword)
+            );
         }
 
-        function formatMoney(amount) {
-            return amount.toLocaleString('vi-VN') + 'đ';
+        // Lọc Giá
+        const priceFilter = document.querySelector('input[name="price"]:checked');
+        if (priceFilter) {
+            const val = priceFilter.value;
+            if(val === '<100k') filtered = filtered.filter(p => p.price < 100000);
+            else if(val === '100k-300k') filtered = filtered.filter(p => p.price >= 100000 && p.price <= 300000);
+            else if(val === '>300k') filtered = filtered.filter(p => p.price > 300000);
         }
 
-        function renderGrid(items) {
-            const grid = document.getElementById('product-grid');
-            if (!items.length) {
-                grid.innerHTML = '<div class="col-span-3 text-center text-slate-400 py-10 font-bold">Không có sản phẩm nào phù hợp.</div>';
-                return;
-            }
+        // Sắp xếp
+        const sortMode = document.getElementById('sort-select').value;
+        if(sortMode === 'asc') filtered.sort((a,b) => a.price - b.price);
+        if(sortMode === 'desc') filtered.sort((a,b) => b.price - a.price);
 
-            grid.innerHTML = items.map(p => {
-                const idStr = p._id || p.id;
-                return `
+        if (!filtered.length && searchKeyword) {
+            document.getElementById('product-grid').innerHTML = `
+                <div class="col-span-3 text-center py-16">
+                    <span class="text-5xl block mb-4 opacity-30">🔍</span>
+                    <p class="text-slate-400 font-bold text-lg">Không tìm thấy sản phẩm nào cho "${searchKeyword}"</p>
+                    <button onclick="clearSearch()" class="mt-4 text-green-600 font-black text-xs uppercase tracking-widest hover:underline">Xem tất cả sản phẩm</button>
+                </div>`;
+            return;
+        }
+        renderGrid(filtered);
+    }
+
+    function clearSearch() {
+        searchKeyword = '';
+        const el = document.getElementById('header-search');
+        if (el) el.value = '';
+        document.getElementById('main-products-title').innerText = 'Tất Cả Sản Phẩm';
+        applyFilters();
+    }
+
+    function formatMoney(amount) {
+        return amount.toLocaleString('vi-VN') + 'đ';
+    }
+
+    function renderGrid(items) {
+        const grid = document.getElementById('product-grid');
+        if (!items.length) {
+            grid.innerHTML = '<div class="col-span-3 text-center text-slate-400 py-10 font-bold">Không có sản phẩm nào phù hợp.</div>';
+            return;
+        }
+
+        grid.innerHTML = items.map(p => {
+            const idStr = p._id || p.id;
+            return `
             <div class="bg-white rounded-[2rem] border border-slate-100 overflow-hidden hover:shadow-2xl hover:border-green-200 transition-all duration-300 relative group cursor-pointer" onclick="openProductModal('${idStr}')">
                 <div class="h-56 md:h-64 bg-slate-50 relative overflow-hidden flex items-center justify-center group-hover:bg-slate-100/50 transition-colors duration-500">
                     ${p.sale ? '<div class="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full z-10 shadow-lg uppercase tracking-widest">Sale</div>' : ''}
@@ -647,119 +766,138 @@
                 </div>
             </div>
             `;
-            }).join('');
+        }).join('');
+    }
+
+    // --- Modal Logic ---
+    function openProductModal(idStr) {
+        const product = productsData.find(p => (p._id || p.id) == idStr);
+        if(!product) return;
+        
+        document.getElementById('modal-name').innerText = product.name;
+        document.getElementById('modal-price').innerText = formatMoney(product.price);
+        document.getElementById('modal-unit').innerText = product.unit;
+        document.getElementById('modal-img').src = product.image;
+        document.getElementById('modal-category').innerText = getParentCategory(product.category);
+        
+        const oldPriceEl = document.getElementById('modal-old-price');
+        const badgeSale = document.getElementById('modal-badge-sale');
+        if (product.sale && product.oldPrice) {
+            oldPriceEl.innerText = formatMoney(product.oldPrice);
+            oldPriceEl.classList.remove('hidden');
+            badgeSale.classList.remove('hidden');
+        } else {
+            oldPriceEl.classList.add('hidden');
+            badgeSale.classList.add('hidden');
         }
 
-        // --- Modal Logic ---
-        function openProductModal(idStr) {
-            const product = productsData.find(p => (p._id || p.id) == idStr);
-            if (!product) return;
+        // Cập nhật sự kiện nút
+        const btnBuy = document.getElementById('modal-btn-buy');
+        const btnFav = document.getElementById('modal-btn-fav');
+        
+        btnBuy.onclick = (e) => { handleAddToCart(e, idStr, false); closeProductModal(); };
+        btnFav.onclick = (e) => { toggleFavorite(idStr); };
 
-            document.getElementById('modal-name').innerText = product.name;
-            document.getElementById('modal-price').innerText = formatMoney(product.price);
-            document.getElementById('modal-unit').innerText = product.unit;
-            document.getElementById('modal-img').src = product.image;
-            document.getElementById('modal-category').innerText = product.category === 'rau' ? 'Rau & Củ quả' : 'Thực phẩm sạch';
+        const modal = document.getElementById('product-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => document.getElementById('product-modal-content').classList.remove('scale-95'), 10);
+    }
 
-            const oldPriceEl = document.getElementById('modal-old-price');
-            const badgeSale = document.getElementById('modal-badge-sale');
-            if (product.sale && product.oldPrice) {
-                oldPriceEl.innerText = formatMoney(product.oldPrice);
-                oldPriceEl.classList.remove('hidden');
-                badgeSale.classList.remove('hidden');
-            } else {
-                oldPriceEl.classList.add('hidden');
-                badgeSale.classList.add('hidden');
-            }
-
-            // Cập nhật sự kiện nút
-            const btnBuy = document.getElementById('modal-btn-buy');
-            const btnFav = document.getElementById('modal-btn-fav');
-
-            btnBuy.onclick = (e) => { handleAddToCart(e, idStr, false); closeProductModal(); };
-            btnFav.onclick = (e) => { toggleFavorite(idStr); };
-
+    function closeProductModal() {
+        document.getElementById('product-modal-content').classList.add('scale-95');
+        setTimeout(() => {
             const modal = document.getElementById('product-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            setTimeout(() => document.getElementById('product-modal-content').classList.remove('scale-95'), 10);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 200);
+    }
+
+    // --- Cart & Fav ---
+    function handleAddToCart(event, productId, isBuyNow) {
+        event.preventDefault();
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+            return;
         }
 
-        function closeProductModal() {
-            document.getElementById('product-modal-content').classList.add('scale-95');
-            setTimeout(() => {
-                const modal = document.getElementById('product-modal');
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }, 200);
+        const product = productsData.find(p => (p._id || p.id) == productId);
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const existing = cart.find(i => (i._id || i.id) == productId);
+        
+        if (existing) existing.qty += 1;
+        else cart.push({ ...product, qty: 1, selected: true });
+        
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartBadges();
+
+        if (isBuyNow) window.location.href = 'cart.html';
+        else showToastDesign(`Đã thêm vào giỏ`, '✅');
+    }
+
+    function getFavKey() {
+        const userStr = localStorage.getItem('currentUser');
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            return 'favorites_' + (user.id || user._id || user.username);
+        }
+        return 'favorites';
+    }
+
+    function toggleFavorite(id) {
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            showToastDesign('Vui lòng đăng nhập để lưu yêu thích', '⚠️');
+            setTimeout(() => window.location.href = 'login.html', 1000);
+            return;
+        }
+        const favs = JSON.parse(localStorage.getItem(getFavKey()) || '[]');
+        const idx = favs.indexOf(String(id));
+        if (idx > -1) {
+            favs.splice(idx, 1);
+            localStorage.setItem(getFavKey(), JSON.stringify(favs));
+            showToastDesign('Đã xóa khỏi Yêu thích', '🗑️');
+        } else {
+            favs.push(String(id));
+            localStorage.setItem(getFavKey(), JSON.stringify(favs));
+            showToastDesign('Đã thêm vào Yêu thích ❤️');
+        }
+    }
+
+    function updateCartBadges() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const headerBadge = document.getElementById('header-cart-count');
+        if (!headerBadge) return;
+
+        if (!isLoggedIn) {
+            headerBadge.classList.remove('flex');
+            headerBadge.classList.add('hidden');
+            return;
         }
 
-        // --- Cart & Fav ---
-        function handleAddToCart(event, productId, isBuyNow) {
-            event.preventDefault();
-            if (localStorage.getItem('isLoggedIn') !== 'true') {
-                window.location.href = 'login.html';
-                return;
-            }
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        let total = 0;
+        cart.forEach(c => total += c.qty);
 
-            const product = productsData.find(p => (p._id || p.id) == productId);
-            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            const existing = cart.find(i => (i._id || i.id) == productId);
-
-            if (existing) existing.qty += 1;
-            else cart.push({ ...product, qty: 1, selected: true });
-
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartBadges();
-
-            if (isBuyNow) window.location.href = 'cart.html';
-            else showToastDesign(`Đã thêm vào giỏ`, '✅');
+        if (total > 0) {
+            headerBadge.innerText = total;
+            headerBadge.classList.remove('hidden');
+            headerBadge.classList.add('flex');
+        } else {
+            headerBadge.classList.remove('flex');
+            headerBadge.classList.add('hidden');
         }
+    }
 
-        function toggleFavorite(id) {
-            if (localStorage.getItem('isLoggedIn') !== 'true') {
-                alert('Vui lòng đăng nhập để lưu sản phẩm yêu thích.');
-                window.location.href = 'login.html';
-                return;
-            }
-            showToastDesign('Đã thêm tiêu điểm Yêu thích', '❤️');
-        }
-
-        function updateCartBadges() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const headerBadge = document.getElementById('header-cart-count');
-            if (!headerBadge) return;
-
-            if (!isLoggedIn) {
-                headerBadge.classList.remove('flex');
-                headerBadge.classList.add('hidden');
-                return;
-            }
-
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            let total = 0;
-            cart.forEach(c => total += c.qty);
-
-            if (total > 0) {
-                headerBadge.innerText = total;
-                headerBadge.classList.remove('hidden');
-                headerBadge.classList.add('flex');
-            } else {
-                headerBadge.classList.remove('flex');
-                headerBadge.classList.add('hidden');
-            }
-        }
-
-        function showToastDesign(message, iconStr = '') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `transform translate-x-10 opacity-0 smooth-transition px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 font-bold text-sm text-slate-800 bg-white border border-slate-100 pointer-events-auto`;
-            toast.innerHTML = `${iconStr ? `<span class="text-xl">${iconStr}</span>` : ''} <span>${message}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
-            setTimeout(() => { toast.classList.add('translate-x-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 2500);
-        }
-    </script>
+    function showToastDesign(message, iconStr = '') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `transform translate-x-10 opacity-0 smooth-transition px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 font-bold text-sm text-slate-800 bg-white border border-slate-100 pointer-events-auto`;
+        toast.innerHTML = `${iconStr ? `<span class="text-xl">${iconStr}</span>` : ''} <span>${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
+        setTimeout(() => { toast.classList.add('translate-x-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 2500);
+    }
+</script>
 </body>
 
 </html>

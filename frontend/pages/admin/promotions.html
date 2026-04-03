@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khuyến mãi - MINI MART Admin</title>
+    <title>Khuyến mãi - FreshFood Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,7 +61,7 @@
     <!-- Sidebar -->
     <aside id="sidebar" class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300">
         <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6">
-            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">MINI MART<br>
+            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">FreshFood<br>
             <span class="text-[10px] text-slate-300 tracking-widest font-bold">Hệ thống Admin</span></span>
         </div>
 
@@ -75,10 +75,14 @@
                 <span class="text-sm">Khuyến mãi</span>
             </a>
             <a href="staff.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all"><span class="material-symbols-outlined text-xl">badge</span><span class="text-sm font-bold">Nhân viên</span></a>
-            <a href="create-order.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all"><span class="material-symbols-outlined text-xl">add_circle</span><span class="text-sm font-bold">POS Bán lẻ</span></a>
+            
         </nav>
         
         <div class="px-4 py-6 border-t border-slate-100 mt-auto">
+            <a href="../user/index.html" class="flex items-center gap-4 w-full py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all mb-2">
+                <span class="material-symbols-outlined text-xl">storefront</span>
+                <span class="text-sm font-bold">Cửa hàng</span>
+            </a>
             <button onclick="logoutAdmin()" class="flex items-center gap-4 w-full py-3 px-4 text-red-500 hover:bg-red-50 rounded-xl transition-all">
                 <span class="material-symbols-outlined text-xl">logout</span>
                 <span class="text-sm font-bold">Đăng xuất</span>
@@ -92,7 +96,7 @@
                 <button onclick="toggleSidebar()" class="lg:hidden text-slate-500"><span class="material-symbols-outlined">menu</span></button>
                 <h1 class="text-lg font-bold text-slate-800 tracking-tight">Marketing & Khuyến mãi</h1>
             </div>
-            <button class="primary-gradient text-white px-8 py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-[1.02] shadow-lg shadow-green-600/10 flex items-center gap-2 transition duration-300">
+            <button onclick="openCreateModal()" class="primary-gradient text-white px-8 py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-[1.02] shadow-lg shadow-green-600/10 flex items-center gap-2 transition duration-300">
                 <span class="material-symbols-outlined text-sm">confirmation_number</span> Tạo Mã Coupon
             </button>
         </header>
@@ -107,96 +111,56 @@
             </div>
 
             <!-- Ticket Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-                
-                <!-- Ticket 1 -->
-                <div class="ticket group">
-                    <div class="ticket-left bg-green-50 group-hover:bg-green-100 transition-colors">
-                        <span class="text-4xl font-black text-green-600 tracking-tighter leading-none mb-1">15%</span>
-                        <span class="text-[10px] font-black text-green-800 uppercase tracking-widest text-center">Giảm Tối đa<br>50.000đ</span>
-                    </div>
-                    <div class="ticket-right">
-                        <div>
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="font-black text-slate-800 text-lg leading-tight w-2/3">Chào Mừng Thành Viên Mới</h3>
-                                <span class="px-2 py-1 bg-green-50 text-green-700 text-[9px] font-black uppercase tracking-widest rounded relative top-1">Đang chạy</span>
-                            </div>
-                            <p class="text-[11px] text-slate-500 font-bold mb-4">Áp dụng cho Bill > 200k. Dành riêng cho User mới đăng ký lần đầu.</p>
-                            <div class="coupon-code inline-block bg-slate-50 border border-slate-200 rounded-lg px-4 py-2">
-                                <span class="font-black text-slate-600 tracking-[0.2em] uppercase text-sm">FRESHNEW</span>
-                            </div>
-                        </div>
-                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">HSD: 31/12/2026</span>
-                            <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 transition"><span class="material-symbols-outlined text-sm font-bold">edit</span></button>
-                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-amber-50 hover:text-amber-600 transition"><span class="material-symbols-outlined text-sm font-bold">pause</span></button>
-                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-600 transition"><span class="material-symbols-outlined text-sm font-bold">delete</span></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Ticket 2 -->
-                <div class="ticket group">
-                    <div class="ticket-left bg-blue-50 group-hover:bg-blue-100 transition-colors">
-                        <span class="text-4xl font-black text-blue-600 tracking-tighter leading-none mb-1">FREE</span>
-                        <span class="text-[10px] font-black text-blue-800 uppercase tracking-widest text-center mt-1">Shipping</span>
-                    </div>
-                    <div class="ticket-right">
-                        <div>
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="font-black text-slate-800 text-lg leading-tight w-2/3">Miễn Phí Giao Hàng</h3>
-                                <span class="px-2 py-1 bg-green-50 text-green-700 text-[9px] font-black uppercase tracking-widest rounded relative top-1">Đang chạy</span>
-                            </div>
-                            <p class="text-[11px] text-slate-500 font-bold mb-4">Freeship mọi đơn hàng nội thành Hà Nội có giá trị từ 300.000đ trở lên.</p>
-                            <div class="coupon-code inline-block bg-slate-50 border border-slate-200 rounded-lg px-4 py-2">
-                                <span class="font-black text-slate-600 tracking-[0.2em] uppercase text-sm">FREESHIP</span>
-                            </div>
-                        </div>
-                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">HSD: Không giới hạn</span>
-                            <div class="flex gap-2 border-slate-100">
-                                <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 transition"><span class="material-symbols-outlined text-sm font-bold">edit</span></button>
-                                    <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-amber-50 hover:text-amber-600 transition"><span class="material-symbols-outlined text-sm font-bold">pause</span></button>
-                                    <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-600 transition"><span class="material-symbols-outlined text-sm font-bold">delete</span></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Ticket 3 (Tạm dừng) -->
-                <div class="ticket group opacity-70 hover:opacity-100 grayscale hover:grayscale-0">
-                    <div class="ticket-left bg-slate-100 transition-colors">
-                        <span class="text-4xl font-black text-slate-400 tracking-tighter leading-none mb-1">50K</span>
-                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest text-center mt-1">Giảm Thẳng</span>
-                    </div>
-                    <div class="ticket-right">
-                        <div>
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="font-black text-slate-800 text-lg leading-tight w-2/3">Ưu đãi Ngày Đôi 4/4</h3>
-                                <span class="px-2 py-1 bg-amber-50 text-amber-700 text-[9px] font-black uppercase tracking-widest rounded relative top-1">Đã dừng</span>
-                            </div>
-                            <p class="text-[11px] text-slate-500 font-bold mb-4">Giảm 50% đơn hàng, tối đa 50k cho khách mua ngày 4/4.</p>
-                            <div class="coupon-code inline-block bg-slate-50 border border-slate-200 rounded-lg px-4 py-2">
-                                <span class="font-black text-slate-400 tracking-[0.2em] uppercase text-sm">SALE44</span>
-                            </div>
-                        </div>
-                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">HSD: 04/04/2026</span>
-                            <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 transition"><span class="material-symbols-outlined text-sm font-bold">edit</span></button>
-                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-green-50 hover:text-green-600 transition"><span class="material-symbols-outlined text-sm font-bold">play_arrow</span></button>
-                                <button class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-600 transition"><span class="material-symbols-outlined text-sm font-bold">delete</span></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+            <div id="tickets-grid" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8"></div>
         </main>
+    </div>
+
+    <!-- Create Promotion Modal -->
+    <div id="create-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[200] items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] w-full max-w-xl shadow-2xl overflow-hidden border border-slate-100">
+            <div class="bg-gradient-to-r from-green-600 to-green-700 p-6 text-white flex justify-between items-center">
+                <div>
+                    <div class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Tạo voucher</div>
+                    <h3 class="text-2xl font-black">Tạo mã giảm giá mới</h3>
+                </div>
+                <button onclick="closeCreateModal()" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition text-xl font-bold">&times;</button>
+            </div>
+            <div class="p-6 space-y-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mã voucher</label>
+                        <input id="promo-code" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-black uppercase tracking-widest text-sm outline-none focus:ring-2 focus:ring-green-500/20" placeholder="FRESH20" oninput="this.value=this.value.toUpperCase()">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Đơn tối thiểu (đ)</label>
+                        <input id="promo-min" type="number" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-green-500/20" placeholder="200000">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Giảm theo %</label>
+                        <input id="promo-percent" type="number" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-green-500/20" placeholder="20">
+                        <div class="text-[10px] text-slate-400 font-bold mt-2">Để trống nếu giảm theo số tiền.</div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Giảm theo tiền (đ)</label>
+                        <input id="promo-amount" type="number" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-green-500/20" placeholder="50000">
+                        <div class="text-[10px] text-slate-400 font-bold mt-2">Để trống nếu giảm theo %.</div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Hạn sử dụng</label>
+                    <input id="promo-expiry" type="date" class="mt-2 w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:ring-2 focus:ring-green-500/20">
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button onclick="closeCreateModal()" class="flex-1 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition">Hủy</button>
+                    <button onclick="createPromotion()" class="flex-1 py-3 bg-green-600 text-white rounded-xl font-black hover:bg-green-500 transition uppercase tracking-widest text-sm">Tạo voucher</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -206,6 +170,134 @@
             localStorage.clear();
             window.location.href = '../user/login.html';
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPromotions();
+        });
+
+        function openCreateModal() {
+            const modal = document.getElementById('create-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // default expiry 30 days
+            const exp = document.getElementById('promo-expiry');
+            if (exp && !exp.value) {
+                const d = new Date();
+                d.setDate(d.getDate() + 30);
+                exp.value = d.toISOString().slice(0, 10);
+            }
+        }
+
+        function closeCreateModal() {
+            const modal = document.getElementById('create-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function loadPromotions() {
+            const token = localStorage.getItem('token');
+            const grid = document.getElementById('tickets-grid');
+            grid.innerHTML = `<div class="col-span-3 text-center py-20 text-slate-400 font-bold">Đang tải dữ liệu...</div>`;
+            try {
+                const res = await fetch('http://localhost:5000/api/promotions', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) throw new Error('API error');
+                const promos = await res.json();
+                renderTickets(promos || []);
+            } catch (e) {
+                // demo fallback
+                renderTickets([
+                    { code: 'FRESHNEW', discountPercentage: 15, discountAmount: 0, minPurchase: 200000, expiryDate: '2026-12-31', isActive: true },
+                    { code: 'FREESHIP', discountPercentage: 0, discountAmount: 30000, minPurchase: 300000, expiryDate: '2026-12-31', isActive: true },
+                ]);
+            }
+        }
+
+        function renderTickets(promos) {
+            const grid = document.getElementById('tickets-grid');
+            if (!promos.length) {
+                grid.innerHTML = `<div class="col-span-3 text-center py-20 text-slate-400 font-bold">Chưa có voucher nào.</div>`;
+                return;
+            }
+            grid.innerHTML = promos.map(p => {
+                const isPct = (Number(p.discountPercentage) || 0) > 0;
+                const leftBg = isPct ? 'bg-green-50 group-hover:bg-green-100' : 'bg-blue-50 group-hover:bg-blue-100';
+                const leftText = isPct ? 'text-green-600' : 'text-blue-600';
+                const main = isPct ? `${Number(p.discountPercentage) || 0}%` : `${(Number(p.discountAmount) || 0).toLocaleString('vi-VN')}đ`;
+                const subtitle = isPct ? `Giảm theo %` : `Giảm thẳng`;
+                const exp = p.expiryDate ? new Date(p.expiryDate).toLocaleDateString('vi-VN') : '--';
+                const status = p.isActive ? { cls: 'bg-green-50 text-green-700', label: 'Đang chạy' } : { cls: 'bg-amber-50 text-amber-700', label: 'Tạm dừng' };
+                return `
+                    <div class="ticket group">
+                        <div class="ticket-left ${leftBg} transition-colors">
+                            <span class="text-4xl font-black ${leftText} tracking-tighter leading-none mb-1">${main}</span>
+                            <span class="text-[10px] font-black text-slate-700 uppercase tracking-widest text-center">${subtitle}</span>
+                        </div>
+                        <div class="ticket-right">
+                            <div>
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-black text-slate-800 text-lg leading-tight w-2/3">${escapeHtml(p.code || '')}</h3>
+                                    <span class="px-2 py-1 ${status.cls} text-[9px] font-black uppercase tracking-widest rounded relative top-1">${status.label}</span>
+                                </div>
+                                <p class="text-[11px] text-slate-500 font-bold mb-4">Đơn tối thiểu: ${(Number(p.minPurchase) || 0).toLocaleString('vi-VN')}đ</p>
+                                <div class="coupon-code inline-block bg-slate-50 border border-slate-200 rounded-lg px-4 py-2">
+                                    <span class="font-black text-slate-600 tracking-[0.2em] uppercase text-sm">${escapeHtml(p.code || '')}</span>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">HSD: ${exp}</span>
+                                <span class="text-[9px] font-bold text-slate-300 uppercase tracking-widest">API</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function createPromotion() {
+            const token = localStorage.getItem('token');
+            const code = (document.getElementById('promo-code')?.value || '').trim().toUpperCase();
+            const minPurchase = Number(document.getElementById('promo-min')?.value || 0);
+            const discountPercentage = Number(document.getElementById('promo-percent')?.value || 0);
+            const discountAmount = Number(document.getElementById('promo-amount')?.value || 0);
+            const expiryDate = document.getElementById('promo-expiry')?.value;
+
+            if (!code) return alert('Vui lòng nhập mã voucher.');
+            if (!expiryDate) return alert('Vui lòng chọn hạn sử dụng.');
+            if ((discountPercentage <= 0) && (discountAmount <= 0)) return alert('Vui lòng nhập % hoặc số tiền giảm.');
+
+            try {
+                const res = await fetch('http://localhost:5000/api/promotions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ code, minPurchase, discountPercentage, discountAmount, expiryDate })
+                });
+                const data = await res.json();
+                if (!res.ok) return alert(data.message || 'Tạo voucher thất bại');
+                closeCreateModal();
+                await loadPromotions();
+                alert('✅ Tạo voucher thành công!');
+            } catch (e) {
+                alert('⚠️ Không kết nối được server để tạo voucher.');
+            }
+        }
+
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+        }
     </script>
-</body>
+
+        <script>
+            // Set Admin Name
+            document.addEventListener('DOMContentLoaded', () => {
+                const uStr = localStorage.getItem('currentUser');
+                if (uStr) {
+                    const u = JSON.parse(uStr);
+                    const el = document.getElementById('admin-header-name');
+                    if (el) el.innerText = u.displayName || u.username || 'Admin';
+                }
+            });
+        </script>
+    </body>
 </html>

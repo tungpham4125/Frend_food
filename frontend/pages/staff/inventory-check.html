@@ -1,14 +1,16 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiểm kê kho hàng | MINI MART Staff</title>
+    <title>Kiểm kê kho hàng | FreshFood Staff</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', system-ui, sans-serif, sans-serif; background-color: #f8f9fa; }
+        body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8f9fa; }
         .sidebar-active { background-color: #f0fdf4; color: #15803d; font-weight: 800; border-left: 4px solid #16a34a; }
         .primary-gradient { background: linear-gradient(135deg, #28a745 0%, #006e25 100%); }
         .custom-scrollbar::-webkit-scrollbar { width: 5px; }
@@ -24,7 +26,7 @@
     <!-- Sidebar -->
     <aside id="sidebar" class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300">
         <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6 shrink-0">
-            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">MINI MART<br>
+            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">FreshFood<br>
             <span class="text-[10px] text-slate-300 tracking-widest font-bold uppercase">Nhân viên trực</span></span>
         </div>
         <nav class="flex flex-col gap-1 flex-1 overflow-y-auto px-4">
@@ -75,10 +77,10 @@
 
         <!-- Filters -->
         <div class="px-10 py-6 bg-white border-b border-slate-50 flex items-center gap-4 shrink-0 overflow-x-auto no-scrollbar">
-            <button onclick="filterCat('all')" class="cat-btn active bg-green-700 text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest ">Tất cả</button>
-            <button onclick="filterCat('Thực phẩm')" class="cat-btn bg-slate-50 text-slate-400 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest  hover:bg-green-50 hover:text-green-700">Thực phẩm</button>
-            <button onclick="filterCat('Giải khát')" class="cat-btn bg-slate-50 text-slate-400 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest  hover:bg-green-50 hover:text-green-700">Giải khát</button>
-            <button onclick="filterCat('Đồ gia dụng')" class="cat-btn bg-slate-50 text-slate-400 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest  hover:bg-green-50 hover:text-green-700">Gia dụng</button>
+            <button onclick="filterCat('all')" class="cat-btn active bg-green-700 text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">Tất cả</button>
+            <button onclick="filterCat('Rau củ quả')" class="cat-btn bg-slate-50 text-slate-400 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-green-50 hover:text-green-700">Rau củ quả</button>
+            <button onclick="filterCat('Thịt các loại')" class="cat-btn bg-slate-50 text-slate-400 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-green-50 hover:text-green-700">Thịt các loại</button>
+            <button onclick="filterCat('Thủy hải sản')" class="cat-btn bg-slate-50 text-slate-400 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-green-50 hover:text-green-700">Thủy hải sản</button>
         </div>
 
         <!-- Inventory List -->
@@ -121,15 +123,71 @@
     <script>
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
 
-        const products = [
-            { id: "P001", name: "Sữa tươi Organic 1L", category: "Thực phẩm", current: 45, actual: 45, unit: "Chai", img: "https://images.unsplash.com/photo-1550583724-1255818c053b?w=200" },
-            { id: "P002", name: "Bánh mì đen lúa mạch", category: "Thực phẩm", current: 15, actual: 15, unit: "Ổ", img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200" },
-            { id: "P003", name: "Trứng gà ta (10 quả)", category: "Thực phẩm", current: 28, actual: 28, unit: "Vỉ", img: "https://images.unsplash.com/photo-1518562180175-34a163b159c5?w=200" },
-            { id: "P004", name: "Cocacola Lon 330ml", category: "Giải khát", current: 120, actual: 120, unit: "Lon", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200" },
-            { id: "P005", name: "Nước khoáng Lavie", category: "Giải khát", current: 200, actual: 200, unit: "Chai", img: "https://images.unsplash.com/photo-1616031037011-087000171abe?w=200" }
-        ];
+        let products = []; // { _id, name, category, unit, image, current, actual }
 
         let selectedCat = 'all';
+        let isSaving = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            ensureStaffAuth();
+            loadProducts();
+        });
+
+        function ensureStaffAuth() {
+            const token = localStorage.getItem('token');
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userStr = localStorage.getItem('currentUser');
+            if (!token || !isLoggedIn || !userStr) {
+                window.location.href = '../user/login.html';
+                return;
+            }
+            const u = JSON.parse(userStr);
+            if (u.role !== 'staff' && u.role !== 'admin') window.location.href = '../user/login.html';
+        }
+
+        function getParentCategory(cat) {
+            const c = String(cat || '');
+            if (['Rau ăn lá', 'Củ & Quả', 'Nấm tươi', 'Trái cây'].includes(c)) return 'Rau củ quả';
+            if (['Thịt heo', 'Thịt bò', 'Gia cầm (gà, vịt)'].includes(c)) return 'Thịt các loại';
+            if (['Cá tươi', 'Tôm/Cua/Mực', 'Hải sản đông lạnh'].includes(c)) return 'Thủy hải sản';
+            const lowC = c.toLowerCase();
+            if (['rau', 'traicay', 'raucu', 'cuqua', 'nam'].includes(lowC)) return 'Rau củ quả';
+            if (['thit', 'thitheo', 'thitbo', 'giacam'].includes(lowC)) return 'Thịt các loại';
+            if (['thuyhai', 'hai', 'catuoi', 'tomcua', 'haisan'].includes(lowC)) return 'Thủy hải sản';
+            return 'Rau củ quả';
+        }
+
+        async function loadProducts() {
+            try {
+                const res = await fetch('http://localhost:5000/api/products');
+                if (!res.ok) throw new Error('API error');
+                const data = await res.json();
+                products = (data || []).map(p => ({
+                    _id: String(p._id || p.id || ''),
+                    name: p.name || '',
+                    category: p.category || '',
+                    parentCategory: getParentCategory(p.category),
+                    unit: p.unit || '',
+                    image: p.image || '',
+                    current: Number(p.stock) || 0,
+                    actual: Number(p.stock) || 0,
+                })).filter(p => p._id);
+            } catch (e) {
+                // Demo fallback
+                products = [
+                    { _id: 'p1', name: 'Cải Chíp Thủy Canh Hữu Cơ', category: 'Rau ăn lá', parentCategory: 'Rau củ quả', unit: '500g', image: 'https://images.unsplash.com/photo-1557844352-761f2565b576?w=200&q=80', current: 20, actual: 20 },
+                    { _id: 'p2', name: 'Thịt Lợn Sinh Học Omega-3', category: 'Thịt heo', parentCategory: 'Thịt các loại', unit: '1kg', image: 'https://images.unsplash.com/photo-1607623814075-e512199b4482?w=200&q=80', current: 12, actual: 12 },
+                    { _id: 'p3', name: 'Cà Chua Bi Hữu Cơ', category: 'Củ & Quả', parentCategory: 'Rau củ quả', unit: '300g', image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=200&q=80', current: 30, actual: 30 },
+                ];
+            }
+
+            renderCategoryTabs();
+            renderItems();
+        }
+
+        function renderCategoryTabs() {
+            // Không render lại tab nữa — dùng nút cứng trong HTML
+        }
 
         function filterCat(cat) {
             selectedCat = cat;
@@ -137,12 +195,12 @@
                 btn.classList.remove('active', 'bg-green-700', 'text-white');
                 btn.classList.add('bg-slate-50', 'text-slate-400');
             });
-            event.target.classList.add('active', 'bg-green-700', 'text-white');
+            if (event?.target) event.target.classList.add('active', 'bg-green-700', 'text-white');
             renderItems();
         }
 
         function updateActual(id, val) {
-            const p = products.find(i => i.id === id);
+            const p = products.find(i => i._id === id);
             if(p) {
                 p.actual = parseInt(val) || 0;
                 renderItems(document.getElementById('invSearch').value, false);
@@ -153,8 +211,8 @@
             const tbody = document.getElementById('inventoryBody');
             const empty = document.getElementById('emptyMsg');
             const filtered = products.filter(p => 
-                (selectedCat === 'all' || p.category === selectedCat) &&
-                (p.name.toLowerCase().includes(search.toLowerCase()) || p.id.toLowerCase().includes(search.toLowerCase()))
+                (selectedCat === 'all' || p.parentCategory === selectedCat) &&
+                ((p.name || '').toLowerCase().includes(search.toLowerCase()) || (p._id || '').toLowerCase().includes(search.toLowerCase()))
             );
 
             if(filtered.length === 0) {
@@ -172,16 +230,16 @@
                 return `
                     <tr class="hover:bg-green-50/20 transition-all border-l-4 border-l-transparent hover:border-l-green-600 group">
                         <td class="px-10 py-6 flex items-center gap-6">
-                            <img src="${p.img}" class="w-16 h-16 rounded-2xl object-cover border border-slate-50 shadow-sm shrink-0">
+                            <img src="${escapeHtmlAttr(p.image)}" class="w-16 h-16 rounded-2xl object-cover border border-slate-50 shadow-sm shrink-0 bg-slate-50">
                             <div>
                                 <p class="font-black text-slate-900 text-sm uppercase  tracking-tight">${p.name}</p>
-                                <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest mt-1">SKU: ${p.id} | ${p.category}</p>
+                                <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest mt-1">ID: ${p._id.slice(-6).toUpperCase()} | ${escapeHtml(p.parentCategory || p.category)}</p>
                             </div>
                         </td>
-                        <td class="px-10 py-6 text-center text-[10px] font-black text-slate-400 uppercase ">${p.unit}</td>
+                        <td class="px-10 py-6 text-center text-[10px] font-black text-slate-400 uppercase ">${escapeHtml(p.unit)}</td>
                         <td class="px-10 py-6 text-center tabular-nums font-black text-slate-400 text-lg  tracking-tighter">${p.current}</td>
                         <td class="px-10 py-6 text-center">
-                            <input onchange="updateActual('${p.id}', this.value)" type="number" value="${p.actual}" class="stock-input w-24 bg-slate-50 border-none rounded-2xl py-4 px-6 text-center font-black text-green-700 text-xl  outline-none transition-all tabular-nums">
+                            <input onchange="updateActual('${escapeHtmlAttr(p._id)}', this.value)" type="number" value="${p.actual}" class="stock-input w-24 bg-slate-50 border-none rounded-2xl py-4 px-6 text-center font-black text-green-700 text-xl outline-none transition-all tabular-nums">
                         </td>
                         <td class="px-10 py-6 text-right tabular-nums font-black text-2xl  tracking-tighter ${diffClass}">
                             ${diffSymbol}${diff}
@@ -191,11 +249,47 @@
             }).join('');
         }
 
-        function saveInventory() {
-            alert('Đã cập nhật dữ liệu kiểm kê thành công vào hệ thống trung tâm!');
+        async function saveInventory() {
+            if (isSaving) return;
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const changed = products.filter(p => Number(p.actual) !== Number(p.current));
+            if (changed.length === 0) {
+                alert('Không có thay đổi tồn kho để lưu.');
+                return;
+            }
+
+            isSaving = true;
+            try {
+                for (const p of changed) {
+                    const res = await fetch(`http://localhost:5000/api/products/${p._id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ stock: Number(p.actual) || 0 })
+                    });
+                    if (!res.ok) {
+                        const err = await res.json().catch(() => ({}));
+                        throw new Error(err.message || 'Lưu thất bại');
+                    }
+                    p.current = Number(p.actual) || 0;
+                }
+                renderItems(document.getElementById('invSearch')?.value || '', false);
+                alert('✅ Đã cập nhật tồn kho lên hệ thống!');
+            } catch (e) {
+                alert(`⚠️ Lỗi lưu tồn kho: ${e.message || 'Không rõ lỗi'}`);
+            } finally {
+                isSaving = false;
+            }
         }
 
-        renderItems();
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+        }
+        function escapeHtmlAttr(str) { return escapeHtml(str); }
     </script>
 </body>
 </html>
