@@ -36,6 +36,10 @@ MONGODB_URI=mongodb://localhost:27017/freshfood_db
 JWT_SECRET=your_secret_key_here
 ```
 ### 4. Khởi tạo dữ liệu (Seeding)
+# Cài thư viện db trước: 
+```bash
+npm install
+```
 # Tại thư mục gốc hoặc thư mục database
 ```bash
 node seed.js        # Nạp danh sách sản phẩm
