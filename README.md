@@ -26,9 +26,10 @@
 git clone <link-repo>
 ```
 ### 3. Cài đặt Backend
-Di chuyển vào thư mục backend và cài đặt thư viện:
+#Di chuyển vào thư mục backend và cài đặt thư viện:
+```bash
 npm install
-
+```
 ###Quan trọng: Tạo file .env trong thư mục backend và dán cấu hình sau thì mới đăng nhập được:
 ```bash
 PORT=5000
