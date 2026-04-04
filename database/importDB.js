@@ -4,11 +4,42 @@
  * ⚠️ Script này sẽ XÓA dữ liệu cũ trong các collection trước khi import!
  */
 const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
 const fs = require('fs');
 const path = require('path');
 
 const MONGODB_URI = 'mongodb://localhost:27017/freshfood_db';
 const DATA_DIR = path.join(__dirname, 'exported_data');
+
+/**
+ * Chuyển đổi các trường _id (và các trường tham chiếu) từ string sang ObjectId
+ * để Mongoose findById() hoạt động đúng.
+ */
+function convertIds(doc) {
+    const converted = { ...doc };
+    // Chuyển _id sang ObjectId
+    if (converted._id && typeof converted._id === 'string' && ObjectId.isValid(converted._id)) {
+        converted._id = new ObjectId(converted._id);
+    }
+    // Chuyển các trường tham chiếu phổ biến (user, product, ...)
+    const refFields = ['user', 'product'];
+    refFields.forEach(field => {
+        if (converted[field] && typeof converted[field] === 'string' && ObjectId.isValid(converted[field])) {
+            converted[field] = new ObjectId(converted[field]);
+        }
+    });
+    // Chuyển items bên trong mảng (ví dụ: order.items[].product)
+    if (Array.isArray(converted.items)) {
+        converted.items = converted.items.map(item => {
+            const newItem = { ...item };
+            if (newItem.product && typeof newItem.product === 'string' && ObjectId.isValid(newItem.product)) {
+                newItem.product = new ObjectId(newItem.product);
+            }
+            return newItem;
+        });
+    }
+    return converted;
+}
 
 async function importDB() {
     try {
@@ -29,12 +60,15 @@ async function importDB() {
         for (const file of files) {
             const collectionName = path.basename(file, '.json');
             const filePath = path.join(DATA_DIR, file);
-            const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+            const rawData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
             
-            if (!Array.isArray(data) || data.length === 0) {
+            if (!Array.isArray(rawData) || rawData.length === 0) {
                 console.log(`   ⏭️  ${collectionName}: bỏ qua (rỗng)`);
                 continue;
             }
+
+            // Chuyển đổi _id từ string sang ObjectId trước khi import
+            const data = rawData.map(convertIds);
 
             // Xóa collection cũ rồi insert mới
             try {
